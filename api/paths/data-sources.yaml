@@ -1,0 +1,66 @@
+paths:
+  /scrape:
+    post:
+      summary: Scrape URL → return series
+      tags:
+        - Data Sources
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/schemas.yaml#/components/schemas/URLRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/schemas.yaml#/components/schemas/Series'
+              example:
+                - name: "CO2 — France"
+                  unit: "kg"
+                  observations:
+                    - date: "2018-01-01"
+                      value: 460000.0
+                    - date: "2019-01-01"
+                      value: 455000.0
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Maximum requests allowed per time window
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: Number of requests remaining in current window
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: Unix timestamp when the rate limit resets
+            X-RateLimit-Window:
+              schema:
+                type: integer
+              description: Time window in seconds
+            X-Concurrent-Limit:
+              schema:
+                type: integer
+              description: Maximum concurrent requests allowed
+            X-Concurrent-Current:
+              schema:
+                type: integer
+              description: Current number of concurrent requests
+        '400':
+          description: Invalid URL or scraping failed
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'

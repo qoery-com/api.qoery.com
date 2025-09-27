@@ -1,0 +1,53 @@
+components:
+  responses:
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    RateLimitError:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+
+    RateLimitHeaders:
+      description: Rate limiting information
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Maximum requests allowed per time window
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Number of requests remaining in current window
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: Unix timestamp when the rate limit resets
+        X-RateLimit-Window:
+          schema:
+            type: integer
+          description: Time window in seconds
+        X-Concurrent-Limit:
+          schema:
+            type: integer
+          description: Maximum concurrent requests allowed
+        X-Concurrent-Current:
+          schema:
+            type: integer
+          description: Current number of concurrent requests

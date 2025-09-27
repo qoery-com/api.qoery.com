@@ -1,0 +1,50 @@
+paths:
+  /usage:
+    get:
+      summary: Get usage statistics
+      description: Get current usage and rate limit information
+      tags:
+        - Usage
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Usage statistics
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/UsageStats'
+              example:
+                queries_used: 150
+                queries_limit: 1000
+                period_start: "2024-01-01T00:00:00Z"
+                period_end: "2024-01-31T23:59:59Z"
+                concurrent_requests: 2
+                max_concurrent: 5
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Maximum requests allowed per time window
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: Number of requests remaining in current window
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: Unix timestamp when the rate limit resets
+            X-RateLimit-Window:
+              schema:
+                type: integer
+              description: Time window in seconds
+            X-Concurrent-Limit:
+              schema:
+                type: integer
+              description: Maximum concurrent requests allowed
+            X-Concurrent-Current:
+              schema:
+                type: integer
+              description: Current number of concurrent requests
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'

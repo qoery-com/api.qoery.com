@@ -1,0 +1,138 @@
+paths:
+  /query/nl:
+    post:
+      summary: Natural language → SQL → time series
+      tags:
+        - Queries
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/schemas.yaml#/components/schemas/NLQueryRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/QueryResponse'
+              example:
+                query_type: "nl"
+                sql_query: "SELECT date, co2_kg_france AS france FROM emissions WHERE date BETWEEN '2010-01-01' AND '2020-12-31' ORDER BY date;"
+                series:
+                  - series_id: "co2_france"
+                    name: "CO2 emissions — France"
+                    unit: "kg"
+                    observations:
+                      - date: "2010-01-01"
+                        value: 450000.0
+                      - date: "2011-01-01"
+                        value: 440000.0
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Maximum requests allowed per time window
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: Number of requests remaining in current window
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: Unix timestamp when the rate limit resets
+            X-RateLimit-Window:
+              schema:
+                type: integer
+              description: Time window in seconds
+            X-Concurrent-Limit:
+              schema:
+                type: integer
+              description: Maximum concurrent requests allowed
+            X-Concurrent-Current:
+              schema:
+                type: integer
+              description: Current number of concurrent requests
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
+
+  /query/sql:
+    post:
+      summary: Execute SQL → return time series
+      tags:
+        - Queries
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/schemas.yaml#/components/schemas/SQLQueryRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/QueryResponse'
+              example:
+                query_type: "sql"
+                sql_query: "SELECT date, co2_kg_france AS france, co2_kg_norway AS norway FROM emissions ORDER BY date;"
+                series:
+                  - name: "CO2 — France"
+                    unit: "kg"
+                    observations:
+                      - date: "2019-01-01"
+                        value: 445000.0
+                  - name: "CO2 — Norway"
+                    unit: "kg"
+                    observations:
+                      - date: "2019-01-01"
+                        value: 118000.0
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Maximum requests allowed per time window
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: Number of requests remaining in current window
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: Unix timestamp when the rate limit resets
+            X-RateLimit-Window:
+              schema:
+                type: integer
+              description: Time window in seconds
+            X-Concurrent-Limit:
+              schema:
+                type: integer
+              description: Maximum concurrent requests allowed
+            X-Concurrent-Current:
+              schema:
+                type: integer
+              description: Current number of concurrent requests
+        '400':
+          description: Invalid SQL or mapping failure
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'

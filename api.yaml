@@ -2,201 +2,53 @@ openapi: 3.1.0
 info:
   title: qoery's API
   version: 0.1.0
-  description: Every number on the internet, queryable. Instant access to millions of trusted statistics through a single natural language query or API call.
+  description: >
+    Every number on the internet, queryable. Instant access to millions of trusted
+    statistics through a single natural language query or API call.
 
 servers:
   - url: https://api.qoery.com
   - url: http://localhost:8000
 
+tags:
+  - name: Authentication
+    description: API key management and authentication
+  - name: Usage
+    description: Usage statistics and rate limiting
+  - name: Queries
+    description: Natural language and SQL query execution
+  - name: Data Sources
+    description: Web scraping and data extraction
+
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication
+    SupabaseAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase JWT token for user authentication
+
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: string
-        code:
-          type: integer
-      required:
-        - error
-        - code
+    $ref: 'api/schemas/schemas.yaml#/components/schemas'
 
-    Observation:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-        value:
-          type: number
-      required:
-        - date
-        - value
-
-    Series:
-      type: object
-      properties:
-        series_id:
-          type: string
-          description: short id for the series (optional but recommended)
-        name:
-          type: string
-          description: human-friendly name for the series
-        unit:
-          type: string
-          description: unit of measurement (optional)
-        observations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Observation'
-      required:
-        - name
-        - observations
-
-    QueryResponse:
-      type: object
-      properties:
-        query_type:
-          type: string
-          enum: [nl, sql]
-        sql_query:
-          type: string
-          nullable: true
-        series:
-          type: array
-          items:
-            $ref: '#/components/schemas/Series'
-      required:
-        - query_type
-        - series
-
-    NLQueryRequest:
-      type: object
-      properties:
-        query:
-          type: string
-      required:
-        - query
-
-    SQLQueryRequest:
-      type: object
-      properties:
-        sql_query:
-          type: string
-      required:
-        - sql_query
-
-    URLRequest:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-      required:
-        - url
+  responses:
+    $ref: 'api/responses/responses.yaml#/components/responses'
 
 paths:
+  /auth/keys:
+    $ref: 'api/paths/auth.yaml#/paths/auth/keys'
+  /auth/keys/{key_id}:
+    $ref: 'api/paths/auth.yaml#/paths/auth/keys/{key_id}'
+  /usage:
+    $ref: 'api/paths/usage.yaml#/paths/usage'
   /query/nl:
-    post:
-      summary: Natural language → SQL → time series
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NLQueryRequest'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/QueryResponse'
-              example:
-                query_type: "nl"
-                sql_query: "SELECT date, co2_kg_france AS france FROM emissions WHERE date BETWEEN '2010-01-01' AND '2020-12-31' ORDER BY date;"
-                series:
-                  - series_id: "co2_france"
-                    name: "CO2 emissions — France"
-                    unit: "kg"
-                    observations:
-                      - date: "2010-01-01"
-                        value: 450000.0
-                      - date: "2011-01-01"
-                        value: 440000.0
-        '400':
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+    $ref: 'api/paths/queries.yaml#/paths/query/nl'
   /query/sql:
-    post:
-      summary: Execute SQL → return time series
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SQLQueryRequest'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/QueryResponse'
-              example:
-                query_type: "sql"
-                sql_query: "SELECT date, co2_kg_france AS france, co2_kg_norway AS norway FROM emissions ORDER BY date;"
-                series:
-                  - name: "CO2 — France"
-                    unit: "kg"
-                    observations:
-                      - date: "2019-01-01"
-                        value: 445000.0
-                  - name: "CO2 — Norway"
-                    unit: "kg"
-                    observations:
-                      - date: "2019-01-01"
-                        value: 118000.0
-        '400':
-          description: Invalid SQL or mapping failure
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+    $ref: 'api/paths/queries.yaml#/paths/query/sql'
   /scrape:
-    post:
-      summary: Scrape URL → return series
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/URLRequest'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Series'
-              example:
-                - name: "CO2 — France"
-                  unit: "kg"
-                  observations:
-                    - date: "2018-01-01"
-                      value: 460000.0
-                    - date: "2019-01-01"
-                      value: 455000.0
-        '400':
-          description: Invalid URL or scraping failed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+    $ref: 'api/paths/data-sources.yaml#/paths/scrape'

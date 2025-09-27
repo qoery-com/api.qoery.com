@@ -1,0 +1,157 @@
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        code:
+          type: integer
+        details:
+          type: string
+          nullable: true
+      required:
+        - error
+        - code
+
+    ApiKey:
+      type: object
+      properties:
+        key_id:
+          type: string
+          description: Unique identifier for the API key
+        key_value:
+          type: string
+          description: The actual API key value (only shown on creation)
+        name:
+          type: string
+          description: Human-readable name for the API key
+        created_at:
+          type: string
+          format: date-time
+        last_used:
+          type: string
+          format: date-time
+          nullable: true
+        is_active:
+          type: boolean
+          description: Whether the key is currently active
+      required:
+        - key_id
+        - key_value
+        - name
+        - created_at
+        - is_active
+
+    ApiKeyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Human-readable name for the API key
+      required:
+        - name
+      description: User context is extracted from the Supabase JWT token
+
+    UsageStats:
+      type: object
+      properties:
+        queries_used:
+          type: integer
+          description: Number of queries used in current period
+        queries_limit:
+          type: integer
+          description: Maximum queries allowed in current period
+        period_start:
+          type: string
+          format: date-time
+        period_end:
+          type: string
+          format: date-time
+        concurrent_requests:
+          type: integer
+          description: Current number of concurrent requests
+        max_concurrent:
+          type: integer
+          description: Maximum concurrent requests allowed
+      required:
+        - queries_used
+        - queries_limit
+        - period_start
+        - period_end
+        - concurrent_requests
+        - max_concurrent
+
+    Observation:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        value:
+          type: number
+      required:
+        - date
+        - value
+
+    Series:
+      type: object
+      properties:
+        series_id:
+          type: string
+          description: short id for the series (optional but recommended)
+        name:
+          type: string
+          description: human-friendly name for the series
+        unit:
+          type: string
+          description: unit of measurement (optional)
+        observations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Observation'
+      required:
+        - name
+        - observations
+
+    QueryResponse:
+      type: object
+      properties:
+        query_type:
+          type: string
+          enum: [nl, sql]
+        sql_query:
+          type: string
+          nullable: true
+        series:
+          type: array
+          items:
+            $ref: '#/components/schemas/Series'
+      required:
+        - query_type
+        - series
+
+    NLQueryRequest:
+      type: object
+      properties:
+        query:
+          type: string
+      required:
+        - query
+
+    SQLQueryRequest:
+      type: object
+      properties:
+        sql_query:
+          type: string
+      required:
+        - sql_query
+
+    URLRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+      required:
+        - url
