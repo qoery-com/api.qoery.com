@@ -41,14 +41,14 @@ components:
 
 paths:
   /auth/keys:
-    $ref: 'api/paths/auth.yaml#/paths/auth/keys'
+    $ref: 'api/paths/auth.yaml#/paths/~1auth~1keys'
   /auth/keys/{key_id}:
-    $ref: 'api/paths/auth.yaml#/paths/auth/keys/{key_id}'
+    $ref: 'api/paths/auth.yaml#/paths/~1auth~1keys~1{key_id}'
   /usage:
-    $ref: 'api/paths/usage.yaml#/paths/usage'
+    $ref: 'api/paths/usage.yaml#/paths/~1usage'
   /query/nl:
-    $ref: 'api/paths/queries.yaml#/paths/query/nl'
+    $ref: 'api/paths/queries.yaml#/paths/~1query~1nl'
   /query/sql:
-    $ref: 'api/paths/queries.yaml#/paths/query/sql'
+    $ref: 'api/paths/queries.yaml#/paths/~1query~1sql'
   /scrape:
-    $ref: 'api/paths/data-sources.yaml#/paths/scrape'
+    $ref: 'api/paths/data-sources.yaml#/paths/~1scrape'
