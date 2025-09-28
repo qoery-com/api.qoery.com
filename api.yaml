@@ -33,11 +33,11 @@ components:
     $ref: 'api/responses/responses.yaml#/components/responses'
 
 paths:
-  /usage:
-    $ref: 'api/paths/usage.yaml#/paths/~1usage'
   /query/nl:
     $ref: 'api/paths/queries.yaml#/paths/~1query~1nl'
   /query/sql:
     $ref: 'api/paths/queries.yaml#/paths/~1query~1sql'
   /scrape:
     $ref: 'api/paths/data-sources.yaml#/paths/~1scrape'
+  /usage:
+    $ref: 'api/paths/usage.yaml#/paths/~1usage'
