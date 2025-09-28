@@ -14,45 +14,6 @@ components:
         - error
         - code
 
-    ApiKey:
-      type: object
-      properties:
-        key_id:
-          type: string
-          description: Unique identifier for the API key
-        key_value:
-          type: string
-          description: The actual API key value (only shown on creation)
-        name:
-          type: string
-          description: Human-readable name for the API key
-        created_at:
-          type: string
-          format: date-time
-        last_used:
-          type: string
-          format: date-time
-          nullable: true
-        is_active:
-          type: boolean
-          description: Whether the key is currently active
-      required:
-        - key_id
-        - key_value
-        - name
-        - created_at
-        - is_active
-
-    ApiKeyRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Human-readable name for the API key
-      required:
-        - name
-      description: User context is extracted from the Supabase JWT token
-
     UsageStats:
       type: object
       properties:

@@ -11,8 +11,6 @@ servers:
   - url: http://localhost:8000
 
 tags:
-  - name: Authentication
-    description: API key management and authentication
   - name: Usage
     description: Usage statistics and rate limiting
   - name: Queries
@@ -27,11 +25,6 @@ components:
       in: header
       name: X-API-Key
       description: API key for authentication
-    SupabaseAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: Supabase JWT token for user authentication
 
   schemas:
     $ref: 'api/schemas/schemas.yaml#/components/schemas'
@@ -40,10 +33,6 @@ components:
     $ref: 'api/responses/responses.yaml#/components/responses'
 
 paths:
-  /auth/keys:
-    $ref: 'api/paths/auth.yaml#/paths/~1auth~1keys'
-  /auth/keys/{key_id}:
-    $ref: 'api/paths/auth.yaml#/paths/~1auth~1keys~1{key_id}'
   /usage:
     $ref: 'api/paths/usage.yaml#/paths/~1usage'
   /query/nl:
