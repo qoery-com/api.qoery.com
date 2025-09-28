@@ -27,10 +27,30 @@ components:
       description: API key for authentication
 
   schemas:
-    $ref: 'api/schemas/schemas.yaml#/components/schemas'
+    ErrorResponse:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/ErrorResponse'
+    UsageStats:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/UsageStats'
+    Observation:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/Observation'
+    Series:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/Series'
+    QueryResponse:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/QueryResponse'
+    NLQueryRequest:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/NLQueryRequest'
+    SQLQueryRequest:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/SQLQueryRequest'
+    URLRequest:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/URLRequest'
 
   responses:
-    $ref: 'api/responses/responses.yaml#/components/responses'
+    UnauthorizedError:
+      $ref: 'api/responses/responses.yaml#/components/responses/UnauthorizedError'
+    RateLimitError:
+      $ref: 'api/responses/responses.yaml#/components/responses/RateLimitError'
+    RateLimitHeaders:
+      $ref: 'api/responses/responses.yaml#/components/responses/RateLimitHeaders'
 
 paths:
   /query/nl:

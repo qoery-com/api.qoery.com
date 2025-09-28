@@ -5,14 +5,14 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
 
     RateLimitError:
       description: Rate limit exceeded
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
       headers:
         X-RateLimit-Limit:
           schema:
