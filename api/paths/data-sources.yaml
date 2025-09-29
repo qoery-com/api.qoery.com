@@ -8,31 +8,11 @@ paths:
         - ApiKeyAuth: []
       x-codeSamples:
         - lang: Python
-          source: |
-            from openapi_client.api.data_sources_api import DataSourcesApi
-            from openapi_client.model.url_request import URLRequest
-            from openapi_client import Configuration, ApiClient
-
-            configuration = Configuration()
-            configuration.api_key['X-API-Key'] = 'your-api-key'
-            with ApiClient(configuration) as api_client:
-                data_sources_api = DataSourcesApi(api_client)
-                result = data_sources_api.scrape_post(URLRequest(url="https://example.com"))
+          source: # INJECT: python/scrape_example.py
         - lang: JavaScript
-          source: |
-            const { DataSourcesApi, URLRequest, ApiClient } = require('qoerys_api');
-
-            const apiClient = new ApiClient();
-            apiClient.defaultHeaders['X-API-Key'] = 'your-api-key';
-
-            const dataSourcesApi = new DataSourcesApi(apiClient);
-            const result = dataSourcesApi.scrapePost(new URLRequest({ url: "https://example.com" }));
+          source: # INJECT: js/scrape_example.js
         - lang: cURL
-          source: |
-            curl -X POST "https://api.qoery.com/scrape" \
-              -H "X-API-Key: your-api-key" \
-              -H "Content-Type: application/json" \
-              -d '{"url": "https://example.com"}'
+          source: # INJECT: curl/scrape_example.sh
       responses:
         '200':
           description: OK

@@ -1,0 +1,187 @@
+#!/usr/bin/env python3
+"""
+Build script to generate API documentation using temporary files.
+This script:
+1. Creates temporary files with injected examples
+2. Runs Redocly to generate docs.html
+3. Cleans up temporary files
+"""
+
+import os
+import re
+import shutil
+import subprocess
+import tempfile
+from pathlib import Path
+
+
+def read_example_file(file_path):
+    """Read content from an example file."""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        print(f"Warning: Example file not found: {file_path}")
+        return None
+
+
+def inject_examples_into_yaml(yaml_content, examples_dir):
+    """Inject example files into YAML content."""
+    
+    # Pattern to match individual source lines with INJECT comments
+    pattern = r'(\s*source:\s*#\s*INJECT:\s*([^\s]+))'
+    
+    def replace_source_line(match):
+        indent = match.group(1).split('source:')[0]  # Get the indentation
+        example_file = match.group(2)  # Get the example file path
+        
+        example_path = os.path.join(examples_dir, example_file)
+        example_content = read_example_file(example_path)
+        
+        if example_content:
+            # Build the new source section with proper indentation
+            new_source = f"{indent}source: |\n"
+            # Add each line of the example content with proper indentation
+            lines = example_content.split('\n')
+            for line in lines:
+                if line.strip():  # Non-empty line
+                    new_source += f"{indent}  {line}\n"
+                else:  # Empty line
+                    new_source += f"{indent}\n"
+            return new_source
+        else:
+            # If file not found, return the original line
+            return match.group(1)
+    
+    return re.sub(pattern, replace_source_line, yaml_content)
+
+
+def create_temp_api_files(api_dir, examples_dir, temp_dir):
+    """Create temporary API files with injected examples."""
+    print("Creating temporary API files with injected examples...")
+    
+    # Create temporary directory structure
+    temp_api_dir = temp_dir / 'api'
+    temp_paths_dir = temp_api_dir / 'paths'
+    temp_schemas_dir = temp_api_dir / 'schemas'
+    temp_responses_dir = temp_api_dir / 'responses'
+    
+    temp_paths_dir.mkdir(parents=True)
+    temp_schemas_dir.mkdir(parents=True)
+    temp_responses_dir.mkdir(parents=True)
+    
+    # Copy schemas and responses (no changes needed)
+    shutil.copy2(api_dir.parent / 'schemas' / 'schemas.yaml', temp_schemas_dir)
+    shutil.copy2(api_dir.parent / 'responses' / 'responses.yaml', temp_responses_dir)
+    
+    # Process API files and inject examples
+    for api_file in api_dir.glob('*.yaml'):
+        print(f"  Processing {api_file.name}...")
+        
+        with open(api_file, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Check if file has placeholder comments
+        if '# INJECT:' not in content:
+            print(f"    No injection placeholders found in {api_file.name}")
+            # Just copy the file as-is
+            shutil.copy2(api_file, temp_paths_dir)
+            continue
+        
+        # Inject examples
+        new_content = inject_examples_into_yaml(content, examples_dir)
+        
+        # Write to temporary file
+        temp_file = temp_paths_dir / api_file.name
+        with open(temp_file, 'w', encoding='utf-8') as f:
+            f.write(new_content)
+        
+        print(f"    ✓ Examples injected into {api_file.name}")
+    
+    return temp_api_dir
+
+
+def create_temp_main_api_file(script_dir, temp_dir):
+    """Create temporary main api.yaml file."""
+    print("Creating temporary main API file...")
+    
+    # Read the original api.yaml
+    with open(script_dir / 'api.yaml', 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # Write to temporary location
+    temp_api_file = temp_dir / 'api.yaml'
+    with open(temp_api_file, 'w', encoding='utf-8') as f:
+        f.write(content)
+    
+    return temp_api_file
+
+
+def run_redocly_build(temp_api_file, output_file):
+    """Run Redocly to generate documentation."""
+    print(f"Running Redocly to generate {output_file}...")
+    
+    try:
+        # Run the Redocly command
+        cmd = [
+            'npx', '@redocly/cli', 'build-docs',
+            str(temp_api_file),
+            '--output', str(output_file)
+        ]
+        
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        print(f"✓ Documentation generated successfully: {output_file}")
+        return True
+        
+    except subprocess.CalledProcessError as e:
+        print(f"Error running Redocly: {e}")
+        print(f"stdout: {e.stdout}")
+        print(f"stderr: {e.stderr}")
+        return False
+    except FileNotFoundError:
+        print("Error: Redocly not found. Please install it with: npm install -g @redocly/cli")
+        return False
+
+
+def main():
+    """Main build function."""
+    script_dir = Path(__file__).parent
+    api_dir = script_dir / 'api' / 'paths'
+    examples_dir = script_dir / 'examples'
+    output_file = script_dir / 'docs.html'
+    
+    print("Building API documentation with temporary files...")
+    print(f"API directory: {api_dir}")
+    print(f"Examples directory: {examples_dir}")
+    print(f"Output file: {output_file}")
+    
+    # Create temporary directory
+    with tempfile.TemporaryDirectory() as temp_dir_str:
+        temp_dir = Path(temp_dir_str)
+        print(f"Using temporary directory: {temp_dir}")
+        
+        try:
+            # Create temporary API files with injected examples
+            temp_api_dir = create_temp_api_files(api_dir, examples_dir, temp_dir)
+            
+            # Create temporary main API file
+            temp_api_file = create_temp_main_api_file(script_dir, temp_dir)
+            
+            # Run Redocly to generate documentation
+            success = run_redocly_build(temp_api_file, output_file)
+            
+            if success:
+                print(f"\n✓ Build complete! Documentation generated: {output_file}")
+            else:
+                print("\n✗ Build failed!")
+                return 1
+                
+        except Exception as e:
+            print(f"Error during build: {e}")
+            return 1
+    
+    return 0
+
+
+if __name__ == '__main__':
+    exit(main())

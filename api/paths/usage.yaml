@@ -9,28 +9,11 @@ paths:
         - ApiKeyAuth: []
       x-codeSamples:
         - lang: Python
-          source: |
-            from openapi_client.api.usage_api import UsageApi
-            from openapi_client import Configuration, ApiClient
-
-            configuration = Configuration()
-            configuration.api_key['X-API-Key'] = 'your-api-key'
-            with ApiClient(configuration) as api_client:
-                usage_api = UsageApi(api_client)
-                result = usage_api.usage_get()
+          source: # INJECT: python/usage_example.py
         - lang: JavaScript
-          source: |
-            const { UsageApi, ApiClient } = require('qoerys_api');
-
-            const apiClient = new ApiClient();
-            apiClient.defaultHeaders['X-API-Key'] = 'your-api-key';
-
-            const usageApi = new UsageApi(apiClient);
-            const result = usageApi.usageGet();
+          source: # INJECT: js/usage_example.js
         - lang: cURL
-          source: |
-            curl -X GET "https://api.qoery.com/usage" \
-              -H "X-API-Key: your-api-key"
+          source: # INJECT: curl/usage_example.sh
       responses:
         '200':
           description: Usage statistics
