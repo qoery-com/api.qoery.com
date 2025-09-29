@@ -11,12 +11,12 @@ servers:
   - url: http://localhost:8000
 
 tags:
-  - name: Usage
-    description: Usage statistics and rate limiting
   - name: Queries
     description: Natural language and SQL query execution
   - name: Data Sources
     description: Web scraping and data extraction
+  - name: Usage
+    description: Usage statistics and rate limiting
 
 components:
   securitySchemes:
