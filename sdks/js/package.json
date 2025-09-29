@@ -2,7 +2,7 @@
   "name": "qoery",
   "version": "0.1.0",
   "description": "Every number on the internet, queryable. Instant access to millions of trusted statistics through a single natural language query or API call. ",
-  "license": "Unlicense",
+  "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src -d dist",
