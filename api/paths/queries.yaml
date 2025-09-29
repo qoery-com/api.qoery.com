@@ -1,7 +1,8 @@
 paths:
   /query/nl:
     post:
-      summary: Natural language → SQL → time series
+      summary: Natural Language Query
+      description: Submit a natural-language request and get back a curated time series response. The response also includes the generated SQL so you can switch to the SQL endpoint for faster/cheaper repeated queries.
       tags:
         - Queries
       security:
@@ -19,9 +20,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '../schemas/schemas.yaml#/components/schemas/QueryResponse'
+                $ref: '../schemas/schemas.yaml#/components/schemas/NLQueryResponse'
               example:
-                query_type: "nl"
                 sql_query: "SELECT date, co2_kg_france AS france FROM emissions WHERE date BETWEEN '2010-01-01' AND '2020-12-31' ORDER BY date;"
                 series:
                   - series_id: "co2_france"
@@ -70,7 +70,8 @@ paths:
 
   /query/sql:
     post:
-      summary: Execute SQL → return time series
+      summary: SQL Query
+      description: Execute a read-only SELECT query and receive the results as curated time series. This endpoint does not return SQL.
       tags:
         - Queries
       security:
@@ -90,15 +91,15 @@ paths:
               schema:
                 $ref: '../schemas/schemas.yaml#/components/schemas/QueryResponse'
               example:
-                query_type: "sql"
-                sql_query: "SELECT date, co2_kg_france AS france, co2_kg_norway AS norway FROM emissions ORDER BY date;"
                 series:
                   - name: "CO2 — France"
+                    series_id: "co2_france"
                     unit: "kg"
                     observations:
                       - date: "2019-01-01"
                         value: 445000.0
                   - name: "CO2 — Norway"
+                    series_id: "co2_norway"
                     unit: "kg"
                     observations:
                       - date: "2019-01-01"

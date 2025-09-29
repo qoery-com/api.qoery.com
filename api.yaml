@@ -7,13 +7,12 @@ info:
     statistics through a single natural language query or API call.
 
 servers:
-  - url: https://api.qoery.com
-  - url: http://localhost:8000
+  - url: https://api.qoery.com/v0
 
 tags:
   - name: Queries
     description: Natural language and SQL query execution
-  - name: Data Sources
+  - name: Web Scraping
     description: Web scraping and data extraction
   - name: Usage
     description: Usage statistics and rate limiting
@@ -58,6 +57,6 @@ paths:
   /query/sql:
     $ref: 'api/paths/queries.yaml#/paths/~1query~1sql'
   /scrape:
-    $ref: 'api/paths/data-sources.yaml#/paths/~1scrape'
+    $ref: 'api/paths/web-scraping.yaml#/paths/~1scrape'
   /usage:
     $ref: 'api/paths/usage.yaml#/paths/~1usage'

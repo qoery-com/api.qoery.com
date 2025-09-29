@@ -1,11 +1,25 @@
 paths:
   /scrape:
     post:
-      summary: Scrape URL → return series
+      summary: Structured Web Scrape
+      description: Download a web page, and structured data as time series. Use query params `html=true` and/or `markdown=true` to include raw artifacts inline; otherwise artifact URLs are provided in `artifacts`.
       tags:
-        - Data Sources
+        - Web Scraping
       security:
         - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: html
+          description: Include page HTML inline in response
+          schema:
+            type: boolean
+            default: false
+        - in: query
+          name: markdown
+          description: Include page markdown inline in response
+          schema:
+            type: boolean
+            default: false
       x-codeSamples:
         - lang: Python
           source: # INJECT: python/scrape_example.py
@@ -19,17 +33,23 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '../schemas/schemas.yaml#/components/schemas/Series'
+                $ref: '../schemas/schemas.yaml#/components/schemas/ScrapeResponse'
               example:
-                - name: "CO2 — France"
-                  unit: "kg"
-                  observations:
-                    - date: "2018-01-01"
-                      value: 460000.0
-                    - date: "2019-01-01"
-                      value: 455000.0
+                html: "<html><body><table>...</table></body></html>"
+                markdown: "# Page Title\n\n| Year | Value |\n|---|---:|\n| 2018 | 460000 |\n| 2019 | 455000 |"
+                series:
+                  - series_id: "co2_france"
+                    name: "CO2 — France"
+                    unit: "kg"
+                    observations:
+                      - date: "2018-01-01"
+                        value: 460000.0
+                      - date: "2019-01-01"
+                        value: 455000.0
+                artifacts:
+                  html_url: "https://example.com/run/raw.html"
+                  markdown_url: "https://example.com/run/processed.md"
+                  tables_base_url: "https://example.com/run/raw/"
           headers:
             X-RateLimit-Limit:
               schema:

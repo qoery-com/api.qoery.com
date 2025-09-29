@@ -78,19 +78,23 @@ components:
     QueryResponse:
       type: object
       properties:
-        query_type:
-          type: string
-          enum: [nl, sql]
-        sql_query:
-          type: string
-          nullable: true
         series:
           type: array
           items:
             $ref: '#/components/schemas/Series'
       required:
-        - query_type
         - series
+
+    NLQueryResponse:
+      allOf:
+        - $ref: '#/components/schemas/QueryResponse'
+        - type: object
+          properties:
+            sql_query:
+              type: string
+              nullable: true
+          required:
+            - sql_query
 
     NLQueryRequest:
       type: object
@@ -116,3 +120,30 @@ components:
           format: uri
       required:
         - url
+
+    ScrapeResponse:
+      type: object
+      properties:
+        html:
+          type: string
+          description: Original HTML of the page
+        markdown:
+          type: string
+          description: Markdown representation of the page
+        series:
+          type: array
+          description: Extracted time series from detected tables
+          items:
+            $ref: '#/components/schemas/Series'
+        artifacts:
+          type: object
+          description: URLs to stored artifacts for larger payloads
+          properties:
+            html_url:
+              type: string
+            markdown_url:
+              type: string
+            tables_base_url:
+              type: string
+      required:
+        - series
