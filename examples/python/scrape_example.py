@@ -1,9 +1,8 @@
-from openapi_client.api.data_sources_api import DataSourcesApi
-from openapi_client.model.url_request import URLRequest
-from openapi_client import Configuration, ApiClient
+from qoery import Configuration, ApiClient, WebScrapingApi, URLRequest
 
 configuration = Configuration()
-configuration.api_key['X-API-Key'] = 'your-api-key'
+configuration.api_key['ApiKeyAuth'] = 'your-api-key'
 with ApiClient(configuration) as api_client:
-    data_sources_api = DataSourcesApi(api_client)
-    result = data_sources_api.scrape_post(URLRequest(url="https://example.com"))
+    scraping_api = WebScrapingApi(api_client)
+    result = scraping_api.scrape_post(URLRequest(url="https://example.com"))
+    print(result)

@@ -1,7 +1,14 @@
-const { QueriesApi, NLQueryRequest, ApiClient } = require('qoerys_api');
+const { ApiClient, QueriesApi, NLQueryRequest } = require('qoery');
 
-const apiClient = new ApiClient();
-apiClient.defaultHeaders['X-API-Key'] = 'your-api-key';
+(async () => {
+  const client = ApiClient.instance;
+  client.basePath = 'https://api.qoery.com/v0'; // optional; defaults from spec
+  client.authentications['ApiKeyAuth'].apiKey = 'your-api-key';
 
-const queriesApi = new QueriesApi(apiClient);
-const result = queriesApi.queryNlPost(new NLQueryRequest({ query: "CO2 emissions for France" }));
+  const queries = new QueriesApi();
+  const body = new NLQueryRequest();
+  body.query = 'CO2 emissions for France';
+
+  const res = await queries.queryNlPost(body);
+  console.log(res);
+})();

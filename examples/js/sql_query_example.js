@@ -1,7 +1,14 @@
-const { QueriesApi, SQLQueryRequest, ApiClient } = require('qoerys_api');
+const { ApiClient, QueriesApi, SQLQueryRequest } = require('qoery');
 
-const apiClient = new ApiClient();
-apiClient.defaultHeaders['X-API-Key'] = 'your-api-key';
+(async () => {
+  const client = ApiClient.instance;
+  client.basePath = 'https://api.qoery.com/v0';
+  client.authentications['ApiKeyAuth'].apiKey = 'your-api-key';
 
-const queriesApi = new QueriesApi(apiClient);
-const result = queriesApi.querySqlPost(new SQLQueryRequest({ sqlQuery: "SELECT * FROM emissions" }));
+  const queries = new QueriesApi();
+  const body = new SQLQueryRequest();
+  body.sql = 'SELECT * FROM emissions';
+
+  const res = await queries.querySqlPost(body);
+  console.log(res);
+})();

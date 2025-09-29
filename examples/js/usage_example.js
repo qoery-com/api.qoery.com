@@ -1,7 +1,11 @@
-const { UsageApi, ApiClient } = require('qoerys_api');
+const { ApiClient, UsageApi } = require('qoery');
 
-const apiClient = new ApiClient();
-apiClient.defaultHeaders['X-API-Key'] = 'your-api-key';
+(async () => {
+  const client = ApiClient.instance;
+  client.basePath = 'https://api.qoery.com/v0';
+  client.authentications['ApiKeyAuth'].apiKey = 'your-api-key';
 
-const usageApi = new UsageApi(apiClient);
-const result = usageApi.usageGet();
+  const usage = new UsageApi();
+  const res = await usage.usageGet();
+  console.log(res);
+})();
