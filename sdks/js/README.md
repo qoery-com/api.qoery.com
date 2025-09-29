@@ -111,6 +111,9 @@ ApiKeyAuth.apiKey = "YOUR API KEY"
 //ApiKeyAuth.apiKeyPrefix['X-API-Key'] = "Token"
 
 var api = new Qoery.QueriesApi()
+var opts = {
+  'query': "query_example" // {String} Natural language query
+};
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -118,7 +121,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.queryNlPost(callback);
+api.queryNlGet(opts, callback);
 
 ```
 
@@ -128,9 +131,12 @@ All URIs are relative to *https://api.qoery.com/v0*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*Qoery.QueriesApi* | [**queryNlGet**](docs/QueriesApi.md#queryNlGet) | **GET** /query/nl | Natural Language Query (query string)
 *Qoery.QueriesApi* | [**queryNlPost**](docs/QueriesApi.md#queryNlPost) | **POST** /query/nl | Natural Language Query
+*Qoery.QueriesApi* | [**querySqlGet**](docs/QueriesApi.md#querySqlGet) | **GET** /query/sql | SQL Query (query string)
 *Qoery.QueriesApi* | [**querySqlPost**](docs/QueriesApi.md#querySqlPost) | **POST** /query/sql | SQL Query
 *Qoery.UsageApi* | [**usageGet**](docs/UsageApi.md#usageGet) | **GET** /usage | Get usage statistics
+*Qoery.WebScrapingApi* | [**scrapeGet**](docs/WebScrapingApi.md#scrapeGet) | **GET** /scrape | Structured Web Scrape (query string)
 *Qoery.WebScrapingApi* | [**scrapePost**](docs/WebScrapingApi.md#scrapePost) | **POST** /scrape | Structured Web Scrape
 
 
@@ -139,15 +145,18 @@ Class | Method | HTTP request | Description
  - [Qoery.ErrorResponse](docs/ErrorResponse.md)
  - [Qoery.NLQueryRequest](docs/NLQueryRequest.md)
  - [Qoery.Observation](docs/Observation.md)
- - [Qoery.QueryNlPost200Response](docs/QueryNlPost200Response.md)
- - [Qoery.QueryNlPost200ResponseAllOfSeriesInner](docs/QueryNlPost200ResponseAllOfSeriesInner.md)
- - [Qoery.QueryNlPost200ResponseAllOfSeriesInnerObservationsInner](docs/QueryNlPost200ResponseAllOfSeriesInnerObservationsInner.md)
- - [Qoery.QueryNlPost400Response](docs/QueryNlPost400Response.md)
+ - [Qoery.QueryNlGet200Response](docs/QueryNlGet200Response.md)
+ - [Qoery.QueryNlGet200ResponseAllOfSeriesInner](docs/QueryNlGet200ResponseAllOfSeriesInner.md)
+ - [Qoery.QueryNlGet200ResponseAllOfSeriesInnerObservationsInner](docs/QueryNlGet200ResponseAllOfSeriesInnerObservationsInner.md)
+ - [Qoery.QueryNlGet400Response](docs/QueryNlGet400Response.md)
+ - [Qoery.QueryNlPostRequest](docs/QueryNlPostRequest.md)
  - [Qoery.QueryResponse](docs/QueryResponse.md)
- - [Qoery.QuerySqlPost200Response](docs/QuerySqlPost200Response.md)
+ - [Qoery.QuerySqlGet200Response](docs/QuerySqlGet200Response.md)
+ - [Qoery.QuerySqlPostRequest](docs/QuerySqlPostRequest.md)
  - [Qoery.SQLQueryRequest](docs/SQLQueryRequest.md)
- - [Qoery.ScrapePost200Response](docs/ScrapePost200Response.md)
- - [Qoery.ScrapePost200ResponseArtifacts](docs/ScrapePost200ResponseArtifacts.md)
+ - [Qoery.ScrapeGet200Response](docs/ScrapeGet200Response.md)
+ - [Qoery.ScrapeGet200ResponseArtifacts](docs/ScrapeGet200ResponseArtifacts.md)
+ - [Qoery.ScrapePostRequest](docs/ScrapePostRequest.md)
  - [Qoery.Series](docs/Series.md)
  - [Qoery.URLRequest](docs/URLRequest.md)
  - [Qoery.UsageGet200Response](docs/UsageGet200Response.md)

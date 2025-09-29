@@ -15,20 +15,20 @@ import ApiClient from '../ApiClient';
 import QueryNlGet200ResponseAllOfSeriesInnerObservationsInner from './QueryNlGet200ResponseAllOfSeriesInnerObservationsInner';
 
 /**
- * The Series model module.
- * @module model/Series
+ * The QueryNlGet200ResponseAllOfSeriesInner model module.
+ * @module model/QueryNlGet200ResponseAllOfSeriesInner
  * @version 0.1.0
  */
-class Series {
+class QueryNlGet200ResponseAllOfSeriesInner {
     /**
-     * Constructs a new <code>Series</code>.
-     * @alias module:model/Series
+     * Constructs a new <code>QueryNlGet200ResponseAllOfSeriesInner</code>.
+     * @alias module:model/QueryNlGet200ResponseAllOfSeriesInner
      * @param name {String} human-friendly name for the series
      * @param observations {Array.<module:model/QueryNlGet200ResponseAllOfSeriesInnerObservationsInner>} 
      */
     constructor(name, observations) { 
         
-        Series.initialize(this, name, observations);
+        QueryNlGet200ResponseAllOfSeriesInner.initialize(this, name, observations);
     }
 
     /**
@@ -42,15 +42,15 @@ class Series {
     }
 
     /**
-     * Constructs a <code>Series</code> from a plain JavaScript object, optionally creating a new instance.
+     * Constructs a <code>QueryNlGet200ResponseAllOfSeriesInner</code> from a plain JavaScript object, optionally creating a new instance.
      * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
      * @param {Object} data The plain JavaScript object bearing properties of interest.
-     * @param {module:model/Series} obj Optional instance to populate.
-     * @return {module:model/Series} The populated <code>Series</code> instance.
+     * @param {module:model/QueryNlGet200ResponseAllOfSeriesInner} obj Optional instance to populate.
+     * @return {module:model/QueryNlGet200ResponseAllOfSeriesInner} The populated <code>QueryNlGet200ResponseAllOfSeriesInner</code> instance.
      */
     static constructFromObject(data, obj) {
         if (data) {
-            obj = obj || new Series();
+            obj = obj || new QueryNlGet200ResponseAllOfSeriesInner();
 
             if (data.hasOwnProperty('series_id')) {
                 obj['series_id'] = ApiClient.convertToType(data['series_id'], 'String');
@@ -69,13 +69,13 @@ class Series {
     }
 
     /**
-     * Validates the JSON data with respect to <code>Series</code>.
+     * Validates the JSON data with respect to <code>QueryNlGet200ResponseAllOfSeriesInner</code>.
      * @param {Object} data The plain JavaScript object bearing properties of interest.
-     * @return {boolean} to indicate whether the JSON data is valid with respect to <code>Series</code>.
+     * @return {boolean} to indicate whether the JSON data is valid with respect to <code>QueryNlGet200ResponseAllOfSeriesInner</code>.
      */
     static validateJSON(data) {
         // check to make sure all required properties are present in the JSON string
-        for (const property of Series.RequiredProperties) {
+        for (const property of QueryNlGet200ResponseAllOfSeriesInner.RequiredProperties) {
             if (!data.hasOwnProperty(property)) {
                 throw new Error("The required field `" + property + "` is not found in the JSON data: " + JSON.stringify(data));
             }
@@ -109,35 +109,35 @@ class Series {
 
 }
 
-Series.RequiredProperties = ["name", "observations"];
+QueryNlGet200ResponseAllOfSeriesInner.RequiredProperties = ["name", "observations"];
 
 /**
  * short id for the series (optional but recommended)
  * @member {String} series_id
  */
-Series.prototype['series_id'] = undefined;
+QueryNlGet200ResponseAllOfSeriesInner.prototype['series_id'] = undefined;
 
 /**
  * human-friendly name for the series
  * @member {String} name
  */
-Series.prototype['name'] = undefined;
+QueryNlGet200ResponseAllOfSeriesInner.prototype['name'] = undefined;
 
 /**
  * unit of measurement (optional)
  * @member {String} unit
  */
-Series.prototype['unit'] = undefined;
+QueryNlGet200ResponseAllOfSeriesInner.prototype['unit'] = undefined;
 
 /**
  * @member {Array.<module:model/QueryNlGet200ResponseAllOfSeriesInnerObservationsInner>} observations
  */
-Series.prototype['observations'] = undefined;
+QueryNlGet200ResponseAllOfSeriesInner.prototype['observations'] = undefined;
 
 
 
 
 
 
-export default Series;
+export default QueryNlGet200ResponseAllOfSeriesInner;
 

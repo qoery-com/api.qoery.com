@@ -13,7 +13,7 @@
 
 
 import ApiClient from "../ApiClient";
-import QueryNlPost400Response from '../model/QueryNlPost400Response';
+import QueryNlGet400Response from '../model/QueryNlGet400Response';
 import UsageGet200Response from '../model/UsageGet200Response';
 
 /**

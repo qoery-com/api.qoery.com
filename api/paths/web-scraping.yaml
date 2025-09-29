@@ -1,5 +1,48 @@
 paths:
   /scrape:
+    get:
+      summary: Structured Web Scrape (query string)
+      description: Download a web page and structured data using query parameters. This is a convenience alias of POST.
+      tags:
+        - Web Scraping
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: url
+          description: Target page URL
+          schema:
+            type: string
+            format: uri
+        - in: query
+          name: html
+          description: Include page HTML inline in response
+          schema:
+            type: boolean
+            default: false
+        - in: query
+          name: markdown
+          description: Include page markdown inline in response
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ScrapeResponse'
+        '400':
+          description: Invalid URL or scraping failed
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
     post:
       summary: Structured Web Scrape
       description: Download a web page, and structured data as time series. Use query params `html=true` and/or `markdown=true` to include raw artifacts inline; otherwise artifact URLs are provided in `artifacts`.
@@ -7,6 +50,13 @@ paths:
         - Web Scraping
       security:
         - ApiKeyAuth: []
+      requestBody:
+        required: false
+        description: Provide JSON body or use query parameter 'url'. Body takes precedence.
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/schemas.yaml#/components/schemas/URLRequest'
       parameters:
         - in: query
           name: html

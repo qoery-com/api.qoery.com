@@ -1,4 +1,4 @@
-# Qoery.QueryResponse
+# Qoery.QuerySqlGet200Response
 
 ## Properties
 

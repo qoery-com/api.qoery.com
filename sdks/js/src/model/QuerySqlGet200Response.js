@@ -15,19 +15,19 @@ import ApiClient from '../ApiClient';
 import QueryNlGet200ResponseAllOfSeriesInner from './QueryNlGet200ResponseAllOfSeriesInner';
 
 /**
- * The QueryResponse model module.
- * @module model/QueryResponse
+ * The QuerySqlGet200Response model module.
+ * @module model/QuerySqlGet200Response
  * @version 0.1.0
  */
-class QueryResponse {
+class QuerySqlGet200Response {
     /**
-     * Constructs a new <code>QueryResponse</code>.
-     * @alias module:model/QueryResponse
+     * Constructs a new <code>QuerySqlGet200Response</code>.
+     * @alias module:model/QuerySqlGet200Response
      * @param series {Array.<module:model/QueryNlGet200ResponseAllOfSeriesInner>} 
      */
     constructor(series) { 
         
-        QueryResponse.initialize(this, series);
+        QuerySqlGet200Response.initialize(this, series);
     }
 
     /**
@@ -40,15 +40,15 @@ class QueryResponse {
     }
 
     /**
-     * Constructs a <code>QueryResponse</code> from a plain JavaScript object, optionally creating a new instance.
+     * Constructs a <code>QuerySqlGet200Response</code> from a plain JavaScript object, optionally creating a new instance.
      * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
      * @param {Object} data The plain JavaScript object bearing properties of interest.
-     * @param {module:model/QueryResponse} obj Optional instance to populate.
-     * @return {module:model/QueryResponse} The populated <code>QueryResponse</code> instance.
+     * @param {module:model/QuerySqlGet200Response} obj Optional instance to populate.
+     * @return {module:model/QuerySqlGet200Response} The populated <code>QuerySqlGet200Response</code> instance.
      */
     static constructFromObject(data, obj) {
         if (data) {
-            obj = obj || new QueryResponse();
+            obj = obj || new QuerySqlGet200Response();
 
             if (data.hasOwnProperty('series')) {
                 obj['series'] = ApiClient.convertToType(data['series'], [QueryNlGet200ResponseAllOfSeriesInner]);
@@ -58,13 +58,13 @@ class QueryResponse {
     }
 
     /**
-     * Validates the JSON data with respect to <code>QueryResponse</code>.
+     * Validates the JSON data with respect to <code>QuerySqlGet200Response</code>.
      * @param {Object} data The plain JavaScript object bearing properties of interest.
-     * @return {boolean} to indicate whether the JSON data is valid with respect to <code>QueryResponse</code>.
+     * @return {boolean} to indicate whether the JSON data is valid with respect to <code>QuerySqlGet200Response</code>.
      */
     static validateJSON(data) {
         // check to make sure all required properties are present in the JSON string
-        for (const property of QueryResponse.RequiredProperties) {
+        for (const property of QuerySqlGet200Response.RequiredProperties) {
             if (!data.hasOwnProperty(property)) {
                 throw new Error("The required field `" + property + "` is not found in the JSON data: " + JSON.stringify(data));
             }
@@ -86,17 +86,17 @@ class QueryResponse {
 
 }
 
-QueryResponse.RequiredProperties = ["series"];
+QuerySqlGet200Response.RequiredProperties = ["series"];
 
 /**
  * @member {Array.<module:model/QueryNlGet200ResponseAllOfSeriesInner>} series
  */
-QueryResponse.prototype['series'] = undefined;
+QuerySqlGet200Response.prototype['series'] = undefined;
 
 
 
 
 
 
-export default QueryResponse;
+export default QuerySqlGet200Response;
 

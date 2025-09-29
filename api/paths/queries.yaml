@@ -1,5 +1,35 @@
 paths:
   /query/nl:
+    get:
+      summary: Natural Language Query (query string)
+      description: Submit a natural-language request using query parameters. This is a convenience alias of POST.
+      tags:
+        - Queries
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: query
+          description: Natural language query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/NLQueryResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
     post:
       summary: Natural Language Query
       description: Submit a natural-language request and get back a curated time series response. The response also includes the generated SQL so you can switch to the SQL endpoint for faster/cheaper repeated queries.
@@ -7,6 +37,13 @@ paths:
         - Queries
       security:
         - ApiKeyAuth: []
+      requestBody:
+        required: false
+        description: Provide JSON body or use query parameter 'query'. Body takes precedence.
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/schemas.yaml#/components/schemas/NLQueryRequest'
       x-codeSamples:
         - lang: Python
           source: # INJECT: python/nl_query_example.py
@@ -69,6 +106,36 @@ paths:
           $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
 
   /query/sql:
+    get:
+      summary: SQL Query (query string)
+      description: Execute a read-only SELECT query using query parameters. This is a convenience alias of POST.
+      tags:
+        - Queries
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: sql_query
+          description: SQL query to execute (read-only)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/QueryResponse'
+        '400':
+          description: Invalid SQL or mapping failure
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
     post:
       summary: SQL Query
       description: Execute a read-only SELECT query and receive the results as curated time series. This endpoint does not return SQL.
@@ -76,6 +143,13 @@ paths:
         - Queries
       security:
         - ApiKeyAuth: []
+      requestBody:
+        required: false
+        description: Provide JSON body or use query parameter 'sql_query'. Body takes precedence.
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/schemas.yaml#/components/schemas/SQLQueryRequest'
       x-codeSamples:
         - lang: Python
           source: # INJECT: python/sql_query_example.py

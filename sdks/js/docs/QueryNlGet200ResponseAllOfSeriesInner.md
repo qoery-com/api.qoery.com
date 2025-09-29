@@ -1,4 +1,4 @@
-# Qoery.Series
+# Qoery.QueryNlGet200ResponseAllOfSeriesInner
 
 ## Properties
 
