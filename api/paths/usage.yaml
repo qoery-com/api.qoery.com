@@ -18,6 +18,15 @@ paths:
             with ApiClient(configuration) as api_client:
                 usage_api = UsageApi(api_client)
                 result = usage_api.usage_get()
+        - lang: JavaScript
+          source: |
+            const { UsageApi, ApiClient } = require('qoerys_api');
+
+            const apiClient = new ApiClient();
+            apiClient.defaultHeaders['X-API-Key'] = 'your-api-key';
+
+            const usageApi = new UsageApi(apiClient);
+            const result = usageApi.usageGet();
       responses:
         '200':
           description: Usage statistics

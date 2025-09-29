@@ -18,6 +18,15 @@ paths:
             with ApiClient(configuration) as api_client:
                 queries_api = QueriesApi(api_client)
                 result = queries_api.query_nl_post(NLQueryRequest(query="CO2 emissions for France"))
+        - lang: JavaScript
+          source: |
+            const { QueriesApi, NLQueryRequest, ApiClient } = require('qoerys_api');
+
+            const apiClient = new ApiClient();
+            apiClient.defaultHeaders['X-API-Key'] = 'your-api-key';
+
+            const queriesApi = new QueriesApi(apiClient);
+            const result = queriesApi.queryNlPost(new NLQueryRequest({ query: "CO2 emissions for France" }));
       responses:
         '200':
           description: OK
@@ -92,6 +101,15 @@ paths:
             with ApiClient(configuration) as api_client:
                 queries_api = QueriesApi(api_client)
                 result = queries_api.query_sql_post(SQLQueryRequest(sql_query="SELECT * FROM emissions"))
+        - lang: JavaScript
+          source: |
+            const { QueriesApi, SQLQueryRequest, ApiClient } = require('qoerys_api');
+
+            const apiClient = new ApiClient();
+            apiClient.defaultHeaders['X-API-Key'] = 'your-api-key';
+
+            const queriesApi = new QueriesApi(apiClient);
+            const result = queriesApi.querySqlPost(new SQLQueryRequest({ sqlQuery: "SELECT * FROM emissions" }));
       responses:
         '200':
           description: OK

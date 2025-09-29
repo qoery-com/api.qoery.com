@@ -18,6 +18,15 @@ paths:
             with ApiClient(configuration) as api_client:
                 data_sources_api = DataSourcesApi(api_client)
                 result = data_sources_api.scrape_post(URLRequest(url="https://example.com"))
+        - lang: JavaScript
+          source: |
+            const { DataSourcesApi, URLRequest, ApiClient } = require('qoerys_api');
+
+            const apiClient = new ApiClient();
+            apiClient.defaultHeaders['X-API-Key'] = 'your-api-key';
+
+            const dataSourcesApi = new DataSourcesApi(apiClient);
+            const result = dataSourcesApi.scrapePost(new URLRequest({ url: "https://example.com" }));
       responses:
         '200':
           description: OK
