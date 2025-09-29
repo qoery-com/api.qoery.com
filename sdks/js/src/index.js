@@ -17,18 +17,21 @@ import ErrorResponse from './model/ErrorResponse';
 import NLQueryRequest from './model/NLQueryRequest';
 import Observation from './model/Observation';
 import QueryNlPost200Response from './model/QueryNlPost200Response';
-import QueryNlPost200ResponseSeriesInner from './model/QueryNlPost200ResponseSeriesInner';
-import QueryNlPost200ResponseSeriesInnerObservationsInner from './model/QueryNlPost200ResponseSeriesInnerObservationsInner';
+import QueryNlPost200ResponseAllOfSeriesInner from './model/QueryNlPost200ResponseAllOfSeriesInner';
+import QueryNlPost200ResponseAllOfSeriesInnerObservationsInner from './model/QueryNlPost200ResponseAllOfSeriesInnerObservationsInner';
 import QueryNlPost400Response from './model/QueryNlPost400Response';
 import QueryResponse from './model/QueryResponse';
+import QuerySqlPost200Response from './model/QuerySqlPost200Response';
 import SQLQueryRequest from './model/SQLQueryRequest';
+import ScrapePost200Response from './model/ScrapePost200Response';
+import ScrapePost200ResponseArtifacts from './model/ScrapePost200ResponseArtifacts';
 import Series from './model/Series';
 import URLRequest from './model/URLRequest';
 import UsageGet200Response from './model/UsageGet200Response';
 import UsageStats from './model/UsageStats';
-import DataSourcesApi from './api/DataSourcesApi';
 import QueriesApi from './api/QueriesApi';
 import UsageApi from './api/UsageApi';
+import WebScrapingApi from './api/WebScrapingApi';
 
 
 /**
@@ -37,9 +40,9 @@ import UsageApi from './api/UsageApi';
 * <p>
 * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
 * <pre>
-* var QoerysApi = require('index'); // See note below*.
-* var xxxSvc = new QoerysApi.XxxApi(); // Allocate the API class we're going to use.
-* var yyyModel = new QoerysApi.Yyy(); // Construct a model instance.
+* var Qoery = require('index'); // See note below*.
+* var xxxSvc = new Qoery.XxxApi(); // Allocate the API class we're going to use.
+* var yyyModel = new Qoery.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -51,8 +54,8 @@ import UsageApi from './api/UsageApi';
 * <p>
 * A non-AMD browser application (discouraged) might do something like this:
 * <pre>
-* var xxxSvc = new QoerysApi.XxxApi(); // Allocate the API class we're going to use.
-* var yyy = new QoerysApi.Yyy(); // Construct a model instance.
+* var xxxSvc = new Qoery.XxxApi(); // Allocate the API class we're going to use.
+* var yyy = new Qoery.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -94,16 +97,16 @@ export {
     QueryNlPost200Response,
 
     /**
-     * The QueryNlPost200ResponseSeriesInner model constructor.
-     * @property {module:model/QueryNlPost200ResponseSeriesInner}
+     * The QueryNlPost200ResponseAllOfSeriesInner model constructor.
+     * @property {module:model/QueryNlPost200ResponseAllOfSeriesInner}
      */
-    QueryNlPost200ResponseSeriesInner,
+    QueryNlPost200ResponseAllOfSeriesInner,
 
     /**
-     * The QueryNlPost200ResponseSeriesInnerObservationsInner model constructor.
-     * @property {module:model/QueryNlPost200ResponseSeriesInnerObservationsInner}
+     * The QueryNlPost200ResponseAllOfSeriesInnerObservationsInner model constructor.
+     * @property {module:model/QueryNlPost200ResponseAllOfSeriesInnerObservationsInner}
      */
-    QueryNlPost200ResponseSeriesInnerObservationsInner,
+    QueryNlPost200ResponseAllOfSeriesInnerObservationsInner,
 
     /**
      * The QueryNlPost400Response model constructor.
@@ -118,10 +121,28 @@ export {
     QueryResponse,
 
     /**
+     * The QuerySqlPost200Response model constructor.
+     * @property {module:model/QuerySqlPost200Response}
+     */
+    QuerySqlPost200Response,
+
+    /**
      * The SQLQueryRequest model constructor.
      * @property {module:model/SQLQueryRequest}
      */
     SQLQueryRequest,
+
+    /**
+     * The ScrapePost200Response model constructor.
+     * @property {module:model/ScrapePost200Response}
+     */
+    ScrapePost200Response,
+
+    /**
+     * The ScrapePost200ResponseArtifacts model constructor.
+     * @property {module:model/ScrapePost200ResponseArtifacts}
+     */
+    ScrapePost200ResponseArtifacts,
 
     /**
      * The Series model constructor.
@@ -148,12 +169,6 @@ export {
     UsageStats,
 
     /**
-    * The DataSourcesApi service constructor.
-    * @property {module:api/DataSourcesApi}
-    */
-    DataSourcesApi,
-
-    /**
     * The QueriesApi service constructor.
     * @property {module:api/QueriesApi}
     */
@@ -163,5 +178,11 @@ export {
     * The UsageApi service constructor.
     * @property {module:api/UsageApi}
     */
-    UsageApi
+    UsageApi,
+
+    /**
+    * The WebScrapingApi service constructor.
+    * @property {module:api/WebScrapingApi}
+    */
+    WebScrapingApi
 };

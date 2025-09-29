@@ -12,7 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
-import QueryNlPost200ResponseSeriesInner from './QueryNlPost200ResponseSeriesInner';
+import QueryNlPost200ResponseAllOfSeriesInner from './QueryNlPost200ResponseAllOfSeriesInner';
 
 /**
  * The QueryNlPost200Response model module.
@@ -23,12 +23,12 @@ class QueryNlPost200Response {
     /**
      * Constructs a new <code>QueryNlPost200Response</code>.
      * @alias module:model/QueryNlPost200Response
-     * @param queryType {module:model/QueryNlPost200Response.QueryTypeEnum} 
-     * @param series {Array.<module:model/QueryNlPost200ResponseSeriesInner>} 
+     * @param series {Array.<module:model/QueryNlPost200ResponseAllOfSeriesInner>} 
+     * @param sqlQuery {String} 
      */
-    constructor(queryType, series) { 
+    constructor(series, sqlQuery) { 
         
-        QueryNlPost200Response.initialize(this, queryType, series);
+        QueryNlPost200Response.initialize(this, series, sqlQuery);
     }
 
     /**
@@ -36,9 +36,9 @@ class QueryNlPost200Response {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj, queryType, series) { 
-        obj['query_type'] = queryType;
+    static initialize(obj, series, sqlQuery) { 
         obj['series'] = series;
+        obj['sql_query'] = sqlQuery;
     }
 
     /**
@@ -52,14 +52,11 @@ class QueryNlPost200Response {
         if (data) {
             obj = obj || new QueryNlPost200Response();
 
-            if (data.hasOwnProperty('query_type')) {
-                obj['query_type'] = ApiClient.convertToType(data['query_type'], 'String');
+            if (data.hasOwnProperty('series')) {
+                obj['series'] = ApiClient.convertToType(data['series'], [QueryNlPost200ResponseAllOfSeriesInner]);
             }
             if (data.hasOwnProperty('sql_query')) {
                 obj['sql_query'] = ApiClient.convertToType(data['sql_query'], 'String');
-            }
-            if (data.hasOwnProperty('series')) {
-                obj['series'] = ApiClient.convertToType(data['series'], [QueryNlPost200ResponseSeriesInner]);
             }
         }
         return obj;
@@ -77,14 +74,6 @@ class QueryNlPost200Response {
                 throw new Error("The required field `" + property + "` is not found in the JSON data: " + JSON.stringify(data));
             }
         }
-        // ensure the json data is a string
-        if (data['query_type'] && !(typeof data['query_type'] === 'string' || data['query_type'] instanceof String)) {
-            throw new Error("Expected the field `query_type` to be a primitive type in the JSON string but got " + data['query_type']);
-        }
-        // ensure the json data is a string
-        if (data['sql_query'] && !(typeof data['sql_query'] === 'string' || data['sql_query'] instanceof String)) {
-            throw new Error("Expected the field `sql_query` to be a primitive type in the JSON string but got " + data['sql_query']);
-        }
         if (data['series']) { // data not null
             // ensure the json data is an array
             if (!Array.isArray(data['series'])) {
@@ -92,8 +81,12 @@ class QueryNlPost200Response {
             }
             // validate the optional field `series` (array)
             for (const item of data['series']) {
-                QueryNlPost200ResponseSeriesInner.validateJSON(item);
+                QueryNlPost200ResponseAllOfSeriesInner.validateJSON(item);
             };
+        }
+        // ensure the json data is a string
+        if (data['sql_query'] && !(typeof data['sql_query'] === 'string' || data['sql_query'] instanceof String)) {
+            throw new Error("Expected the field `sql_query` to be a primitive type in the JSON string but got " + data['sql_query']);
         }
 
         return true;
@@ -102,46 +95,20 @@ class QueryNlPost200Response {
 
 }
 
-QueryNlPost200Response.RequiredProperties = ["query_type", "series"];
+QueryNlPost200Response.RequiredProperties = ["series", "sql_query"];
 
 /**
- * @member {module:model/QueryNlPost200Response.QueryTypeEnum} query_type
+ * @member {Array.<module:model/QueryNlPost200ResponseAllOfSeriesInner>} series
  */
-QueryNlPost200Response.prototype['query_type'] = undefined;
+QueryNlPost200Response.prototype['series'] = undefined;
 
 /**
  * @member {String} sql_query
  */
 QueryNlPost200Response.prototype['sql_query'] = undefined;
 
-/**
- * @member {Array.<module:model/QueryNlPost200ResponseSeriesInner>} series
- */
-QueryNlPost200Response.prototype['series'] = undefined;
 
 
-
-
-
-/**
- * Allowed values for the <code>query_type</code> property.
- * @enum {String}
- * @readonly
- */
-QueryNlPost200Response['QueryTypeEnum'] = {
-
-    /**
-     * value: "nl"
-     * @const
-     */
-    "nl": "nl",
-
-    /**
-     * value: "sql"
-     * @const
-     */
-    "sql": "sql"
-};
 
 
 

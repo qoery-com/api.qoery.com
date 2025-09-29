@@ -17,9 +17,9 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List, Optional
-from openapi_client.models.query_nl_post200_response_series_inner import QueryNlPost200ResponseSeriesInner
+from pydantic import BaseModel, ConfigDict
+from typing import Any, ClassVar, Dict, List
+from openapi_client.models.query_nl_post200_response_all_of_series_inner import QueryNlPost200ResponseAllOfSeriesInner
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,17 +27,8 @@ class QueryResponse(BaseModel):
     """
     QueryResponse
     """ # noqa: E501
-    query_type: StrictStr
-    sql_query: Optional[StrictStr] = None
-    series: List[QueryNlPost200ResponseSeriesInner]
-    __properties: ClassVar[List[str]] = ["query_type", "sql_query", "series"]
-
-    @field_validator('query_type')
-    def query_type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['nl', 'sql']):
-            raise ValueError("must be one of enum values ('nl', 'sql')")
-        return value
+    series: List[QueryNlPost200ResponseAllOfSeriesInner]
+    __properties: ClassVar[List[str]] = ["series"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -97,9 +88,7 @@ class QueryResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "query_type": obj.get("query_type"),
-            "sql_query": obj.get("sql_query"),
-            "series": [QueryNlPost200ResponseSeriesInner.from_dict(_item) for _item in obj["series"]] if obj.get("series") is not None else None
+            "series": [QueryNlPost200ResponseAllOfSeriesInner.from_dict(_item) for _item in obj["series"]] if obj.get("series") is not None else None
         })
         return _obj
 

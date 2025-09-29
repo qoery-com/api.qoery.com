@@ -15,6 +15,7 @@
 import ApiClient from "../ApiClient";
 import QueryNlPost200Response from '../model/QueryNlPost200Response';
 import QueryNlPost400Response from '../model/QueryNlPost400Response';
+import QuerySqlPost200Response from '../model/QuerySqlPost200Response';
 
 /**
 * Queries service.
@@ -44,7 +45,8 @@ export default class QueriesApi {
      */
 
     /**
-     * Natural language → SQL → time series
+     * Natural Language Query
+     * Submit a natural-language request and get back a curated time series response. The response also includes the generated SQL so you can switch to the SQL endpoint for faster/cheaper repeated queries.
      * @param {module:api/QueriesApi~queryNlPostCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/QueryNlPost200Response}
      */
@@ -75,14 +77,15 @@ export default class QueriesApi {
      * Callback function to receive the result of the querySqlPost operation.
      * @callback module:api/QueriesApi~querySqlPostCallback
      * @param {String} error Error message, if any.
-     * @param {module:model/QueryNlPost200Response} data The data returned by the service call.
+     * @param {module:model/QuerySqlPost200Response} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
-     * Execute SQL → return time series
+     * SQL Query
+     * Execute a read-only SELECT query and receive the results as curated time series. This endpoint does not return SQL.
      * @param {module:api/QueriesApi~querySqlPostCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/QueryNlPost200Response}
+     * data is of type: {@link module:model/QuerySqlPost200Response}
      */
     querySqlPost(callback) {
       let postBody = null;
@@ -99,7 +102,7 @@ export default class QueriesApi {
       let authNames = ['ApiKeyAuth'];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = QueryNlPost200Response;
+      let returnType = QuerySqlPost200Response;
       return this.apiClient.callApi(
         '/query/sql', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,

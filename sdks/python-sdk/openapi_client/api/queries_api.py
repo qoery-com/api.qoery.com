@@ -17,8 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from openapi_client.models.query_nl_post200_response import QueryNlPost200Response
-from openapi_client.models.query_nl_post_request import QueryNlPostRequest
-from openapi_client.models.query_sql_post_request import QuerySqlPostRequest
+from openapi_client.models.query_sql_post200_response import QuerySqlPost200Response
 
 from openapi_client.api_client import ApiClient, RequestSerialized
 from openapi_client.api_response import ApiResponse
@@ -41,7 +40,6 @@ class QueriesApi:
     @validate_call
     def query_nl_post(
         self,
-        query_nl_post_request: QueryNlPostRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -55,11 +53,10 @@ class QueriesApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> QueryNlPost200Response:
-        """Natural language → SQL → time series
+        """Natural Language Query
 
+        Submit a natural-language request and get back a curated time series response. The response also includes the generated SQL so you can switch to the SQL endpoint for faster/cheaper repeated queries.
 
-        :param query_nl_post_request: (required)
-        :type query_nl_post_request: QueryNlPostRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -83,7 +80,6 @@ class QueriesApi:
         """ # noqa: E501
 
         _param = self._query_nl_post_serialize(
-            query_nl_post_request=query_nl_post_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -110,7 +106,6 @@ class QueriesApi:
     @validate_call
     def query_nl_post_with_http_info(
         self,
-        query_nl_post_request: QueryNlPostRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -124,11 +119,10 @@ class QueriesApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ApiResponse[QueryNlPost200Response]:
-        """Natural language → SQL → time series
+        """Natural Language Query
 
+        Submit a natural-language request and get back a curated time series response. The response also includes the generated SQL so you can switch to the SQL endpoint for faster/cheaper repeated queries.
 
-        :param query_nl_post_request: (required)
-        :type query_nl_post_request: QueryNlPostRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -152,7 +146,6 @@ class QueriesApi:
         """ # noqa: E501
 
         _param = self._query_nl_post_serialize(
-            query_nl_post_request=query_nl_post_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -179,7 +172,6 @@ class QueriesApi:
     @validate_call
     def query_nl_post_without_preload_content(
         self,
-        query_nl_post_request: QueryNlPostRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -193,11 +185,10 @@ class QueriesApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Natural language → SQL → time series
+        """Natural Language Query
 
+        Submit a natural-language request and get back a curated time series response. The response also includes the generated SQL so you can switch to the SQL endpoint for faster/cheaper repeated queries.
 
-        :param query_nl_post_request: (required)
-        :type query_nl_post_request: QueryNlPostRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -221,7 +212,6 @@ class QueriesApi:
         """ # noqa: E501
 
         _param = self._query_nl_post_serialize(
-            query_nl_post_request=query_nl_post_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -243,7 +233,6 @@ class QueriesApi:
 
     def _query_nl_post_serialize(
         self,
-        query_nl_post_request,
         _request_auth,
         _content_type,
         _headers,
@@ -269,8 +258,6 @@ class QueriesApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if query_nl_post_request is not None:
-            _body_params = query_nl_post_request
 
 
         # set the HTTP header `Accept`
@@ -281,19 +268,6 @@ class QueriesApi:
                 ]
             )
 
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
         _auth_settings: List[str] = [
@@ -321,7 +295,6 @@ class QueriesApi:
     @validate_call
     def query_sql_post(
         self,
-        query_sql_post_request: QuerySqlPostRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -334,12 +307,11 @@ class QueriesApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> QueryNlPost200Response:
-        """Execute SQL → return time series
+    ) -> QuerySqlPost200Response:
+        """SQL Query
 
+        Execute a read-only SELECT query and receive the results as curated time series. This endpoint does not return SQL.
 
-        :param query_sql_post_request: (required)
-        :type query_sql_post_request: QuerySqlPostRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -363,7 +335,6 @@ class QueriesApi:
         """ # noqa: E501
 
         _param = self._query_sql_post_serialize(
-            query_sql_post_request=query_sql_post_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -371,7 +342,7 @@ class QueriesApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "QueryNlPost200Response",
+            '200': "QuerySqlPost200Response",
             '400': "QueryNlPost400Response",
             '401': "QueryNlPost400Response",
             '429': "QueryNlPost400Response",
@@ -390,7 +361,6 @@ class QueriesApi:
     @validate_call
     def query_sql_post_with_http_info(
         self,
-        query_sql_post_request: QuerySqlPostRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -403,12 +373,11 @@ class QueriesApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[QueryNlPost200Response]:
-        """Execute SQL → return time series
+    ) -> ApiResponse[QuerySqlPost200Response]:
+        """SQL Query
 
+        Execute a read-only SELECT query and receive the results as curated time series. This endpoint does not return SQL.
 
-        :param query_sql_post_request: (required)
-        :type query_sql_post_request: QuerySqlPostRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -432,7 +401,6 @@ class QueriesApi:
         """ # noqa: E501
 
         _param = self._query_sql_post_serialize(
-            query_sql_post_request=query_sql_post_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -440,7 +408,7 @@ class QueriesApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "QueryNlPost200Response",
+            '200': "QuerySqlPost200Response",
             '400': "QueryNlPost400Response",
             '401': "QueryNlPost400Response",
             '429': "QueryNlPost400Response",
@@ -459,7 +427,6 @@ class QueriesApi:
     @validate_call
     def query_sql_post_without_preload_content(
         self,
-        query_sql_post_request: QuerySqlPostRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -473,11 +440,10 @@ class QueriesApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Execute SQL → return time series
+        """SQL Query
 
+        Execute a read-only SELECT query and receive the results as curated time series. This endpoint does not return SQL.
 
-        :param query_sql_post_request: (required)
-        :type query_sql_post_request: QuerySqlPostRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -501,7 +467,6 @@ class QueriesApi:
         """ # noqa: E501
 
         _param = self._query_sql_post_serialize(
-            query_sql_post_request=query_sql_post_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -509,7 +474,7 @@ class QueriesApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "QueryNlPost200Response",
+            '200': "QuerySqlPost200Response",
             '400': "QueryNlPost400Response",
             '401': "QueryNlPost400Response",
             '429': "QueryNlPost400Response",
@@ -523,7 +488,6 @@ class QueriesApi:
 
     def _query_sql_post_serialize(
         self,
-        query_sql_post_request,
         _request_auth,
         _content_type,
         _headers,
@@ -549,8 +513,6 @@ class QueriesApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if query_sql_post_request is not None:
-            _body_params = query_sql_post_request
 
 
         # set the HTTP header `Accept`
@@ -561,19 +523,6 @@ class QueriesApi:
                 ]
             )
 
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
         _auth_settings: List[str] = [

@@ -12,7 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
-import QueryNlPost200ResponseSeriesInner from './QueryNlPost200ResponseSeriesInner';
+import QueryNlPost200ResponseAllOfSeriesInner from './QueryNlPost200ResponseAllOfSeriesInner';
 
 /**
  * The QueryResponse model module.
@@ -23,12 +23,11 @@ class QueryResponse {
     /**
      * Constructs a new <code>QueryResponse</code>.
      * @alias module:model/QueryResponse
-     * @param queryType {module:model/QueryResponse.QueryTypeEnum} 
-     * @param series {Array.<module:model/QueryNlPost200ResponseSeriesInner>} 
+     * @param series {Array.<module:model/QueryNlPost200ResponseAllOfSeriesInner>} 
      */
-    constructor(queryType, series) { 
+    constructor(series) { 
         
-        QueryResponse.initialize(this, queryType, series);
+        QueryResponse.initialize(this, series);
     }
 
     /**
@@ -36,8 +35,7 @@ class QueryResponse {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj, queryType, series) { 
-        obj['query_type'] = queryType;
+    static initialize(obj, series) { 
         obj['series'] = series;
     }
 
@@ -52,14 +50,8 @@ class QueryResponse {
         if (data) {
             obj = obj || new QueryResponse();
 
-            if (data.hasOwnProperty('query_type')) {
-                obj['query_type'] = ApiClient.convertToType(data['query_type'], 'String');
-            }
-            if (data.hasOwnProperty('sql_query')) {
-                obj['sql_query'] = ApiClient.convertToType(data['sql_query'], 'String');
-            }
             if (data.hasOwnProperty('series')) {
-                obj['series'] = ApiClient.convertToType(data['series'], [QueryNlPost200ResponseSeriesInner]);
+                obj['series'] = ApiClient.convertToType(data['series'], [QueryNlPost200ResponseAllOfSeriesInner]);
             }
         }
         return obj;
@@ -77,14 +69,6 @@ class QueryResponse {
                 throw new Error("The required field `" + property + "` is not found in the JSON data: " + JSON.stringify(data));
             }
         }
-        // ensure the json data is a string
-        if (data['query_type'] && !(typeof data['query_type'] === 'string' || data['query_type'] instanceof String)) {
-            throw new Error("Expected the field `query_type` to be a primitive type in the JSON string but got " + data['query_type']);
-        }
-        // ensure the json data is a string
-        if (data['sql_query'] && !(typeof data['sql_query'] === 'string' || data['sql_query'] instanceof String)) {
-            throw new Error("Expected the field `sql_query` to be a primitive type in the JSON string but got " + data['sql_query']);
-        }
         if (data['series']) { // data not null
             // ensure the json data is an array
             if (!Array.isArray(data['series'])) {
@@ -92,7 +76,7 @@ class QueryResponse {
             }
             // validate the optional field `series` (array)
             for (const item of data['series']) {
-                QueryNlPost200ResponseSeriesInner.validateJSON(item);
+                QueryNlPost200ResponseAllOfSeriesInner.validateJSON(item);
             };
         }
 
@@ -102,46 +86,15 @@ class QueryResponse {
 
 }
 
-QueryResponse.RequiredProperties = ["query_type", "series"];
+QueryResponse.RequiredProperties = ["series"];
 
 /**
- * @member {module:model/QueryResponse.QueryTypeEnum} query_type
- */
-QueryResponse.prototype['query_type'] = undefined;
-
-/**
- * @member {String} sql_query
- */
-QueryResponse.prototype['sql_query'] = undefined;
-
-/**
- * @member {Array.<module:model/QueryNlPost200ResponseSeriesInner>} series
+ * @member {Array.<module:model/QueryNlPost200ResponseAllOfSeriesInner>} series
  */
 QueryResponse.prototype['series'] = undefined;
 
 
 
-
-
-/**
- * Allowed values for the <code>query_type</code> property.
- * @enum {String}
- * @readonly
- */
-QueryResponse['QueryTypeEnum'] = {
-
-    /**
-     * value: "nl"
-     * @const
-     */
-    "nl": "nl",
-
-    /**
-     * value: "sql"
-     * @const
-     */
-    "sql": "sql"
-};
 
 
 

@@ -1,6 +1,6 @@
-# QoerysApi.UsageApi
+# Qoery.UsageApi
 
-All URIs are relative to *https://api.qoery.com*
+All URIs are relative to *https://api.qoery.com/v0*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -19,15 +19,15 @@ Get current usage and rate limit information
 ### Example
 
 ```javascript
-import QoerysApi from 'qoerys_api';
-let defaultClient = QoerysApi.ApiClient.instance;
+import Qoery from 'qoery';
+let defaultClient = Qoery.ApiClient.instance;
 // Configure API key authorization: ApiKeyAuth
 let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
 ApiKeyAuth.apiKey = 'YOUR API KEY';
 // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
 //ApiKeyAuth.apiKeyPrefix = 'Token';
 
-let apiInstance = new QoerysApi.UsageApi();
+let apiInstance = new Qoery.UsageApi();
 apiInstance.usageGet((error, data, response) => {
   if (error) {
     console.error(error);

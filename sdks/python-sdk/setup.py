@@ -20,7 +20,7 @@ from setuptools import setup, find_packages  # noqa: H301
 #
 # prerequisite: setuptools
 # http://pypi.python.org/pypi/setuptools
-NAME = "openapi-client"
+NAME = "qoery"
 VERSION = "1.0.0"
 PYTHON_REQUIRES = ">= 3.9"
 REQUIRES = [
@@ -36,7 +36,7 @@ setup(
     description="qoery&#39;s API",
     author="OpenAPI Generator community",
     author_email="team@openapitools.org",
-    url="",
+    url="https://github.com/qoery/python-sdk",
     keywords=["OpenAPI", "OpenAPI-Generator", "qoery's API"],
     install_requires=REQUIRES,
     packages=find_packages(exclude=["test", "tests"]),
@@ -45,5 +45,5 @@ setup(
     long_description="""\
     Every number on the internet, queryable. Instant access to millions of trusted statistics through a single natural language query or API call. 
     """,  # noqa: E501
-    package_data={"openapi_client": ["py.typed"]},
+    package_data={"qoery": ["py.typed"]},
 )

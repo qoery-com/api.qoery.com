@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.url_request import URLRequest
+from qoery.models.url_request import URLRequest
 
 # TODO update the JSON string below
 json = "{}"

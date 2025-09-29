@@ -1,4 +1,4 @@
-# openapi-client
+# qoery
 Every number on the internet, queryable. Instant access to millions of trusted statistics through a single natural language query or API call.
 
 
@@ -25,7 +25,7 @@ pip install git+https://github.com/GIT_USER_ID/GIT_REPO_ID.git
 
 Then import the package:
 ```python
-import openapi_client
+import qoery
 ```
 
 ### Setuptools
@@ -39,7 +39,7 @@ python setup.py install --user
 
 Then import the package:
 ```python
-import openapi_client
+import qoery
 ```
 
 ### Tests
@@ -52,14 +52,14 @@ Please follow the [installation procedure](#installation--usage) and then run th
 
 ```python
 
-import openapi_client
-from openapi_client.rest import ApiException
+import qoery
+from qoery.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://api.qoery.com
+# Defining the host is optional and defaults to https://api.qoery.com/v0
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
-    host = "https://api.qoery.com"
+configuration = qoery.Configuration(
+    host = "https://api.qoery.com/v0"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -75,31 +75,30 @@ configuration.api_key['ApiKeyAuth'] = os.environ["API_KEY"]
 
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with qoery.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.DataSourcesApi(api_client)
-    scrape_post_request = openapi_client.ScrapePostRequest() # ScrapePostRequest | 
+    api_instance = qoery.QueriesApi(api_client)
 
     try:
-        # Scrape URL → return series
-        api_response = api_instance.scrape_post(scrape_post_request)
-        print("The response of DataSourcesApi->scrape_post:\n")
+        # Natural Language Query
+        api_response = api_instance.query_nl_post()
+        print("The response of QueriesApi->query_nl_post:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling DataSourcesApi->scrape_post: %s\n" % e)
+        print("Exception when calling QueriesApi->query_nl_post: %s\n" % e)
 
 ```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://api.qoery.com*
+All URIs are relative to *https://api.qoery.com/v0*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DataSourcesApi* | [**scrape_post**](docs/DataSourcesApi.md#scrape_post) | **POST** /scrape | Scrape URL → return series
-*QueriesApi* | [**query_nl_post**](docs/QueriesApi.md#query_nl_post) | **POST** /query/nl | Natural language → SQL → time series
-*QueriesApi* | [**query_sql_post**](docs/QueriesApi.md#query_sql_post) | **POST** /query/sql | Execute SQL → return time series
+*QueriesApi* | [**query_nl_post**](docs/QueriesApi.md#query_nl_post) | **POST** /query/nl | Natural Language Query
+*QueriesApi* | [**query_sql_post**](docs/QueriesApi.md#query_sql_post) | **POST** /query/sql | SQL Query
 *UsageApi* | [**usage_get**](docs/UsageApi.md#usage_get) | **GET** /usage | Get usage statistics
+*WebScrapingApi* | [**scrape_post**](docs/WebScrapingApi.md#scrape_post) | **POST** /scrape | Structured Web Scrape
 
 
 ## Documentation For Models
@@ -108,14 +107,14 @@ Class | Method | HTTP request | Description
  - [NLQueryRequest](docs/NLQueryRequest.md)
  - [Observation](docs/Observation.md)
  - [QueryNlPost200Response](docs/QueryNlPost200Response.md)
- - [QueryNlPost200ResponseSeriesInner](docs/QueryNlPost200ResponseSeriesInner.md)
- - [QueryNlPost200ResponseSeriesInnerObservationsInner](docs/QueryNlPost200ResponseSeriesInnerObservationsInner.md)
+ - [QueryNlPost200ResponseAllOfSeriesInner](docs/QueryNlPost200ResponseAllOfSeriesInner.md)
+ - [QueryNlPost200ResponseAllOfSeriesInnerObservationsInner](docs/QueryNlPost200ResponseAllOfSeriesInnerObservationsInner.md)
  - [QueryNlPost400Response](docs/QueryNlPost400Response.md)
- - [QueryNlPostRequest](docs/QueryNlPostRequest.md)
  - [QueryResponse](docs/QueryResponse.md)
- - [QuerySqlPostRequest](docs/QuerySqlPostRequest.md)
+ - [QuerySqlPost200Response](docs/QuerySqlPost200Response.md)
  - [SQLQueryRequest](docs/SQLQueryRequest.md)
- - [ScrapePostRequest](docs/ScrapePostRequest.md)
+ - [ScrapePost200Response](docs/ScrapePost200Response.md)
+ - [ScrapePost200ResponseArtifacts](docs/ScrapePost200ResponseArtifacts.md)
  - [Series](docs/Series.md)
  - [URLRequest](docs/URLRequest.md)
  - [UsageGet200Response](docs/UsageGet200Response.md)

@@ -12,7 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
-import QueryNlPost200ResponseSeriesInnerObservationsInner from './QueryNlPost200ResponseSeriesInnerObservationsInner';
+import QueryNlPost200ResponseAllOfSeriesInnerObservationsInner from './QueryNlPost200ResponseAllOfSeriesInnerObservationsInner';
 
 /**
  * The Series model module.
@@ -24,7 +24,7 @@ class Series {
      * Constructs a new <code>Series</code>.
      * @alias module:model/Series
      * @param name {String} human-friendly name for the series
-     * @param observations {Array.<module:model/QueryNlPost200ResponseSeriesInnerObservationsInner>} 
+     * @param observations {Array.<module:model/QueryNlPost200ResponseAllOfSeriesInnerObservationsInner>} 
      */
     constructor(name, observations) { 
         
@@ -62,7 +62,7 @@ class Series {
                 obj['unit'] = ApiClient.convertToType(data['unit'], 'String');
             }
             if (data.hasOwnProperty('observations')) {
-                obj['observations'] = ApiClient.convertToType(data['observations'], [QueryNlPost200ResponseSeriesInnerObservationsInner]);
+                obj['observations'] = ApiClient.convertToType(data['observations'], [QueryNlPost200ResponseAllOfSeriesInnerObservationsInner]);
             }
         }
         return obj;
@@ -99,7 +99,7 @@ class Series {
             }
             // validate the optional field `observations` (array)
             for (const item of data['observations']) {
-                QueryNlPost200ResponseSeriesInnerObservationsInner.validateJSON(item);
+                QueryNlPost200ResponseAllOfSeriesInnerObservationsInner.validateJSON(item);
             };
         }
 
@@ -130,7 +130,7 @@ Series.prototype['name'] = undefined;
 Series.prototype['unit'] = undefined;
 
 /**
- * @member {Array.<module:model/QueryNlPost200ResponseSeriesInnerObservationsInner>} observations
+ * @member {Array.<module:model/QueryNlPost200ResponseAllOfSeriesInnerObservationsInner>} observations
  */
 Series.prototype['observations'] = undefined;
 

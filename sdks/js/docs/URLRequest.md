@@ -1,4 +1,4 @@
-# QoerysApi.URLRequest
+# Qoery.URLRequest
 
 ## Properties
 

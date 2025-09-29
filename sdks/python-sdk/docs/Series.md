@@ -8,12 +8,12 @@ Name | Type | Description | Notes
 **series_id** | **str** | short id for the series (optional but recommended) | [optional] 
 **name** | **str** | human-friendly name for the series | 
 **unit** | **str** | unit of measurement (optional) | [optional] 
-**observations** | [**List[QueryNlPost200ResponseSeriesInnerObservationsInner]**](QueryNlPost200ResponseSeriesInnerObservationsInner.md) |  | 
+**observations** | [**List[QueryNlPost200ResponseAllOfSeriesInnerObservationsInner]**](QueryNlPost200ResponseAllOfSeriesInnerObservationsInner.md) |  | 
 
 ## Example
 
 ```python
-from openapi_client.models.series import Series
+from qoery.models.series import Series
 
 # TODO update the JSON string below
 json = "{}"

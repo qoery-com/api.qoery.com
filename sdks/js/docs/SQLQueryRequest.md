@@ -1,4 +1,4 @@
-# QoerysApi.SQLQueryRequest
+# Qoery.SQLQueryRequest
 
 ## Properties
 

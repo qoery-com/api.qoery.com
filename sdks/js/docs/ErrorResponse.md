@@ -1,4 +1,4 @@
-# QoerysApi.ErrorResponse
+# Qoery.ErrorResponse
 
 ## Properties
 

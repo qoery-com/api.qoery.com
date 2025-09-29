@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.observation import Observation
+from qoery.models.observation import Observation
 
 # TODO update the JSON string below
 json = "{}"

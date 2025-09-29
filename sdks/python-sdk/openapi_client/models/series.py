@@ -19,7 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from openapi_client.models.query_nl_post200_response_series_inner_observations_inner import QueryNlPost200ResponseSeriesInnerObservationsInner
+from openapi_client.models.query_nl_post200_response_all_of_series_inner_observations_inner import QueryNlPost200ResponseAllOfSeriesInnerObservationsInner
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,7 +30,7 @@ class Series(BaseModel):
     series_id: Optional[StrictStr] = Field(default=None, description="short id for the series (optional but recommended)")
     name: StrictStr = Field(description="human-friendly name for the series")
     unit: Optional[StrictStr] = Field(default=None, description="unit of measurement (optional)")
-    observations: List[QueryNlPost200ResponseSeriesInnerObservationsInner]
+    observations: List[QueryNlPost200ResponseAllOfSeriesInnerObservationsInner]
     __properties: ClassVar[List[str]] = ["series_id", "name", "unit", "observations"]
 
     model_config = ConfigDict(
@@ -94,7 +94,7 @@ class Series(BaseModel):
             "series_id": obj.get("series_id"),
             "name": obj.get("name"),
             "unit": obj.get("unit"),
-            "observations": [QueryNlPost200ResponseSeriesInnerObservationsInner.from_dict(_item) for _item in obj["observations"]] if obj.get("observations") is not None else None
+            "observations": [QueryNlPost200ResponseAllOfSeriesInnerObservationsInner.from_dict(_item) for _item in obj["observations"]] if obj.get("observations") is not None else None
         })
         return _obj
 

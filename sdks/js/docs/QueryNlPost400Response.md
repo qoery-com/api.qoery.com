@@ -1,4 +1,4 @@
-# QoerysApi.QueryNlPost400Response
+# Qoery.QueryNlPost400Response
 
 ## Properties
 

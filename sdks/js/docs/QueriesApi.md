@@ -1,11 +1,11 @@
-# QoerysApi.QueriesApi
+# Qoery.QueriesApi
 
-All URIs are relative to *https://api.qoery.com*
+All URIs are relative to *https://api.qoery.com/v0*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**queryNlPost**](QueriesApi.md#queryNlPost) | **POST** /query/nl | Natural language → SQL → time series
-[**querySqlPost**](QueriesApi.md#querySqlPost) | **POST** /query/sql | Execute SQL → return time series
+[**queryNlPost**](QueriesApi.md#queryNlPost) | **POST** /query/nl | Natural Language Query
+[**querySqlPost**](QueriesApi.md#querySqlPost) | **POST** /query/sql | SQL Query
 
 
 
@@ -13,20 +13,22 @@ Method | HTTP request | Description
 
 > QueryNlPost200Response queryNlPost()
 
-Natural language → SQL → time series
+Natural Language Query
+
+Submit a natural-language request and get back a curated time series response. The response also includes the generated SQL so you can switch to the SQL endpoint for faster/cheaper repeated queries.
 
 ### Example
 
 ```javascript
-import QoerysApi from 'qoerys_api';
-let defaultClient = QoerysApi.ApiClient.instance;
+import Qoery from 'qoery';
+let defaultClient = Qoery.ApiClient.instance;
 // Configure API key authorization: ApiKeyAuth
 let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
 ApiKeyAuth.apiKey = 'YOUR API KEY';
 // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
 //ApiKeyAuth.apiKeyPrefix = 'Token';
 
-let apiInstance = new QoerysApi.QueriesApi();
+let apiInstance = new Qoery.QueriesApi();
 apiInstance.queryNlPost((error, data, response) => {
   if (error) {
     console.error(error);
@@ -56,22 +58,24 @@ This endpoint does not need any parameter.
 
 ## querySqlPost
 
-> QueryNlPost200Response querySqlPost()
+> QuerySqlPost200Response querySqlPost()
 
-Execute SQL → return time series
+SQL Query
+
+Execute a read-only SELECT query and receive the results as curated time series. This endpoint does not return SQL.
 
 ### Example
 
 ```javascript
-import QoerysApi from 'qoerys_api';
-let defaultClient = QoerysApi.ApiClient.instance;
+import Qoery from 'qoery';
+let defaultClient = Qoery.ApiClient.instance;
 // Configure API key authorization: ApiKeyAuth
 let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
 ApiKeyAuth.apiKey = 'YOUR API KEY';
 // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
 //ApiKeyAuth.apiKeyPrefix = 'Token';
 
-let apiInstance = new QoerysApi.QueriesApi();
+let apiInstance = new Qoery.QueriesApi();
 apiInstance.querySqlPost((error, data, response) => {
   if (error) {
     console.error(error);
@@ -87,7 +91,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**QueryNlPost200Response**](QueryNlPost200Response.md)
+[**QuerySqlPost200Response**](QuerySqlPost200Response.md)
 
 ### Authorization
 

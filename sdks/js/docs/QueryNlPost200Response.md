@@ -1,22 +1,10 @@
-# QoerysApi.QueryNlPost200Response
+# Qoery.QueryNlPost200Response
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**queryType** | **String** |  | 
-**sqlQuery** | **String** |  | [optional] 
-**series** | [**[QueryNlPost200ResponseSeriesInner]**](QueryNlPost200ResponseSeriesInner.md) |  | 
-
-
-
-## Enum: QueryTypeEnum
-
-
-* `nl` (value: `"nl"`)
-
-* `sql` (value: `"sql"`)
-
-
+**series** | [**[QueryNlPost200ResponseAllOfSeriesInner]**](QueryNlPost200ResponseAllOfSeriesInner.md) |  | 
+**sqlQuery** | **String** |  | 
 
 

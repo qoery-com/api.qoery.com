@@ -1,0 +1,6 @@
+packageName: qoery
+packageVersion: 1.0.0
+packageDescription: "qoery's Python SDK"
+packageUrl: "https://github.com/qoery/python-sdk"
+packageCompany: "qoery"
+packageAuthors: "qoery team"

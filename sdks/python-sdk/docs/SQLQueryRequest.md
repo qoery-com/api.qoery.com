@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.sql_query_request import SQLQueryRequest
+from qoery.models.sql_query_request import SQLQueryRequest
 
 # TODO update the JSON string below
 json = "{}"

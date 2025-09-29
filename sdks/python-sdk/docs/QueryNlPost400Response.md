@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.query_nl_post400_response import QueryNlPost400Response
+from qoery.models.query_nl_post400_response import QueryNlPost400Response
 
 # TODO update the JSON string below
 json = "{}"

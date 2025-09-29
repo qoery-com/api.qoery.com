@@ -18,9 +18,9 @@ __version__ = "1.0.0"
 
 # Define package exports
 __all__ = [
-    "DataSourcesApi",
     "QueriesApi",
     "UsageApi",
+    "WebScrapingApi",
     "ApiResponse",
     "ApiClient",
     "Configuration",
@@ -34,14 +34,14 @@ __all__ = [
     "NLQueryRequest",
     "Observation",
     "QueryNlPost200Response",
-    "QueryNlPost200ResponseSeriesInner",
-    "QueryNlPost200ResponseSeriesInnerObservationsInner",
+    "QueryNlPost200ResponseAllOfSeriesInner",
+    "QueryNlPost200ResponseAllOfSeriesInnerObservationsInner",
     "QueryNlPost400Response",
-    "QueryNlPostRequest",
     "QueryResponse",
-    "QuerySqlPostRequest",
+    "QuerySqlPost200Response",
     "SQLQueryRequest",
-    "ScrapePostRequest",
+    "ScrapePost200Response",
+    "ScrapePost200ResponseArtifacts",
     "Series",
     "URLRequest",
     "UsageGet200Response",
@@ -49,9 +49,9 @@ __all__ = [
 ]
 
 # import apis into sdk package
-from openapi_client.api.data_sources_api import DataSourcesApi as DataSourcesApi
 from openapi_client.api.queries_api import QueriesApi as QueriesApi
 from openapi_client.api.usage_api import UsageApi as UsageApi
+from openapi_client.api.web_scraping_api import WebScrapingApi as WebScrapingApi
 
 # import ApiClient
 from openapi_client.api_response import ApiResponse as ApiResponse
@@ -69,14 +69,14 @@ from openapi_client.models.error_response import ErrorResponse as ErrorResponse
 from openapi_client.models.nl_query_request import NLQueryRequest as NLQueryRequest
 from openapi_client.models.observation import Observation as Observation
 from openapi_client.models.query_nl_post200_response import QueryNlPost200Response as QueryNlPost200Response
-from openapi_client.models.query_nl_post200_response_series_inner import QueryNlPost200ResponseSeriesInner as QueryNlPost200ResponseSeriesInner
-from openapi_client.models.query_nl_post200_response_series_inner_observations_inner import QueryNlPost200ResponseSeriesInnerObservationsInner as QueryNlPost200ResponseSeriesInnerObservationsInner
+from openapi_client.models.query_nl_post200_response_all_of_series_inner import QueryNlPost200ResponseAllOfSeriesInner as QueryNlPost200ResponseAllOfSeriesInner
+from openapi_client.models.query_nl_post200_response_all_of_series_inner_observations_inner import QueryNlPost200ResponseAllOfSeriesInnerObservationsInner as QueryNlPost200ResponseAllOfSeriesInnerObservationsInner
 from openapi_client.models.query_nl_post400_response import QueryNlPost400Response as QueryNlPost400Response
-from openapi_client.models.query_nl_post_request import QueryNlPostRequest as QueryNlPostRequest
 from openapi_client.models.query_response import QueryResponse as QueryResponse
-from openapi_client.models.query_sql_post_request import QuerySqlPostRequest as QuerySqlPostRequest
+from openapi_client.models.query_sql_post200_response import QuerySqlPost200Response as QuerySqlPost200Response
 from openapi_client.models.sql_query_request import SQLQueryRequest as SQLQueryRequest
-from openapi_client.models.scrape_post_request import ScrapePostRequest as ScrapePostRequest
+from openapi_client.models.scrape_post200_response import ScrapePost200Response as ScrapePost200Response
+from openapi_client.models.scrape_post200_response_artifacts import ScrapePost200ResponseArtifacts as ScrapePost200ResponseArtifacts
 from openapi_client.models.series import Series as Series
 from openapi_client.models.url_request import URLRequest as URLRequest
 from openapi_client.models.usage_get200_response import UsageGet200Response as UsageGet200Response

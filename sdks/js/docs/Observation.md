@@ -1,4 +1,4 @@
-# QoerysApi.Observation
+# Qoery.Observation
 
 ## Properties
 

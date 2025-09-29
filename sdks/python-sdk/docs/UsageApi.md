@@ -1,6 +1,6 @@
-# openapi_client.UsageApi
+# qoery.UsageApi
 
-All URIs are relative to *https://api.qoery.com*
+All URIs are relative to *https://api.qoery.com/v0*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -19,15 +19,15 @@ Get current usage and rate limit information
 * Api Key Authentication (ApiKeyAuth):
 
 ```python
-import openapi_client
-from openapi_client.models.usage_get200_response import UsageGet200Response
-from openapi_client.rest import ApiException
+import qoery
+from qoery.models.usage_get200_response import UsageGet200Response
+from qoery.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://api.qoery.com
+# Defining the host is optional and defaults to https://api.qoery.com/v0
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
-    host = "https://api.qoery.com"
+configuration = qoery.Configuration(
+    host = "https://api.qoery.com/v0"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -42,9 +42,9 @@ configuration.api_key['ApiKeyAuth'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['ApiKeyAuth'] = 'Bearer'
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with qoery.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.UsageApi(api_client)
+    api_instance = qoery.UsageApi(api_client)
 
     try:
         # Get usage statistics

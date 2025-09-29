@@ -1,4 +1,4 @@
-# QoerysApi.UsageStats
+# Qoery.UsageStats
 
 ## Properties
 

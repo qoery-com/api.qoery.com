@@ -1,33 +1,34 @@
-# openapi_client.QueriesApi
+# qoery.QueriesApi
 
-All URIs are relative to *https://api.qoery.com*
+All URIs are relative to *https://api.qoery.com/v0*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**query_nl_post**](QueriesApi.md#query_nl_post) | **POST** /query/nl | Natural language → SQL → time series
-[**query_sql_post**](QueriesApi.md#query_sql_post) | **POST** /query/sql | Execute SQL → return time series
+[**query_nl_post**](QueriesApi.md#query_nl_post) | **POST** /query/nl | Natural Language Query
+[**query_sql_post**](QueriesApi.md#query_sql_post) | **POST** /query/sql | SQL Query
 
 
 # **query_nl_post**
-> QueryNlPost200Response query_nl_post(query_nl_post_request)
+> QueryNlPost200Response query_nl_post()
 
-Natural language → SQL → time series
+Natural Language Query
+
+Submit a natural-language request and get back a curated time series response. The response also includes the generated SQL so you can switch to the SQL endpoint for faster/cheaper repeated queries.
 
 ### Example
 
 * Api Key Authentication (ApiKeyAuth):
 
 ```python
-import openapi_client
-from openapi_client.models.query_nl_post200_response import QueryNlPost200Response
-from openapi_client.models.query_nl_post_request import QueryNlPostRequest
-from openapi_client.rest import ApiException
+import qoery
+from qoery.models.query_nl_post200_response import QueryNlPost200Response
+from qoery.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://api.qoery.com
+# Defining the host is optional and defaults to https://api.qoery.com/v0
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
-    host = "https://api.qoery.com"
+configuration = qoery.Configuration(
+    host = "https://api.qoery.com/v0"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -42,14 +43,13 @@ configuration.api_key['ApiKeyAuth'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['ApiKeyAuth'] = 'Bearer'
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with qoery.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.QueriesApi(api_client)
-    query_nl_post_request = openapi_client.QueryNlPostRequest() # QueryNlPostRequest | 
+    api_instance = qoery.QueriesApi(api_client)
 
     try:
-        # Natural language → SQL → time series
-        api_response = api_instance.query_nl_post(query_nl_post_request)
+        # Natural Language Query
+        api_response = api_instance.query_nl_post()
         print("The response of QueriesApi->query_nl_post:\n")
         pprint(api_response)
     except Exception as e:
@@ -60,10 +60,7 @@ with openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **query_nl_post_request** | [**QueryNlPostRequest**](QueryNlPostRequest.md)|  | 
+This endpoint does not need any parameter.
 
 ### Return type
 
@@ -75,7 +72,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 ### HTTP response details
@@ -90,25 +87,26 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **query_sql_post**
-> QueryNlPost200Response query_sql_post(query_sql_post_request)
+> QuerySqlPost200Response query_sql_post()
 
-Execute SQL → return time series
+SQL Query
+
+Execute a read-only SELECT query and receive the results as curated time series. This endpoint does not return SQL.
 
 ### Example
 
 * Api Key Authentication (ApiKeyAuth):
 
 ```python
-import openapi_client
-from openapi_client.models.query_nl_post200_response import QueryNlPost200Response
-from openapi_client.models.query_sql_post_request import QuerySqlPostRequest
-from openapi_client.rest import ApiException
+import qoery
+from qoery.models.query_sql_post200_response import QuerySqlPost200Response
+from qoery.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://api.qoery.com
+# Defining the host is optional and defaults to https://api.qoery.com/v0
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openapi_client.Configuration(
-    host = "https://api.qoery.com"
+configuration = qoery.Configuration(
+    host = "https://api.qoery.com/v0"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -123,14 +121,13 @@ configuration.api_key['ApiKeyAuth'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['ApiKeyAuth'] = 'Bearer'
 
 # Enter a context with an instance of the API client
-with openapi_client.ApiClient(configuration) as api_client:
+with qoery.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openapi_client.QueriesApi(api_client)
-    query_sql_post_request = openapi_client.QuerySqlPostRequest() # QuerySqlPostRequest | 
+    api_instance = qoery.QueriesApi(api_client)
 
     try:
-        # Execute SQL → return time series
-        api_response = api_instance.query_sql_post(query_sql_post_request)
+        # SQL Query
+        api_response = api_instance.query_sql_post()
         print("The response of QueriesApi->query_sql_post:\n")
         pprint(api_response)
     except Exception as e:
@@ -141,14 +138,11 @@ with openapi_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **query_sql_post_request** | [**QuerySqlPostRequest**](QuerySqlPostRequest.md)|  | 
+This endpoint does not need any parameter.
 
 ### Return type
 
-[**QueryNlPost200Response**](QueryNlPost200Response.md)
+[**QuerySqlPost200Response**](QuerySqlPost200Response.md)
 
 ### Authorization
 
@@ -156,7 +150,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 ### HTTP response details

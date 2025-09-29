@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from openapi_client.models.nl_query_request import NLQueryRequest
+from qoery.models.nl_query_request import NLQueryRequest
 
 # TODO update the JSON string below
 json = "{}"

@@ -209,7 +209,7 @@ conf = openapi_client.Configuration(
     ) -> None:
         """Constructor
         """
-        self._base_path = "https://api.qoery.com" if host is None else host
+        self._base_path = "https://api.qoery.com/v0" if host is None else host
         """Default Base url
         """
         self.server_index = 0 if server_index is None and host is None else server_index
@@ -541,11 +541,7 @@ conf = openapi_client.Configuration(
         """
         return [
             {
-                'url': "https://api.qoery.com",
-                'description': "No description provided",
-            },
-            {
-                'url': "http://localhost:8000",
+                'url': "https://api.qoery.com/v0",
                 'description': "No description provided",
             }
         ]

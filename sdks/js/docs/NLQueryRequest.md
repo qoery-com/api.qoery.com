@@ -1,4 +1,4 @@
-# QoerysApi.NLQueryRequest
+# Qoery.NLQueryRequest
 
 ## Properties
 

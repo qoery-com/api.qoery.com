@@ -32,11 +32,11 @@ class ApiClient {
      * Overrides the default value set in spec file if present
      * @param {String} basePath
      */
-    constructor(basePath = 'https://api.qoery.com') {
+    constructor(basePath = 'https://api.qoery.com/v0') {
         /**
          * The base URL against which to resolve every API call's (relative) path.
          * @type {String}
-         * @default https://api.qoery.com
+         * @default https://api.qoery.com/v0
          */
         this.basePath = basePath.replace(/\/+$/, '');
 
@@ -595,11 +595,7 @@ class ApiClient {
     hostSettings() {
         return [
             {
-              'url': "https://api.qoery.com",
-              'description': "No description provided",
-            },
-            {
-              'url': "http://localhost:8000",
+              'url': "https://api.qoery.com/v0",
               'description': "No description provided",
             }
       ];

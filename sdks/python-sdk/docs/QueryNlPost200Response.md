@@ -5,14 +5,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**query_type** | **str** |  | 
-**sql_query** | **str** |  | [optional] 
-**series** | [**List[QueryNlPost200ResponseSeriesInner]**](QueryNlPost200ResponseSeriesInner.md) |  | 
+**series** | [**List[QueryNlPost200ResponseAllOfSeriesInner]**](QueryNlPost200ResponseAllOfSeriesInner.md) |  | 
+**sql_query** | **str** |  | 
 
 ## Example
 
 ```python
-from openapi_client.models.query_nl_post200_response import QueryNlPost200Response
+from qoery.models.query_nl_post200_response import QueryNlPost200Response
 
 # TODO update the JSON string below
 json = "{}"

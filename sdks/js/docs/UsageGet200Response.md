@@ -1,4 +1,4 @@
-# QoerysApi.UsageGet200Response
+# Qoery.UsageGet200Response
 
 ## Properties
 
