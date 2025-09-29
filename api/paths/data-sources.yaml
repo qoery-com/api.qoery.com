@@ -27,6 +27,12 @@ paths:
 
             const dataSourcesApi = new DataSourcesApi(apiClient);
             const result = dataSourcesApi.scrapePost(new URLRequest({ url: "https://example.com" }));
+        - lang: cURL
+          source: |
+            curl -X POST "https://api.qoery.com/scrape" \
+              -H "X-API-Key: your-api-key" \
+              -H "Content-Type: application/json" \
+              -d '{"url": "https://example.com"}'
       responses:
         '200':
           description: OK

@@ -27,6 +27,10 @@ paths:
 
             const usageApi = new UsageApi(apiClient);
             const result = usageApi.usageGet();
+        - lang: cURL
+          source: |
+            curl -X GET "https://api.qoery.com/usage" \
+              -H "X-API-Key: your-api-key"
       responses:
         '200':
           description: Usage statistics

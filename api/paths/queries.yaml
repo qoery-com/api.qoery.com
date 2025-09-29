@@ -27,6 +27,12 @@ paths:
 
             const queriesApi = new QueriesApi(apiClient);
             const result = queriesApi.queryNlPost(new NLQueryRequest({ query: "CO2 emissions for France" }));
+        - lang: cURL
+          source: |
+            curl -X POST "https://api.qoery.com/query/nl" \
+              -H "X-API-Key: your-api-key" \
+              -H "Content-Type: application/json" \
+              -d '{"query": "CO2 emissions for France"}'
       responses:
         '200':
           description: OK
@@ -110,6 +116,12 @@ paths:
 
             const queriesApi = new QueriesApi(apiClient);
             const result = queriesApi.querySqlPost(new SQLQueryRequest({ sqlQuery: "SELECT * FROM emissions" }));
+        - lang: cURL
+          source: |
+            curl -X POST "https://api.qoery.com/query/sql" \
+              -H "X-API-Key: your-api-key" \
+              -H "Content-Type: application/json" \
+              -d '{"sql_query": "SELECT * FROM emissions"}'
       responses:
         '200':
           description: OK
