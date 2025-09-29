@@ -6,8 +6,19 @@ info:
     Every number on the internet, queryable. Instant access to millions of trusted
     statistics through a single natural language query or API call.
 
+  contact:
+    name: Qoery Support
+    url: https://qoery.com
+    email: samuel.tinnerholm@gmail.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
 servers:
   - url: https://api.qoery.com/v0
+
+security:
+  - ApiKeyAuth: []
 
 tags:
   - name: Queries
