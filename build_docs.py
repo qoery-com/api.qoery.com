@@ -16,10 +16,10 @@ from pathlib import Path
 
 
 def read_example_file(file_path):
-    """Read content from an example file."""
+    """Read content from an example file, preserving content exactly."""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
-            return f.read().strip()
+            return f.read()
     except FileNotFoundError:
         print(f"Warning: Example file not found: {file_path}")
         return None
@@ -39,15 +39,18 @@ def inject_examples_into_yaml(yaml_content, examples_dir):
         example_content = read_example_file(example_path)
         
         if example_content:
-            # Build the new source section with proper indentation
-            new_source = f"{indent}source: |\n"
-            # Add each line of the example content with proper indentation
-            lines = example_content.split('\n')
-            for line in lines:
-                if line.strip():  # Non-empty line
-                    new_source += f"{indent}  {line}\n"
-                else:  # Empty line
-                    new_source += f"{indent}\n"
+            # Normalize only line endings (CRLF/CR -> LF) during temp build
+            # Preserve per-line EOLs to avoid introducing extra blank lines in renderers
+            normalized = example_content.replace('\r\n', '\n').replace('\r', '\n')
+            # If the example starts with a leading newline, drop just one to avoid
+            # rendering an empty first line in the code block.
+            if normalized.startswith('\n'):
+                normalized = normalized[1:]
+            # Always use strip-final-newline chomping to avoid a trailing blank line
+            chomp = '|-'
+            new_source = f"{indent}source: {chomp}\n"
+            for line in normalized.splitlines(False):
+                new_source += f"{indent}  {line}"
             return new_source
         else:
             # If file not found, return the original line
@@ -155,12 +158,17 @@ def main():
     print(f"Examples directory: {examples_dir}")
     print(f"Output file: {output_file}")
     
-    # Create temporary directory
-    with tempfile.TemporaryDirectory() as temp_dir_str:
-        temp_dir = Path(temp_dir_str)
-        print(f"Using temporary directory: {temp_dir}")
-        
-        try:
+    # Create temporary directory (persist if KEEP_TEMP=1)
+    keep_temp = os.getenv('KEEP_TEMP') == '1'
+    if keep_temp:
+        temp_dir = Path(tempfile.mkdtemp(prefix='qoery-docs-'))
+        temp_ctx = None
+    else:
+        temp_ctx = tempfile.TemporaryDirectory()
+        temp_dir = Path(temp_ctx.name)
+    print(f"Using temporary directory: {temp_dir}")
+
+    try:
             # Create temporary API files with injected examples
             temp_api_dir = create_temp_api_files(api_dir, examples_dir, temp_dir)
             
@@ -176,10 +184,15 @@ def main():
                 print("\n✗ Build failed!")
                 return 1
                 
-        except Exception as e:
-            print(f"Error during build: {e}")
-            return 1
-    
+    except Exception as e:
+        print(f"Error during build: {e}")
+        return 1
+    finally:
+        if not keep_temp and temp_ctx is not None:
+            temp_ctx.cleanup()
+        else:
+            print(f"Temporary files kept at: {temp_dir}")
+
     return 0
 
 
