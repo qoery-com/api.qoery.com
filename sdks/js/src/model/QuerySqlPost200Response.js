@@ -53,6 +53,9 @@ class QuerySqlPost200Response {
             if (data.hasOwnProperty('series')) {
                 obj['series'] = ApiClient.convertToType(data['series'], [QueryNlPost200ResponseAllOfSeriesInner]);
             }
+            if (data.hasOwnProperty('metadata')) {
+                obj['metadata'] = ApiClient.convertToType(data['metadata'], {'String': Object});
+            }
         }
         return obj;
     }
@@ -92,6 +95,12 @@ QuerySqlPost200Response.RequiredProperties = ["series"];
  * @member {Array.<module:model/QueryNlPost200ResponseAllOfSeriesInner>} series
  */
 QuerySqlPost200Response.prototype['series'] = undefined;
+
+/**
+ * Additional metadata about the query execution
+ * @member {Object.<String, Object>} metadata
+ */
+QuerySqlPost200Response.prototype['metadata'] = undefined;
 
 
 

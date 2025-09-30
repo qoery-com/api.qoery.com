@@ -4,69 +4,14 @@ All URIs are relative to *https://api.qoery.com/v0*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**queryNlGet**](QueriesApi.md#queryNlGet) | **GET** /query/nl | Natural Language Query (query string)
 [**queryNlPost**](QueriesApi.md#queryNlPost) | **POST** /query/nl | Natural Language Query
-[**querySqlGet**](QueriesApi.md#querySqlGet) | **GET** /query/sql | SQL Query (query string)
 [**querySqlPost**](QueriesApi.md#querySqlPost) | **POST** /query/sql | SQL Query
 
 
 
-## queryNlGet
-
-> QueryNlGet200Response queryNlGet(opts)
-
-Natural Language Query (query string)
-
-Submit a natural-language request using query parameters. This is a convenience alias of POST.
-
-### Example
-
-```javascript
-import Qoery from 'qoery';
-let defaultClient = Qoery.ApiClient.instance;
-// Configure API key authorization: ApiKeyAuth
-let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
-ApiKeyAuth.apiKey = 'YOUR API KEY';
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//ApiKeyAuth.apiKeyPrefix = 'Token';
-
-let apiInstance = new Qoery.QueriesApi();
-let opts = {
-  'query': "query_example" // String | Natural language query
-};
-apiInstance.queryNlGet(opts, (error, data, response) => {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-});
-```
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **query** | **String**| Natural language query | [optional] 
-
-### Return type
-
-[**QueryNlGet200Response**](QueryNlGet200Response.md)
-
-### Authorization
-
-[ApiKeyAuth](../README.md#ApiKeyAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-
 ## queryNlPost
 
-> QueryNlGet200Response queryNlPost(opts)
+> QueryNlPost200Response queryNlPost(opts)
 
 Natural Language Query
 
@@ -105,7 +50,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**QueryNlGet200Response**](QueryNlGet200Response.md)
+[**QueryNlPost200Response**](QueryNlPost200Response.md)
 
 ### Authorization
 
@@ -117,64 +62,9 @@ Name | Type | Description  | Notes
 - **Accept**: application/json
 
 
-## querySqlGet
-
-> QuerySqlGet200Response querySqlGet(opts)
-
-SQL Query (query string)
-
-Execute a read-only SELECT query using query parameters. This is a convenience alias of POST.
-
-### Example
-
-```javascript
-import Qoery from 'qoery';
-let defaultClient = Qoery.ApiClient.instance;
-// Configure API key authorization: ApiKeyAuth
-let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
-ApiKeyAuth.apiKey = 'YOUR API KEY';
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//ApiKeyAuth.apiKeyPrefix = 'Token';
-
-let apiInstance = new Qoery.QueriesApi();
-let opts = {
-  'query': "query_example", // String | SQL query to execute (read-only)
-  'sqlQuery': "sqlQuery_example" // String | SQL query to execute (alternative/legacy parameter)
-};
-apiInstance.querySqlGet(opts, (error, data, response) => {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-});
-```
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **query** | **String**| SQL query to execute (read-only) | [optional] 
- **sqlQuery** | **String**| SQL query to execute (alternative/legacy parameter) | [optional] 
-
-### Return type
-
-[**QuerySqlGet200Response**](QuerySqlGet200Response.md)
-
-### Authorization
-
-[ApiKeyAuth](../README.md#ApiKeyAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-
 ## querySqlPost
 
-> QuerySqlGet200Response querySqlPost(opts)
+> QuerySqlPost200Response querySqlPost(opts)
 
 SQL Query
 
@@ -213,7 +103,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**QuerySqlGet200Response**](QuerySqlGet200Response.md)
+[**QuerySqlPost200Response**](QuerySqlPost200Response.md)
 
 ### Authorization
 

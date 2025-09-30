@@ -4,71 +4,13 @@ All URIs are relative to *https://api.qoery.com/v0*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**scrapeGet**](WebScrapingApi.md#scrapeGet) | **GET** /scrape | Structured Web Scrape (query string)
 [**scrapePost**](WebScrapingApi.md#scrapePost) | **POST** /scrape | Structured Web Scrape
 
 
 
-## scrapeGet
-
-> ScrapeGet200Response scrapeGet(opts)
-
-Structured Web Scrape (query string)
-
-Download a web page and structured data using query parameters. This is a convenience alias of POST.
-
-### Example
-
-```javascript
-import Qoery from 'qoery';
-let defaultClient = Qoery.ApiClient.instance;
-// Configure API key authorization: ApiKeyAuth
-let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
-ApiKeyAuth.apiKey = 'YOUR API KEY';
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//ApiKeyAuth.apiKeyPrefix = 'Token';
-
-let apiInstance = new Qoery.WebScrapingApi();
-let opts = {
-  'url': "url_example", // String | Target page URL
-  'html': false, // Boolean | Include page HTML inline in response
-  'markdown': false // Boolean | Include page markdown inline in response
-};
-apiInstance.scrapeGet(opts, (error, data, response) => {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-});
-```
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **url** | **String**| Target page URL | [optional] 
- **html** | **Boolean**| Include page HTML inline in response | [optional] [default to false]
- **markdown** | **Boolean**| Include page markdown inline in response | [optional] [default to false]
-
-### Return type
-
-[**ScrapeGet200Response**](ScrapeGet200Response.md)
-
-### Authorization
-
-[ApiKeyAuth](../README.md#ApiKeyAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-
 ## scrapePost
 
-> ScrapeGet200Response scrapePost(opts)
+> ScrapePost200Response scrapePost(opts)
 
 Structured Web Scrape
 
@@ -111,7 +53,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ScrapeGet200Response**](ScrapeGet200Response.md)
+[**ScrapePost200Response**](ScrapePost200Response.md)
 
 ### Authorization
 

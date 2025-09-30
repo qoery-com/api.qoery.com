@@ -17,19 +17,19 @@ import DBSeries from './model/DBSeries';
 import ErrorResponse from './model/ErrorResponse';
 import NLQueryRequest from './model/NLQueryRequest';
 import Observation from './model/Observation';
-import QueryNlGet200Response from './model/QueryNlGet200Response';
-import QueryNlGet200ResponseAllOfSeriesInner from './model/QueryNlGet200ResponseAllOfSeriesInner';
-import QueryNlGet200ResponseAllOfSeriesInnerObservationsInner from './model/QueryNlGet200ResponseAllOfSeriesInnerObservationsInner';
-import QueryNlGet400Response from './model/QueryNlGet400Response';
+import QueryNlPost200Response from './model/QueryNlPost200Response';
+import QueryNlPost200ResponseAllOfSeriesInner from './model/QueryNlPost200ResponseAllOfSeriesInner';
+import QueryNlPost200ResponseAllOfSeriesInnerObservationsInner from './model/QueryNlPost200ResponseAllOfSeriesInnerObservationsInner';
+import QueryNlPost400Response from './model/QueryNlPost400Response';
 import QueryNlPostRequest from './model/QueryNlPostRequest';
 import QueryResponse from './model/QueryResponse';
-import QuerySqlGet200Response from './model/QuerySqlGet200Response';
+import QuerySqlPost200Response from './model/QuerySqlPost200Response';
 import QuerySqlPostRequest from './model/QuerySqlPostRequest';
 import SQLQueryRequest from './model/SQLQueryRequest';
-import ScrapeGet200Response from './model/ScrapeGet200Response';
-import ScrapeGet200ResponseArtifacts from './model/ScrapeGet200ResponseArtifacts';
-import ScrapeGet200ResponseSeriesInner from './model/ScrapeGet200ResponseSeriesInner';
-import ScrapeGet200ResponseSeriesInnerOneOf from './model/ScrapeGet200ResponseSeriesInnerOneOf';
+import ScrapePost200Response from './model/ScrapePost200Response';
+import ScrapePost200ResponseArtifacts from './model/ScrapePost200ResponseArtifacts';
+import ScrapePost200ResponseSeriesInner from './model/ScrapePost200ResponseSeriesInner';
+import ScrapePost200ResponseSeriesInnerOneOf from './model/ScrapePost200ResponseSeriesInnerOneOf';
 import ScrapePostRequest from './model/ScrapePostRequest';
 import Series from './model/Series';
 import URLRequest from './model/URLRequest';
@@ -103,28 +103,28 @@ export {
     Observation,
 
     /**
-     * The QueryNlGet200Response model constructor.
-     * @property {module:model/QueryNlGet200Response}
+     * The QueryNlPost200Response model constructor.
+     * @property {module:model/QueryNlPost200Response}
      */
-    QueryNlGet200Response,
+    QueryNlPost200Response,
 
     /**
-     * The QueryNlGet200ResponseAllOfSeriesInner model constructor.
-     * @property {module:model/QueryNlGet200ResponseAllOfSeriesInner}
+     * The QueryNlPost200ResponseAllOfSeriesInner model constructor.
+     * @property {module:model/QueryNlPost200ResponseAllOfSeriesInner}
      */
-    QueryNlGet200ResponseAllOfSeriesInner,
+    QueryNlPost200ResponseAllOfSeriesInner,
 
     /**
-     * The QueryNlGet200ResponseAllOfSeriesInnerObservationsInner model constructor.
-     * @property {module:model/QueryNlGet200ResponseAllOfSeriesInnerObservationsInner}
+     * The QueryNlPost200ResponseAllOfSeriesInnerObservationsInner model constructor.
+     * @property {module:model/QueryNlPost200ResponseAllOfSeriesInnerObservationsInner}
      */
-    QueryNlGet200ResponseAllOfSeriesInnerObservationsInner,
+    QueryNlPost200ResponseAllOfSeriesInnerObservationsInner,
 
     /**
-     * The QueryNlGet400Response model constructor.
-     * @property {module:model/QueryNlGet400Response}
+     * The QueryNlPost400Response model constructor.
+     * @property {module:model/QueryNlPost400Response}
      */
-    QueryNlGet400Response,
+    QueryNlPost400Response,
 
     /**
      * The QueryNlPostRequest model constructor.
@@ -139,10 +139,10 @@ export {
     QueryResponse,
 
     /**
-     * The QuerySqlGet200Response model constructor.
-     * @property {module:model/QuerySqlGet200Response}
+     * The QuerySqlPost200Response model constructor.
+     * @property {module:model/QuerySqlPost200Response}
      */
-    QuerySqlGet200Response,
+    QuerySqlPost200Response,
 
     /**
      * The QuerySqlPostRequest model constructor.
@@ -157,28 +157,28 @@ export {
     SQLQueryRequest,
 
     /**
-     * The ScrapeGet200Response model constructor.
-     * @property {module:model/ScrapeGet200Response}
+     * The ScrapePost200Response model constructor.
+     * @property {module:model/ScrapePost200Response}
      */
-    ScrapeGet200Response,
+    ScrapePost200Response,
 
     /**
-     * The ScrapeGet200ResponseArtifacts model constructor.
-     * @property {module:model/ScrapeGet200ResponseArtifacts}
+     * The ScrapePost200ResponseArtifacts model constructor.
+     * @property {module:model/ScrapePost200ResponseArtifacts}
      */
-    ScrapeGet200ResponseArtifacts,
+    ScrapePost200ResponseArtifacts,
 
     /**
-     * The ScrapeGet200ResponseSeriesInner model constructor.
-     * @property {module:model/ScrapeGet200ResponseSeriesInner}
+     * The ScrapePost200ResponseSeriesInner model constructor.
+     * @property {module:model/ScrapePost200ResponseSeriesInner}
      */
-    ScrapeGet200ResponseSeriesInner,
+    ScrapePost200ResponseSeriesInner,
 
     /**
-     * The ScrapeGet200ResponseSeriesInnerOneOf model constructor.
-     * @property {module:model/ScrapeGet200ResponseSeriesInnerOneOf}
+     * The ScrapePost200ResponseSeriesInnerOneOf model constructor.
+     * @property {module:model/ScrapePost200ResponseSeriesInnerOneOf}
      */
-    ScrapeGet200ResponseSeriesInnerOneOf,
+    ScrapePost200ResponseSeriesInnerOneOf,
 
     /**
      * The ScrapePostRequest model constructor.

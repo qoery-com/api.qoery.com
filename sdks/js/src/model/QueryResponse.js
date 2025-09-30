@@ -12,7 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
-import QueryNlGet200ResponseAllOfSeriesInner from './QueryNlGet200ResponseAllOfSeriesInner';
+import QueryNlPost200ResponseAllOfSeriesInner from './QueryNlPost200ResponseAllOfSeriesInner';
 
 /**
  * The QueryResponse model module.
@@ -23,7 +23,7 @@ class QueryResponse {
     /**
      * Constructs a new <code>QueryResponse</code>.
      * @alias module:model/QueryResponse
-     * @param series {Array.<module:model/QueryNlGet200ResponseAllOfSeriesInner>} 
+     * @param series {Array.<module:model/QueryNlPost200ResponseAllOfSeriesInner>} 
      */
     constructor(series) { 
         
@@ -51,7 +51,7 @@ class QueryResponse {
             obj = obj || new QueryResponse();
 
             if (data.hasOwnProperty('series')) {
-                obj['series'] = ApiClient.convertToType(data['series'], [QueryNlGet200ResponseAllOfSeriesInner]);
+                obj['series'] = ApiClient.convertToType(data['series'], [QueryNlPost200ResponseAllOfSeriesInner]);
             }
             if (data.hasOwnProperty('metadata')) {
                 obj['metadata'] = ApiClient.convertToType(data['metadata'], {'String': Object});
@@ -79,7 +79,7 @@ class QueryResponse {
             }
             // validate the optional field `series` (array)
             for (const item of data['series']) {
-                QueryNlGet200ResponseAllOfSeriesInner.validateJSON(item);
+                QueryNlPost200ResponseAllOfSeriesInner.validateJSON(item);
             };
         }
 
@@ -92,7 +92,7 @@ class QueryResponse {
 QueryResponse.RequiredProperties = ["series"];
 
 /**
- * @member {Array.<module:model/QueryNlGet200ResponseAllOfSeriesInner>} series
+ * @member {Array.<module:model/QueryNlPost200ResponseAllOfSeriesInner>} series
  */
 QueryResponse.prototype['series'] = undefined;
 

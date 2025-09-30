@@ -13,8 +13,8 @@
 
 
 import ApiClient from "../ApiClient";
-import QueryNlGet400Response from '../model/QueryNlGet400Response';
-import ScrapeGet200Response from '../model/ScrapeGet200Response';
+import QueryNlPost400Response from '../model/QueryNlPost400Response';
+import ScrapePost200Response from '../model/ScrapePost200Response';
 import ScrapePostRequest from '../model/ScrapePostRequest';
 
 /**
@@ -37,55 +37,10 @@ export default class WebScrapingApi {
 
 
     /**
-     * Callback function to receive the result of the scrapeGet operation.
-     * @callback module:api/WebScrapingApi~scrapeGetCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/ScrapeGet200Response} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
-
-    /**
-     * Structured Web Scrape (query string)
-     * Download a web page and structured data using query parameters. This is a convenience alias of POST.
-     * @param {Object} opts Optional parameters
-     * @param {String} [url] Target page URL
-     * @param {Boolean} [html = false)] Include page HTML inline in response
-     * @param {Boolean} [markdown = false)] Include page markdown inline in response
-     * @param {module:api/WebScrapingApi~scrapeGetCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/ScrapeGet200Response}
-     */
-    scrapeGet(opts, callback) {
-      opts = opts || {};
-      let postBody = null;
-
-      let pathParams = {
-      };
-      let queryParams = {
-        'url': opts['url'],
-        'html': opts['html'],
-        'markdown': opts['markdown']
-      };
-      let headerParams = {
-      };
-      let formParams = {
-      };
-
-      let authNames = ['ApiKeyAuth'];
-      let contentTypes = [];
-      let accepts = ['application/json'];
-      let returnType = ScrapeGet200Response;
-      return this.apiClient.callApi(
-        '/scrape', 'GET',
-        pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
-      );
-    }
-
-    /**
      * Callback function to receive the result of the scrapePost operation.
      * @callback module:api/WebScrapingApi~scrapePostCallback
      * @param {String} error Error message, if any.
-     * @param {module:model/ScrapeGet200Response} data The data returned by the service call.
+     * @param {module:model/ScrapePost200Response} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
@@ -97,7 +52,7 @@ export default class WebScrapingApi {
      * @param {Boolean} [markdown = false)] Include page markdown inline in response
      * @param {module:model/ScrapePostRequest} [scrapePostRequest] Provide JSON body or use query parameter 'url'. Body takes precedence.
      * @param {module:api/WebScrapingApi~scrapePostCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/ScrapeGet200Response}
+     * data is of type: {@link module:model/ScrapePost200Response}
      */
     scrapePost(opts, callback) {
       opts = opts || {};
@@ -117,7 +72,7 @@ export default class WebScrapingApi {
       let authNames = ['ApiKeyAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['application/json'];
-      let returnType = ScrapeGet200Response;
+      let returnType = ScrapePost200Response;
       return this.apiClient.callApi(
         '/scrape', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
