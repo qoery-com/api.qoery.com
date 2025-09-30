@@ -186,7 +186,7 @@ def main():
     script_dir = Path(__file__).parent
     api_dir = script_dir / 'api' / 'paths'
     examples_dir = script_dir / 'examples'
-    output_file = script_dir / 'docs.html'
+    output_file = script_dir / 'index.html'
     
     print("Building API documentation with temporary files...")
     print(f"API directory: {api_dir}")
