@@ -131,7 +131,8 @@ export default class QueriesApi {
      * SQL Query (query string)
      * Execute a read-only SELECT query using query parameters. This is a convenience alias of POST.
      * @param {Object} opts Optional parameters
-     * @param {String} [sqlQuery] SQL query to execute (read-only)
+     * @param {String} [query] SQL query to execute (read-only)
+     * @param {String} [sqlQuery] SQL query to execute (alternative/legacy parameter)
      * @param {module:api/QueriesApi~querySqlGetCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/QuerySqlGet200Response}
      */
@@ -142,6 +143,7 @@ export default class QueriesApi {
       let pathParams = {
       };
       let queryParams = {
+        'query': opts['query'],
         'sql_query': opts['sqlQuery']
       };
       let headerParams = {
@@ -170,9 +172,9 @@ export default class QueriesApi {
 
     /**
      * SQL Query
-     * Execute a read-only SELECT query and receive the results as curated time series. This endpoint does not return SQL.
+     * Execute a read-only SELECT query and receive the results as curated time series. The response includes the executed SQL query and optional metadata.
      * @param {Object} opts Optional parameters
-     * @param {module:model/QuerySqlPostRequest} [querySqlPostRequest] Provide JSON body or use query parameter 'sql_query'. Body takes precedence.
+     * @param {module:model/QuerySqlPostRequest} [querySqlPostRequest] Provide JSON body with 'query' or 'sql_query' field, or use query parameters. Body takes precedence.
      * @param {module:api/QueriesApi~querySqlPostCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/QuerySqlGet200Response}
      */

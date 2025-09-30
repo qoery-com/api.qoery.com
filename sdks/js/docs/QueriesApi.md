@@ -138,7 +138,8 @@ ApiKeyAuth.apiKey = 'YOUR API KEY';
 
 let apiInstance = new Qoery.QueriesApi();
 let opts = {
-  'sqlQuery': "sqlQuery_example" // String | SQL query to execute (read-only)
+  'query': "query_example", // String | SQL query to execute (read-only)
+  'sqlQuery': "sqlQuery_example" // String | SQL query to execute (alternative/legacy parameter)
 };
 apiInstance.querySqlGet(opts, (error, data, response) => {
   if (error) {
@@ -154,7 +155,8 @@ apiInstance.querySqlGet(opts, (error, data, response) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **sqlQuery** | **String**| SQL query to execute (read-only) | [optional] 
+ **query** | **String**| SQL query to execute (read-only) | [optional] 
+ **sqlQuery** | **String**| SQL query to execute (alternative/legacy parameter) | [optional] 
 
 ### Return type
 
@@ -176,7 +178,7 @@ Name | Type | Description  | Notes
 
 SQL Query
 
-Execute a read-only SELECT query and receive the results as curated time series. This endpoint does not return SQL.
+Execute a read-only SELECT query and receive the results as curated time series. The response includes the executed SQL query and optional metadata.
 
 ### Example
 
@@ -191,7 +193,7 @@ ApiKeyAuth.apiKey = 'YOUR API KEY';
 
 let apiInstance = new Qoery.QueriesApi();
 let opts = {
-  'querySqlPostRequest': new Qoery.QuerySqlPostRequest() // QuerySqlPostRequest | Provide JSON body or use query parameter 'sql_query'. Body takes precedence.
+  'querySqlPostRequest': new Qoery.QuerySqlPostRequest() // QuerySqlPostRequest | Provide JSON body with 'query' or 'sql_query' field, or use query parameters. Body takes precedence.
 };
 apiInstance.querySqlPost(opts, (error, data, response) => {
   if (error) {
@@ -207,7 +209,7 @@ apiInstance.querySqlPost(opts, (error, data, response) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **querySqlPostRequest** | [**QuerySqlPostRequest**](QuerySqlPostRequest.md)| Provide JSON body or use query parameter &#39;sql_query&#39;. Body takes precedence. | [optional] 
+ **querySqlPostRequest** | [**QuerySqlPostRequest**](QuerySqlPostRequest.md)| Provide JSON body with &#39;query&#39; or &#39;sql_query&#39; field, or use query parameters. Body takes precedence. | [optional] 
 
 ### Return type
 

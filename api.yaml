@@ -7,7 +7,7 @@ info:
     statistics through a single natural language query or API call.
 
   contact:
-    name: Qoery Support
+    name: qoery Support
     url: https://qoery.com
     email: samuel.tinnerholm@gmail.com
   license:
@@ -34,7 +34,7 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-      description: API key for authentication
+      description: API key for authentication. Can also be provided via query parameter 'api_key', 'X-API-Key', or 'x-api-key'
 
   schemas:
     ErrorResponse:
@@ -45,6 +45,8 @@ components:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/Observation'
     Series:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/Series'
+    DBSeries:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/DBSeries'
     QueryResponse:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/QueryResponse'
     NLQueryRequest:

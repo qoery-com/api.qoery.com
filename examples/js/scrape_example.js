@@ -7,8 +7,15 @@ const { ApiClient, WebScrapingApi, URLRequest } = require('qoery');
 
   const scraping = new WebScrapingApi();
   const body = new URLRequest();
-  body.url = 'https://example.com';
+  body.url = 'https://example.com/statistics';
 
-  const res = await scraping.scrapePost(body);
-  console.log(res);
+  // Use markdown=true and/or html=true query params to include content inline
+  const res = await scraping.scrapePost(body, { markdown: true });
+  
+  // Response includes: series, artifacts, cached (if from cache), source_id
+  console.log('Cached:', res.cached || false);
+  console.log('Series count:', res.series.length);
+  if (res.markdown) {
+    console.log('Markdown length:', res.markdown.length, 'chars');
+  }
 })();

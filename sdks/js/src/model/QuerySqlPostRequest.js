@@ -22,11 +22,10 @@ class QuerySqlPostRequest {
     /**
      * Constructs a new <code>QuerySqlPostRequest</code>.
      * @alias module:model/QuerySqlPostRequest
-     * @param sqlQuery {String} 
      */
-    constructor(sqlQuery) { 
+    constructor() { 
         
-        QuerySqlPostRequest.initialize(this, sqlQuery);
+        QuerySqlPostRequest.initialize(this);
     }
 
     /**
@@ -34,8 +33,7 @@ class QuerySqlPostRequest {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj, sqlQuery) { 
-        obj['sql_query'] = sqlQuery;
+    static initialize(obj) { 
     }
 
     /**
@@ -49,6 +47,9 @@ class QuerySqlPostRequest {
         if (data) {
             obj = obj || new QuerySqlPostRequest();
 
+            if (data.hasOwnProperty('query')) {
+                obj['query'] = ApiClient.convertToType(data['query'], 'String');
+            }
             if (data.hasOwnProperty('sql_query')) {
                 obj['sql_query'] = ApiClient.convertToType(data['sql_query'], 'String');
             }
@@ -62,11 +63,9 @@ class QuerySqlPostRequest {
      * @return {boolean} to indicate whether the JSON data is valid with respect to <code>QuerySqlPostRequest</code>.
      */
     static validateJSON(data) {
-        // check to make sure all required properties are present in the JSON string
-        for (const property of QuerySqlPostRequest.RequiredProperties) {
-            if (!data.hasOwnProperty(property)) {
-                throw new Error("The required field `" + property + "` is not found in the JSON data: " + JSON.stringify(data));
-            }
+        // ensure the json data is a string
+        if (data['query'] && !(typeof data['query'] === 'string' || data['query'] instanceof String)) {
+            throw new Error("Expected the field `query` to be a primitive type in the JSON string but got " + data['query']);
         }
         // ensure the json data is a string
         if (data['sql_query'] && !(typeof data['sql_query'] === 'string' || data['sql_query'] instanceof String)) {
@@ -79,9 +78,16 @@ class QuerySqlPostRequest {
 
 }
 
-QuerySqlPostRequest.RequiredProperties = ["sql_query"];
+
 
 /**
+ * SQL query to execute (primary field name)
+ * @member {String} query
+ */
+QuerySqlPostRequest.prototype['query'] = undefined;
+
+/**
+ * SQL query to execute (alternative/legacy field name)
  * @member {String} sql_query
  */
 QuerySqlPostRequest.prototype['sql_query'] = undefined;

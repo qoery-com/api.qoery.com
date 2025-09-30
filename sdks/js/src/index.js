@@ -13,6 +13,7 @@
 
 
 import ApiClient from './ApiClient';
+import DBSeries from './model/DBSeries';
 import ErrorResponse from './model/ErrorResponse';
 import NLQueryRequest from './model/NLQueryRequest';
 import Observation from './model/Observation';
@@ -27,6 +28,8 @@ import QuerySqlPostRequest from './model/QuerySqlPostRequest';
 import SQLQueryRequest from './model/SQLQueryRequest';
 import ScrapeGet200Response from './model/ScrapeGet200Response';
 import ScrapeGet200ResponseArtifacts from './model/ScrapeGet200ResponseArtifacts';
+import ScrapeGet200ResponseSeriesInner from './model/ScrapeGet200ResponseSeriesInner';
+import ScrapeGet200ResponseSeriesInnerOneOf from './model/ScrapeGet200ResponseSeriesInnerOneOf';
 import ScrapePostRequest from './model/ScrapePostRequest';
 import Series from './model/Series';
 import URLRequest from './model/URLRequest';
@@ -74,6 +77,12 @@ export {
      * @property {module:ApiClient}
      */
     ApiClient,
+
+    /**
+     * The DBSeries model constructor.
+     * @property {module:model/DBSeries}
+     */
+    DBSeries,
 
     /**
      * The ErrorResponse model constructor.
@@ -158,6 +167,18 @@ export {
      * @property {module:model/ScrapeGet200ResponseArtifacts}
      */
     ScrapeGet200ResponseArtifacts,
+
+    /**
+     * The ScrapeGet200ResponseSeriesInner model constructor.
+     * @property {module:model/ScrapeGet200ResponseSeriesInner}
+     */
+    ScrapeGet200ResponseSeriesInner,
+
+    /**
+     * The ScrapeGet200ResponseSeriesInnerOneOf model constructor.
+     * @property {module:model/ScrapeGet200ResponseSeriesInnerOneOf}
+     */
+    ScrapeGet200ResponseSeriesInnerOneOf,
 
     /**
      * The ScrapePostRequest model constructor.

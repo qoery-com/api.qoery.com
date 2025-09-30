@@ -35,6 +35,15 @@ components:
         max_concurrent:
           type: integer
           description: Maximum concurrent requests allowed
+        tokens_in:
+          type: integer
+          description: Total input tokens consumed in current period
+        tokens_out:
+          type: integer
+          description: Total output tokens consumed in current period
+        errors:
+          type: integer
+          description: Total number of errors in current period
       required:
         - queries_used
         - queries_limit
@@ -42,6 +51,9 @@ components:
         - period_end
         - concurrent_requests
         - max_concurrent
+        - tokens_in
+        - tokens_out
+        - errors
 
     Observation:
       type: object
@@ -82,6 +94,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Series'
+        metadata:
+          type: object
+          description: Additional metadata about the query execution
+          additionalProperties: true
       required:
         - series
 
@@ -93,6 +109,10 @@ components:
             sql_query:
               type: string
               nullable: true
+              description: The generated SQL query
+            description:
+              type: string
+              description: Natural language description of the query result
           required:
             - sql_query
 
@@ -107,10 +127,15 @@ components:
     SQLQueryRequest:
       type: object
       properties:
+        query:
+          type: string
+          description: SQL query to execute (primary field name)
         sql_query:
           type: string
-      required:
-        - sql_query
+          description: SQL query to execute (alternative/legacy field name)
+      oneOf:
+        - required: [query]
+        - required: [sql_query]
 
     URLRequest:
       type: object
@@ -121,23 +146,55 @@ components:
       required:
         - url
 
+    DBSeries:
+      type: object
+      description: Database-structured series returned from cached scrape results
+      properties:
+        id:
+          type: integer
+        entity_id:
+          type: integer
+        metric_id:
+          type: integer
+        unit_id:
+          type: integer
+          nullable: true
+        frequency:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        labels:
+          type: object
+          additionalProperties: true
+          nullable: true
+        observations_count:
+          type: integer
+      required:
+        - id
+        - entity_id
+        - metric_id
+
     ScrapeResponse:
       type: object
       properties:
         html:
           type: string
-          description: Original HTML of the page
+          description: Original HTML of the page (if requested)
         markdown:
           type: string
-          description: Markdown representation of the page
+          description: Markdown representation of the page (if requested)
         series:
           type: array
-          description: Extracted time series from detected tables
+          description: Extracted time series from detected tables (fresh scrape) or structured DB series (cached)
           items:
-            $ref: '#/components/schemas/Series'
+            oneOf:
+              - $ref: '#/components/schemas/Series'
+              - $ref: '#/components/schemas/DBSeries'
         artifacts:
           type: object
-          description: URLs to stored artifacts for larger payloads
+          description: URLs or file paths to stored artifacts
           properties:
             html_url:
               type: string
@@ -145,5 +202,11 @@ components:
               type: string
             tables_base_url:
               type: string
+        cached:
+          type: boolean
+          description: Whether this result was retrieved from cache
+        source_id:
+          type: integer
+          description: Database source ID (present when cached=true)
       required:
         - series

@@ -21,7 +21,7 @@ import ApiClient from '../ApiClient';
 class ScrapeGet200ResponseArtifacts {
     /**
      * Constructs a new <code>ScrapeGet200ResponseArtifacts</code>.
-     * URLs to stored artifacts for larger payloads
+     * URLs or file paths to stored artifacts
      * @alias module:model/ScrapeGet200ResponseArtifacts
      */
     constructor() { 

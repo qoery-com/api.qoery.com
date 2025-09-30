@@ -28,10 +28,13 @@ class UsageGet200Response {
      * @param periodEnd {Date} 
      * @param concurrentRequests {Number} Current number of concurrent requests
      * @param maxConcurrent {Number} Maximum concurrent requests allowed
+     * @param tokensIn {Number} Total input tokens consumed in current period
+     * @param tokensOut {Number} Total output tokens consumed in current period
+     * @param errors {Number} Total number of errors in current period
      */
-    constructor(queriesUsed, queriesLimit, periodStart, periodEnd, concurrentRequests, maxConcurrent) { 
+    constructor(queriesUsed, queriesLimit, periodStart, periodEnd, concurrentRequests, maxConcurrent, tokensIn, tokensOut, errors) { 
         
-        UsageGet200Response.initialize(this, queriesUsed, queriesLimit, periodStart, periodEnd, concurrentRequests, maxConcurrent);
+        UsageGet200Response.initialize(this, queriesUsed, queriesLimit, periodStart, periodEnd, concurrentRequests, maxConcurrent, tokensIn, tokensOut, errors);
     }
 
     /**
@@ -39,13 +42,16 @@ class UsageGet200Response {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj, queriesUsed, queriesLimit, periodStart, periodEnd, concurrentRequests, maxConcurrent) { 
+    static initialize(obj, queriesUsed, queriesLimit, periodStart, periodEnd, concurrentRequests, maxConcurrent, tokensIn, tokensOut, errors) { 
         obj['queries_used'] = queriesUsed;
         obj['queries_limit'] = queriesLimit;
         obj['period_start'] = periodStart;
         obj['period_end'] = periodEnd;
         obj['concurrent_requests'] = concurrentRequests;
         obj['max_concurrent'] = maxConcurrent;
+        obj['tokens_in'] = tokensIn;
+        obj['tokens_out'] = tokensOut;
+        obj['errors'] = errors;
     }
 
     /**
@@ -77,6 +83,15 @@ class UsageGet200Response {
             if (data.hasOwnProperty('max_concurrent')) {
                 obj['max_concurrent'] = ApiClient.convertToType(data['max_concurrent'], 'Number');
             }
+            if (data.hasOwnProperty('tokens_in')) {
+                obj['tokens_in'] = ApiClient.convertToType(data['tokens_in'], 'Number');
+            }
+            if (data.hasOwnProperty('tokens_out')) {
+                obj['tokens_out'] = ApiClient.convertToType(data['tokens_out'], 'Number');
+            }
+            if (data.hasOwnProperty('errors')) {
+                obj['errors'] = ApiClient.convertToType(data['errors'], 'Number');
+            }
         }
         return obj;
     }
@@ -100,7 +115,7 @@ class UsageGet200Response {
 
 }
 
-UsageGet200Response.RequiredProperties = ["queries_used", "queries_limit", "period_start", "period_end", "concurrent_requests", "max_concurrent"];
+UsageGet200Response.RequiredProperties = ["queries_used", "queries_limit", "period_start", "period_end", "concurrent_requests", "max_concurrent", "tokens_in", "tokens_out", "errors"];
 
 /**
  * Number of queries used in current period
@@ -135,6 +150,24 @@ UsageGet200Response.prototype['concurrent_requests'] = undefined;
  * @member {Number} max_concurrent
  */
 UsageGet200Response.prototype['max_concurrent'] = undefined;
+
+/**
+ * Total input tokens consumed in current period
+ * @member {Number} tokens_in
+ */
+UsageGet200Response.prototype['tokens_in'] = undefined;
+
+/**
+ * Total output tokens consumed in current period
+ * @member {Number} tokens_out
+ */
+UsageGet200Response.prototype['tokens_out'] = undefined;
+
+/**
+ * Total number of errors in current period
+ * @member {Number} errors
+ */
+UsageGet200Response.prototype['errors'] = undefined;
 
 
 

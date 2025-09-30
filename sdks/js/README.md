@@ -142,6 +142,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Models
 
+ - [Qoery.DBSeries](docs/DBSeries.md)
  - [Qoery.ErrorResponse](docs/ErrorResponse.md)
  - [Qoery.NLQueryRequest](docs/NLQueryRequest.md)
  - [Qoery.Observation](docs/Observation.md)
@@ -156,6 +157,8 @@ Class | Method | HTTP request | Description
  - [Qoery.SQLQueryRequest](docs/SQLQueryRequest.md)
  - [Qoery.ScrapeGet200Response](docs/ScrapeGet200Response.md)
  - [Qoery.ScrapeGet200ResponseArtifacts](docs/ScrapeGet200ResponseArtifacts.md)
+ - [Qoery.ScrapeGet200ResponseSeriesInner](docs/ScrapeGet200ResponseSeriesInner.md)
+ - [Qoery.ScrapeGet200ResponseSeriesInnerOneOf](docs/ScrapeGet200ResponseSeriesInnerOneOf.md)
  - [Qoery.ScrapePostRequest](docs/ScrapePostRequest.md)
  - [Qoery.Series](docs/Series.md)
  - [Qoery.URLRequest](docs/URLRequest.md)

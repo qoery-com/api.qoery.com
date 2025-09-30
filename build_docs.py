@@ -59,6 +59,37 @@ def inject_examples_into_yaml(yaml_content, examples_dir):
     return re.sub(pattern, replace_source_line, yaml_content)
 
 
+def strip_request_bodies(yaml_content):
+    """Remove requestBody sections to hide the auto-generated Payload tab in docs.
+
+    Works line-by-line to remove the block starting at a line equal to
+    "requestBody:" and all following lines that are more indented than that
+    line. Operates only on temporary files during docs build.
+    """
+    lines = yaml_content.splitlines(True)  # keep line endings
+    result_lines = []
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        m = re.match(r'^([ \t]*)requestBody:\s*\n?$', line)
+        if m:
+            indent = m.group(1)
+            i += 1
+            # Consume all lines that are more indented than the requestBody line
+            while i < len(lines):
+                nxt = lines[i]
+                # A more-indented line must start with indent + space or indent + tab
+                if nxt.startswith(indent + ' ') or nxt.startswith(indent + '\t'):
+                    i += 1
+                    continue
+                break
+            # Skip adding any of the requestBody block
+            continue
+        else:
+            result_lines.append(line)
+            i += 1
+    return ''.join(result_lines)
+
 def create_temp_api_files(api_dir, examples_dir, temp_dir):
     """Create temporary API files with injected examples."""
     print("Creating temporary API files with injected examples...")
@@ -93,6 +124,10 @@ def create_temp_api_files(api_dir, examples_dir, temp_dir):
         
         # Inject examples
         new_content = inject_examples_into_yaml(content, examples_dir)
+
+        # Strip request bodies to avoid showing the auto-generated "Payload" tab
+        # in the built documentation. We only do this for the temporary build.
+        new_content = strip_request_bodies(new_content)
         
         # Write to temporary file
         temp_file = temp_paths_dir / api_file.name

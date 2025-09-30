@@ -24,7 +24,7 @@ class QueryNlGet200Response {
      * Constructs a new <code>QueryNlGet200Response</code>.
      * @alias module:model/QueryNlGet200Response
      * @param series {Array.<module:model/QueryNlGet200ResponseAllOfSeriesInner>} 
-     * @param sqlQuery {String} 
+     * @param sqlQuery {String} The generated SQL query
      */
     constructor(series, sqlQuery) { 
         
@@ -55,8 +55,14 @@ class QueryNlGet200Response {
             if (data.hasOwnProperty('series')) {
                 obj['series'] = ApiClient.convertToType(data['series'], [QueryNlGet200ResponseAllOfSeriesInner]);
             }
+            if (data.hasOwnProperty('metadata')) {
+                obj['metadata'] = ApiClient.convertToType(data['metadata'], {'String': Object});
+            }
             if (data.hasOwnProperty('sql_query')) {
                 obj['sql_query'] = ApiClient.convertToType(data['sql_query'], 'String');
+            }
+            if (data.hasOwnProperty('description')) {
+                obj['description'] = ApiClient.convertToType(data['description'], 'String');
             }
         }
         return obj;
@@ -88,6 +94,10 @@ class QueryNlGet200Response {
         if (data['sql_query'] && !(typeof data['sql_query'] === 'string' || data['sql_query'] instanceof String)) {
             throw new Error("Expected the field `sql_query` to be a primitive type in the JSON string but got " + data['sql_query']);
         }
+        // ensure the json data is a string
+        if (data['description'] && !(typeof data['description'] === 'string' || data['description'] instanceof String)) {
+            throw new Error("Expected the field `description` to be a primitive type in the JSON string but got " + data['description']);
+        }
 
         return true;
     }
@@ -103,9 +113,22 @@ QueryNlGet200Response.RequiredProperties = ["series", "sql_query"];
 QueryNlGet200Response.prototype['series'] = undefined;
 
 /**
+ * Additional metadata about the query execution
+ * @member {Object.<String, Object>} metadata
+ */
+QueryNlGet200Response.prototype['metadata'] = undefined;
+
+/**
+ * The generated SQL query
  * @member {String} sql_query
  */
 QueryNlGet200Response.prototype['sql_query'] = undefined;
+
+/**
+ * Natural language description of the query result
+ * @member {String} description
+ */
+QueryNlGet200Response.prototype['description'] = undefined;
 
 
 

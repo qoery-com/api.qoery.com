@@ -12,8 +12,8 @@
  */
 
 import ApiClient from '../ApiClient';
-import QueryNlGet200ResponseAllOfSeriesInner from './QueryNlGet200ResponseAllOfSeriesInner';
 import ScrapeGet200ResponseArtifacts from './ScrapeGet200ResponseArtifacts';
+import ScrapeGet200ResponseSeriesInner from './ScrapeGet200ResponseSeriesInner';
 
 /**
  * The ScrapeGet200Response model module.
@@ -24,7 +24,7 @@ class ScrapeGet200Response {
     /**
      * Constructs a new <code>ScrapeGet200Response</code>.
      * @alias module:model/ScrapeGet200Response
-     * @param series {Array.<module:model/QueryNlGet200ResponseAllOfSeriesInner>} Extracted time series from detected tables
+     * @param series {Array.<module:model/ScrapeGet200ResponseSeriesInner>} Extracted time series from detected tables (fresh scrape) or structured DB series (cached)
      */
     constructor(series) { 
         
@@ -58,10 +58,16 @@ class ScrapeGet200Response {
                 obj['markdown'] = ApiClient.convertToType(data['markdown'], 'String');
             }
             if (data.hasOwnProperty('series')) {
-                obj['series'] = ApiClient.convertToType(data['series'], [QueryNlGet200ResponseAllOfSeriesInner]);
+                obj['series'] = ApiClient.convertToType(data['series'], [ScrapeGet200ResponseSeriesInner]);
             }
             if (data.hasOwnProperty('artifacts')) {
                 obj['artifacts'] = ScrapeGet200ResponseArtifacts.constructFromObject(data['artifacts']);
+            }
+            if (data.hasOwnProperty('cached')) {
+                obj['cached'] = ApiClient.convertToType(data['cached'], 'Boolean');
+            }
+            if (data.hasOwnProperty('source_id')) {
+                obj['source_id'] = ApiClient.convertToType(data['source_id'], 'Number');
             }
         }
         return obj;
@@ -94,7 +100,7 @@ class ScrapeGet200Response {
             }
             // validate the optional field `series` (array)
             for (const item of data['series']) {
-                QueryNlGet200ResponseAllOfSeriesInner.validateJSON(item);
+                ScrapeGet200ResponseSeriesInner.validateJSON(item);
             };
         }
         // validate the optional field `artifacts`
@@ -111,20 +117,20 @@ class ScrapeGet200Response {
 ScrapeGet200Response.RequiredProperties = ["series"];
 
 /**
- * Original HTML of the page
+ * Original HTML of the page (if requested)
  * @member {String} html
  */
 ScrapeGet200Response.prototype['html'] = undefined;
 
 /**
- * Markdown representation of the page
+ * Markdown representation of the page (if requested)
  * @member {String} markdown
  */
 ScrapeGet200Response.prototype['markdown'] = undefined;
 
 /**
- * Extracted time series from detected tables
- * @member {Array.<module:model/QueryNlGet200ResponseAllOfSeriesInner>} series
+ * Extracted time series from detected tables (fresh scrape) or structured DB series (cached)
+ * @member {Array.<module:model/ScrapeGet200ResponseSeriesInner>} series
  */
 ScrapeGet200Response.prototype['series'] = undefined;
 
@@ -132,6 +138,18 @@ ScrapeGet200Response.prototype['series'] = undefined;
  * @member {module:model/ScrapeGet200ResponseArtifacts} artifacts
  */
 ScrapeGet200Response.prototype['artifacts'] = undefined;
+
+/**
+ * Whether this result was retrieved from cache
+ * @member {Boolean} cached
+ */
+ScrapeGet200Response.prototype['cached'] = undefined;
+
+/**
+ * Database source ID (present when cached=true)
+ * @member {Number} source_id
+ */
+ScrapeGet200Response.prototype['source_id'] = undefined;
 
 
 

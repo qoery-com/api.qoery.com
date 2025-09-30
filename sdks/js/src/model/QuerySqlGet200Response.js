@@ -53,6 +53,9 @@ class QuerySqlGet200Response {
             if (data.hasOwnProperty('series')) {
                 obj['series'] = ApiClient.convertToType(data['series'], [QueryNlGet200ResponseAllOfSeriesInner]);
             }
+            if (data.hasOwnProperty('metadata')) {
+                obj['metadata'] = ApiClient.convertToType(data['metadata'], {'String': Object});
+            }
         }
         return obj;
     }
@@ -92,6 +95,12 @@ QuerySqlGet200Response.RequiredProperties = ["series"];
  * @member {Array.<module:model/QueryNlGet200ResponseAllOfSeriesInner>} series
  */
 QuerySqlGet200Response.prototype['series'] = undefined;
+
+/**
+ * Additional metadata about the query execution
+ * @member {Object.<String, Object>} metadata
+ */
+QuerySqlGet200Response.prototype['metadata'] = undefined;
 
 
 

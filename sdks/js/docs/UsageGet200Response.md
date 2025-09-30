@@ -10,5 +10,8 @@ Name | Type | Description | Notes
 **periodEnd** | **Date** |  | 
 **concurrentRequests** | **Number** | Current number of concurrent requests | 
 **maxConcurrent** | **Number** | Maximum concurrent requests allowed | 
+**tokensIn** | **Number** | Total input tokens consumed in current period | 
+**tokensOut** | **Number** | Total output tokens consumed in current period | 
+**errors** | **Number** | Total number of errors in current period | 
 
 

@@ -1,35 +1,5 @@
 paths:
   /query/nl:
-    get:
-      summary: Natural Language Query (query string)
-      description: Submit a natural-language request using query parameters. This is a convenience alias of POST.
-      tags:
-        - Queries
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - in: query
-          name: query
-          description: Natural language query
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas/schemas.yaml#/components/schemas/NLQueryResponse'
-        '400':
-          description: Invalid input
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
-        '401':
-          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
-        '429':
-          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
     post:
       summary: Natural Language Query
       description: Submit a natural-language request and get back a curated time series response. The response also includes the generated SQL so you can switch to the SQL endpoint for faster/cheaper repeated queries.
@@ -45,12 +15,12 @@ paths:
             schema:
               $ref: '../schemas/schemas.yaml#/components/schemas/NLQueryRequest'
       x-codeSamples:
+        - lang: cURL
+          source: # INJECT: curl/nl_query_example.sh
         - lang: Python
           source: # INJECT: python/nl_query_example.py
         - lang: JavaScript
           source: # INJECT: js/nl_query_example.js
-        - lang: cURL
-          source: # INJECT: curl/nl_query_example.sh
       responses:
         '200':
           description: OK
@@ -58,17 +28,6 @@ paths:
             application/json:
               schema:
                 $ref: '../schemas/schemas.yaml#/components/schemas/NLQueryResponse'
-              example:
-                sql_query: "SELECT date, co2_kg_france AS france FROM emissions WHERE date BETWEEN '2010-01-01' AND '2020-12-31' ORDER BY date;"
-                series:
-                  - series_id: "co2_france"
-                    name: "CO2 emissions — France"
-                    unit: "kg"
-                    observations:
-                      - date: "2010-01-01"
-                        value: 450000.0
-                      - date: "2011-01-01"
-                        value: 440000.0
           headers:
             X-RateLimit-Limit:
               schema:
@@ -106,57 +65,27 @@ paths:
           $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
 
   /query/sql:
-    get:
-      summary: SQL Query (query string)
-      description: Execute a read-only SELECT query using query parameters. This is a convenience alias of POST.
-      tags:
-        - Queries
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - in: query
-          name: sql_query
-          description: SQL query to execute (read-only)
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas/schemas.yaml#/components/schemas/QueryResponse'
-        '400':
-          description: Invalid SQL or mapping failure
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
-        '401':
-          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
-        '429':
-          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
     post:
       summary: SQL Query
-      description: Execute a read-only SELECT query and receive the results as curated time series. This endpoint does not return SQL.
+      description: Execute a read-only SELECT query and receive the results as curated time series. The response includes the executed SQL query and optional metadata.
       tags:
         - Queries
       security:
         - ApiKeyAuth: []
       requestBody:
         required: false
-        description: Provide JSON body or use query parameter 'sql_query'. Body takes precedence.
+        description: Provide JSON body with 'query' or 'sql_query' field, or use query parameters. Body takes precedence.
         content:
           application/json:
             schema:
               $ref: '../schemas/schemas.yaml#/components/schemas/SQLQueryRequest'
       x-codeSamples:
+        - lang: cURL
+          source: # INJECT: curl/sql_query_example.sh
         - lang: Python
           source: # INJECT: python/sql_query_example.py
         - lang: JavaScript
           source: # INJECT: js/sql_query_example.js
-        - lang: cURL
-          source: # INJECT: curl/sql_query_example.sh
       responses:
         '200':
           description: OK
@@ -164,20 +93,6 @@ paths:
             application/json:
               schema:
                 $ref: '../schemas/schemas.yaml#/components/schemas/QueryResponse'
-              example:
-                series:
-                  - name: "CO2 — France"
-                    series_id: "co2_france"
-                    unit: "kg"
-                    observations:
-                      - date: "2019-01-01"
-                        value: 445000.0
-                  - name: "CO2 — Norway"
-                    series_id: "co2_norway"
-                    unit: "kg"
-                    observations:
-                      - date: "2019-01-01"
-                        value: 118000.0
           headers:
             X-RateLimit-Limit:
               schema:

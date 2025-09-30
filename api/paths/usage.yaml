@@ -8,12 +8,12 @@ paths:
       security:
         - ApiKeyAuth: []
       x-codeSamples:
+        - lang: cURL
+          source: # INJECT: curl/usage_example.sh
         - lang: Python
           source: # INJECT: python/usage_example.py
         - lang: JavaScript
           source: # INJECT: js/usage_example.js
-        - lang: cURL
-          source: # INJECT: curl/usage_example.sh
       responses:
         '200':
           description: Usage statistics
@@ -21,13 +21,6 @@ paths:
             application/json:
               schema:
                 $ref: '../schemas/schemas.yaml#/components/schemas/UsageStats'
-              example:
-                queries_used: 150
-                queries_limit: 1000
-                period_start: "2024-01-01T00:00:00Z"
-                period_end: "2024-01-31T23:59:59Z"
-                concurrent_requests: 2
-                max_concurrent: 5
           headers:
             X-RateLimit-Limit:
               schema:
