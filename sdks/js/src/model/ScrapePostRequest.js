@@ -22,7 +22,7 @@ class ScrapePostRequest {
     /**
      * Constructs a new <code>ScrapePostRequest</code>.
      * @alias module:model/ScrapePostRequest
-     * @param url {String} 
+     * @param url {String} URL to scrape
      */
     constructor(url) { 
         
@@ -82,6 +82,7 @@ class ScrapePostRequest {
 ScrapePostRequest.RequiredProperties = ["url"];
 
 /**
+ * URL to scrape
  * @member {String} url
  */
 ScrapePostRequest.prototype['url'] = undefined;

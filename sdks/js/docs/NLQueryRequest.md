@@ -4,6 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**query** | **String** |  | 
+**query** | **String** | Natural language query | 
 
 

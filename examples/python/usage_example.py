@@ -1,15 +1,13 @@
-from qoery import Configuration, ApiClient, UsageApi
+import requests
 
-configuration = Configuration()
-configuration.host = 'https://api.qoery.com/v0'
-configuration.api_key['ApiKeyAuth'] = 'your-api-key'
+response = requests.get(
+    "https://api.qoery.com/v0/usage",
+    headers={"X-API-Key": "your-api-key"},
+    params={"uid": "your-user-id"}
+)
 
-with ApiClient(configuration) as api_client:
-    usage_api = UsageApi(api_client)
-    result = usage_api.usage_get()
-    
-    # Response includes usage stats and token consumption
-    print(f"Queries: {result.queries_used}/{result.queries_limit}")
-    print(f"Tokens in: {result.tokens_in}, out: {result.tokens_out}")
-    print(f"Errors: {result.errors}")
-    print(f"Period: {result.period_start} to {result.period_end}")
+data = response.json()
+print(f"Plan: {data['plan']}")
+print(f"NL calls: {data['endpoints']['nl']['calls_used']}/{data['endpoints']['nl']['calls_limit']}")
+print(f"SQL calls: {data['endpoints']['sql']['calls_used']}/{data['endpoints']['sql']['calls_limit']}")
+print(f"Scrape calls: {data['endpoints']['scrape']['calls_used']}/{data['endpoints']['scrape']['calls_limit']}")

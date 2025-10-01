@@ -1,20 +1,12 @@
-const { ApiClient, QueriesApi, NLQueryRequest } = require('qoery');
+const response = await fetch("https://api.qoery.com/v0/query/nl", {
+  method: "POST",
+  headers: {
+    "X-API-Key": "your-api-key",
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ query: "population of France" })
+});
 
-(async () => {
-  const client = ApiClient.instance;
-  client.basePath = 'https://api.qoery.com/v0';
-  client.authentications['ApiKeyAuth'].apiKey = 'your-api-key';
-
-  const queries = new QueriesApi();
-  const body = new NLQueryRequest();
-  body.query = 'CO2 emissions for France from 2010 to 2020';
-
-  const res = await queries.queryNlPost(body);
-  
-  // Response includes: sql_query, series, metadata, description
-  console.log('Generated SQL:', res.sql_query);
-  console.log('Series count:', res.series.length);
-  res.series.forEach(s => {
-    console.log(`  ${s.name}: ${s.observations.length} observations`);
-  });
-})();
+const data = await response.json();
+console.log(`Generated SQL: ${data.sql_query}`);
+console.log(`Results: ${data.series.length} observations`);

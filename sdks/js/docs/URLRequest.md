@@ -4,6 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**url** | **String** |  | 
+**url** | **String** | URL to scrape | 
 
 

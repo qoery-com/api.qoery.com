@@ -45,16 +45,22 @@ export default class UsageApi {
 
     /**
      * Get usage statistics
-     * Get current usage and rate limit information
+     * Get current usage and rate limit information per endpoint
+     * @param {String} uid User ID (UUID)
      * @param {module:api/UsageApi~usageGetCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/UsageGet200Response}
      */
-    usageGet(callback) {
+    usageGet(uid, callback) {
       let postBody = null;
+      // verify the required parameter 'uid' is set
+      if (uid === undefined || uid === null) {
+        throw new Error("Missing the required parameter 'uid' when calling usageGet");
+      }
 
       let pathParams = {
       };
       let queryParams = {
+        'uid': uid
       };
       let headerParams = {
       };

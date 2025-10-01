@@ -7,6 +7,9 @@ components:
           type: string
         code:
           type: integer
+        message:
+          type: string
+          description: Additional error message
         details:
           type: string
           nullable: true
@@ -14,27 +17,16 @@ components:
         - error
         - code
 
-    UsageStats:
+    EndpointUsageStats:
       type: object
+      description: Usage statistics for a specific endpoint
       properties:
-        queries_used:
+        calls_used:
           type: integer
-          description: Number of queries used in current period
-        queries_limit:
-          type: integer
-          description: Maximum queries allowed in current period
-        period_start:
+          description: Number of calls used in current period
+        calls_limit:
           type: string
-          format: date-time
-        period_end:
-          type: string
-          format: date-time
-        concurrent_requests:
-          type: integer
-          description: Current number of concurrent requests
-        max_concurrent:
-          type: integer
-          description: Maximum concurrent requests allowed
+          description: Maximum calls allowed in current period (returned as string)
         tokens_in:
           type: integer
           description: Total input tokens consumed in current period
@@ -44,83 +36,166 @@ components:
         errors:
           type: integer
           description: Total number of errors in current period
+        remaining:
+          type: integer
+          description: Number of calls remaining in current period
       required:
-        - queries_used
-        - queries_limit
-        - period_start
-        - period_end
-        - concurrent_requests
-        - max_concurrent
+        - calls_used
+        - calls_limit
         - tokens_in
         - tokens_out
         - errors
+        - remaining
 
-    Observation:
+    UsageStats:
       type: object
+      description: Usage statistics per endpoint
       properties:
-        date:
+        period_start:
           type: string
-          format: date
-        value:
-          type: number
+          format: date-time
+          description: Start of the current usage period
+        period_end:
+          type: string
+          format: date-time
+          description: End of the current usage period
+        plan:
+          type: string
+          description: Current subscription plan
+        endpoints:
+          type: object
+          description: Usage statistics broken down by endpoint
+          properties:
+            nl:
+              $ref: '#/components/schemas/EndpointUsageStats'
+            sql:
+              $ref: '#/components/schemas/EndpointUsageStats'
+            scrape:
+              $ref: '#/components/schemas/EndpointUsageStats'
+          required:
+            - nl
+            - sql
+            - scrape
       required:
-        - date
-        - value
+        - period_start
+        - period_end
+        - plan
+        - endpoints
 
-    Series:
+    ObservationData:
       type: object
+      description: A single observation with full metadata (flat structure)
       properties:
+        ts:
+          type: string
+          format: date-time
+          description: Timestamp of the observation
+        value:
+          type: string
+          description: Value of the observation (returned as string)
+        entity_name:
+          type: string
+          description: Human-readable name of the entity
+        entity_id:
+          type: string
+          description: ID of the entity
+          nullable: true
+        metric_name:
+          type: string
+          description: Human-readable name of the metric
+        metric_id:
+          type: string
+          description: ID of the metric
+          nullable: true
+        unit_name:
+          type: string
+          description: Human-readable name of the unit
+        unit_id:
+          type: string
+          description: ID of the unit
+          nullable: true
+        frequency:
+          type: string
+          description: Frequency of the time series (e.g., monthly, annual)
+          nullable: true
+        series_description:
+          type: string
+          description: Description of the series
+          nullable: true
+        labels:
+          type: object
+          description: Additional labels and metadata
+          additionalProperties: true
+          nullable: true
+        source:
+          type: string
+          description: Source URL for the data
+          nullable: true
         series_id:
           type: string
-          description: short id for the series (optional but recommended)
-        name:
-          type: string
-          description: human-friendly name for the series
-        unit:
-          type: string
-          description: unit of measurement (optional)
-        observations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Observation'
+          description: ID of the series
+          nullable: true
       required:
-        - name
-        - observations
+        - ts
+        - value
+
+    QueryMetadata:
+      type: object
+      description: Metadata about query execution
+      properties:
+        result_count:
+          type: integer
+          description: Number of results returned
+      additionalProperties: true
 
     QueryResponse:
       type: object
+      description: Response from SQL query endpoint
       properties:
         series:
           type: array
+          description: Array of observations (flat structure, not nested)
           items:
-            $ref: '#/components/schemas/Series'
+            $ref: '#/components/schemas/ObservationData'
+        sql_query:
+          type: string
+          description: The SQL query that was executed
+          nullable: true
         metadata:
-          type: object
-          description: Additional metadata about the query execution
-          additionalProperties: true
+          $ref: '#/components/schemas/QueryMetadata'
       required:
         - series
 
     NLQueryResponse:
-      allOf:
-        - $ref: '#/components/schemas/QueryResponse'
-        - type: object
-          properties:
-            sql_query:
-              type: string
-              nullable: true
-              description: The generated SQL query
-            description:
-              type: string
-              description: Natural language description of the query result
-          required:
-            - sql_query
+      type: object
+      description: Response from natural language query endpoint
+      properties:
+        sql_query:
+          type: string
+          description: The generated SQL query
+        series:
+          type: array
+          description: Array of observations (flat structure, not nested)
+          items:
+            $ref: '#/components/schemas/ObservationData'
+        metadata:
+          type: object
+          description: Extended metadata including query resolution details
+          additionalProperties: true
+        description:
+          type: string
+          description: Natural language description of the query result
+      required:
+        - sql_query
+        - series
+        - description
 
     NLQueryRequest:
       type: object
       properties:
         query:
           type: string
+          description: Natural language query
       required:
         - query
 
@@ -143,70 +218,57 @@ components:
         url:
           type: string
           format: uri
+          description: URL to scrape
       required:
         - url
 
-    DBSeries:
+    ScrapeArtifacts:
       type: object
-      description: Database-structured series returned from cached scrape results
+      description: URLs to stored artifacts
       properties:
-        id:
-          type: integer
-        entity_id:
-          type: integer
-        metric_id:
-          type: integer
-        unit_id:
-          type: integer
-          nullable: true
-        frequency:
+        html_url:
           type: string
-          nullable: true
-        description:
+          description: URL to stored HTML
+        markdown_url:
           type: string
-          nullable: true
-        labels:
-          type: object
-          additionalProperties: true
-          nullable: true
-        observations_count:
-          type: integer
-      required:
-        - id
-        - entity_id
-        - metric_id
+          description: URL to stored markdown
+        tables_base_url:
+          type: string
+          description: Base URL for stored tables
 
     ScrapeResponse:
       type: object
+      description: Response from web scraping endpoint
       properties:
-        html:
-          type: string
-          description: Original HTML of the page (if requested)
-        markdown:
-          type: string
-          description: Markdown representation of the page (if requested)
         series:
           type: array
-          description: Extracted time series from detected tables (fresh scrape) or structured DB series (cached)
+          description: Array of observations extracted from the page (flat structure)
           items:
-            oneOf:
-              - $ref: '#/components/schemas/Series'
-              - $ref: '#/components/schemas/DBSeries'
+            $ref: '#/components/schemas/ObservationData'
         artifacts:
-          type: object
-          description: URLs or file paths to stored artifacts
-          properties:
-            html_url:
-              type: string
-            markdown_url:
-              type: string
-            tables_base_url:
-              type: string
+          $ref: '#/components/schemas/ScrapeArtifacts'
         cached:
           type: boolean
           description: Whether this result was retrieved from cache
         source_id:
-          type: integer
+          type: string
           description: Database source ID (present when cached=true)
+          nullable: true
+        metadata:
+          type: object
+          description: Additional metadata about the scrape
+          properties:
+            result_count:
+              type: integer
+              description: Number of observations extracted
+          additionalProperties: true
+        html:
+          type: string
+          description: Original HTML of the page (only if html=true query param)
+          nullable: true
+        markdown:
+          type: string
+          description: Markdown representation of the page (only if markdown=true query param)
+          nullable: true
       required:
         - series

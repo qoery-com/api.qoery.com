@@ -22,7 +22,7 @@ class NLQueryRequest {
     /**
      * Constructs a new <code>NLQueryRequest</code>.
      * @alias module:model/NLQueryRequest
-     * @param query {String} 
+     * @param query {String} Natural language query
      */
     constructor(query) { 
         
@@ -82,6 +82,7 @@ class NLQueryRequest {
 NLQueryRequest.RequiredProperties = ["query"];
 
 /**
+ * Natural language query
  * @member {String} query
  */
 NLQueryRequest.prototype['query'] = undefined;

@@ -41,20 +41,20 @@ components:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/ErrorResponse'
     UsageStats:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/UsageStats'
-    Observation:
-      $ref: 'api/schemas/schemas.yaml#/components/schemas/Observation'
-    Series:
-      $ref: 'api/schemas/schemas.yaml#/components/schemas/Series'
-    DBSeries:
-      $ref: 'api/schemas/schemas.yaml#/components/schemas/DBSeries'
+    ObservationData:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/ObservationData'
     QueryResponse:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/QueryResponse'
+    NLQueryResponse:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/NLQueryResponse'
     NLQueryRequest:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/NLQueryRequest'
     SQLQueryRequest:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/SQLQueryRequest'
     URLRequest:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/URLRequest'
+    ScrapeResponse:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/ScrapeResponse'
 
   responses:
     UnauthorizedError:

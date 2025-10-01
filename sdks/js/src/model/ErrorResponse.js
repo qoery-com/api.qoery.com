@@ -57,6 +57,9 @@ class ErrorResponse {
             if (data.hasOwnProperty('code')) {
                 obj['code'] = ApiClient.convertToType(data['code'], 'Number');
             }
+            if (data.hasOwnProperty('message')) {
+                obj['message'] = ApiClient.convertToType(data['message'], 'String');
+            }
             if (data.hasOwnProperty('details')) {
                 obj['details'] = ApiClient.convertToType(data['details'], 'String');
             }
@@ -81,6 +84,10 @@ class ErrorResponse {
             throw new Error("Expected the field `error` to be a primitive type in the JSON string but got " + data['error']);
         }
         // ensure the json data is a string
+        if (data['message'] && !(typeof data['message'] === 'string' || data['message'] instanceof String)) {
+            throw new Error("Expected the field `message` to be a primitive type in the JSON string but got " + data['message']);
+        }
+        // ensure the json data is a string
         if (data['details'] && !(typeof data['details'] === 'string' || data['details'] instanceof String)) {
             throw new Error("Expected the field `details` to be a primitive type in the JSON string but got " + data['details']);
         }
@@ -102,6 +109,12 @@ ErrorResponse.prototype['error'] = undefined;
  * @member {Number} code
  */
 ErrorResponse.prototype['code'] = undefined;
+
+/**
+ * Additional error message
+ * @member {String} message
+ */
+ErrorResponse.prototype['message'] = undefined;
 
 /**
  * @member {String} details

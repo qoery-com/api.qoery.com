@@ -1,12 +1,21 @@
-# QoerysApi.QueryNlPost200ResponseSeriesInner
+# Qoery.QueryNlPost200ResponseSeriesInner
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**seriesId** | **String** | short id for the series (optional but recommended) | [optional] 
-**name** | **String** | human-friendly name for the series | 
-**unit** | **String** | unit of measurement (optional) | [optional] 
-**observations** | [**[QueryNlPost200ResponseSeriesInnerObservationsInner]**](QueryNlPost200ResponseSeriesInnerObservationsInner.md) |  | 
+**ts** | **Date** | Timestamp of the observation | 
+**value** | **String** | Value of the observation (returned as string) | 
+**entityName** | **String** | Human-readable name of the entity | [optional] 
+**entityId** | **String** | ID of the entity | [optional] 
+**metricName** | **String** | Human-readable name of the metric | [optional] 
+**metricId** | **String** | ID of the metric | [optional] 
+**unitName** | **String** | Human-readable name of the unit | [optional] 
+**unitId** | **String** | ID of the unit | [optional] 
+**frequency** | **String** | Frequency of the time series (e.g., monthly, annual) | [optional] 
+**seriesDescription** | **String** | Description of the series | [optional] 
+**labels** | **{String: Object}** | Additional labels and metadata | [optional] 
+**source** | **String** | Source URL for the data | [optional] 
+**seriesId** | **String** | ID of the series | [optional] 
 
 

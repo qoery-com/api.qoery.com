@@ -12,6 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
+import UsageGet200ResponseEndpoints from './UsageGet200ResponseEndpoints';
 
 /**
  * The UsageGet200Response model module.
@@ -21,20 +22,16 @@ import ApiClient from '../ApiClient';
 class UsageGet200Response {
     /**
      * Constructs a new <code>UsageGet200Response</code>.
+     * Usage statistics per endpoint
      * @alias module:model/UsageGet200Response
-     * @param queriesUsed {Number} Number of queries used in current period
-     * @param queriesLimit {Number} Maximum queries allowed in current period
-     * @param periodStart {Date} 
-     * @param periodEnd {Date} 
-     * @param concurrentRequests {Number} Current number of concurrent requests
-     * @param maxConcurrent {Number} Maximum concurrent requests allowed
-     * @param tokensIn {Number} Total input tokens consumed in current period
-     * @param tokensOut {Number} Total output tokens consumed in current period
-     * @param errors {Number} Total number of errors in current period
+     * @param periodStart {Date} Start of the current usage period
+     * @param periodEnd {Date} End of the current usage period
+     * @param plan {String} Current subscription plan
+     * @param endpoints {module:model/UsageGet200ResponseEndpoints} 
      */
-    constructor(queriesUsed, queriesLimit, periodStart, periodEnd, concurrentRequests, maxConcurrent, tokensIn, tokensOut, errors) { 
+    constructor(periodStart, periodEnd, plan, endpoints) { 
         
-        UsageGet200Response.initialize(this, queriesUsed, queriesLimit, periodStart, periodEnd, concurrentRequests, maxConcurrent, tokensIn, tokensOut, errors);
+        UsageGet200Response.initialize(this, periodStart, periodEnd, plan, endpoints);
     }
 
     /**
@@ -42,16 +39,11 @@ class UsageGet200Response {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj, queriesUsed, queriesLimit, periodStart, periodEnd, concurrentRequests, maxConcurrent, tokensIn, tokensOut, errors) { 
-        obj['queries_used'] = queriesUsed;
-        obj['queries_limit'] = queriesLimit;
+    static initialize(obj, periodStart, periodEnd, plan, endpoints) { 
         obj['period_start'] = periodStart;
         obj['period_end'] = periodEnd;
-        obj['concurrent_requests'] = concurrentRequests;
-        obj['max_concurrent'] = maxConcurrent;
-        obj['tokens_in'] = tokensIn;
-        obj['tokens_out'] = tokensOut;
-        obj['errors'] = errors;
+        obj['plan'] = plan;
+        obj['endpoints'] = endpoints;
     }
 
     /**
@@ -65,32 +57,17 @@ class UsageGet200Response {
         if (data) {
             obj = obj || new UsageGet200Response();
 
-            if (data.hasOwnProperty('queries_used')) {
-                obj['queries_used'] = ApiClient.convertToType(data['queries_used'], 'Number');
-            }
-            if (data.hasOwnProperty('queries_limit')) {
-                obj['queries_limit'] = ApiClient.convertToType(data['queries_limit'], 'Number');
-            }
             if (data.hasOwnProperty('period_start')) {
                 obj['period_start'] = ApiClient.convertToType(data['period_start'], 'Date');
             }
             if (data.hasOwnProperty('period_end')) {
                 obj['period_end'] = ApiClient.convertToType(data['period_end'], 'Date');
             }
-            if (data.hasOwnProperty('concurrent_requests')) {
-                obj['concurrent_requests'] = ApiClient.convertToType(data['concurrent_requests'], 'Number');
+            if (data.hasOwnProperty('plan')) {
+                obj['plan'] = ApiClient.convertToType(data['plan'], 'String');
             }
-            if (data.hasOwnProperty('max_concurrent')) {
-                obj['max_concurrent'] = ApiClient.convertToType(data['max_concurrent'], 'Number');
-            }
-            if (data.hasOwnProperty('tokens_in')) {
-                obj['tokens_in'] = ApiClient.convertToType(data['tokens_in'], 'Number');
-            }
-            if (data.hasOwnProperty('tokens_out')) {
-                obj['tokens_out'] = ApiClient.convertToType(data['tokens_out'], 'Number');
-            }
-            if (data.hasOwnProperty('errors')) {
-                obj['errors'] = ApiClient.convertToType(data['errors'], 'Number');
+            if (data.hasOwnProperty('endpoints')) {
+                obj['endpoints'] = UsageGet200ResponseEndpoints.constructFromObject(data['endpoints']);
             }
         }
         return obj;
@@ -108,6 +85,14 @@ class UsageGet200Response {
                 throw new Error("The required field `" + property + "` is not found in the JSON data: " + JSON.stringify(data));
             }
         }
+        // ensure the json data is a string
+        if (data['plan'] && !(typeof data['plan'] === 'string' || data['plan'] instanceof String)) {
+            throw new Error("Expected the field `plan` to be a primitive type in the JSON string but got " + data['plan']);
+        }
+        // validate the optional field `endpoints`
+        if (data['endpoints']) { // data not null
+          UsageGet200ResponseEndpoints.validateJSON(data['endpoints']);
+        }
 
         return true;
     }
@@ -115,59 +100,30 @@ class UsageGet200Response {
 
 }
 
-UsageGet200Response.RequiredProperties = ["queries_used", "queries_limit", "period_start", "period_end", "concurrent_requests", "max_concurrent", "tokens_in", "tokens_out", "errors"];
+UsageGet200Response.RequiredProperties = ["period_start", "period_end", "plan", "endpoints"];
 
 /**
- * Number of queries used in current period
- * @member {Number} queries_used
- */
-UsageGet200Response.prototype['queries_used'] = undefined;
-
-/**
- * Maximum queries allowed in current period
- * @member {Number} queries_limit
- */
-UsageGet200Response.prototype['queries_limit'] = undefined;
-
-/**
+ * Start of the current usage period
  * @member {Date} period_start
  */
 UsageGet200Response.prototype['period_start'] = undefined;
 
 /**
+ * End of the current usage period
  * @member {Date} period_end
  */
 UsageGet200Response.prototype['period_end'] = undefined;
 
 /**
- * Current number of concurrent requests
- * @member {Number} concurrent_requests
+ * Current subscription plan
+ * @member {String} plan
  */
-UsageGet200Response.prototype['concurrent_requests'] = undefined;
+UsageGet200Response.prototype['plan'] = undefined;
 
 /**
- * Maximum concurrent requests allowed
- * @member {Number} max_concurrent
+ * @member {module:model/UsageGet200ResponseEndpoints} endpoints
  */
-UsageGet200Response.prototype['max_concurrent'] = undefined;
-
-/**
- * Total input tokens consumed in current period
- * @member {Number} tokens_in
- */
-UsageGet200Response.prototype['tokens_in'] = undefined;
-
-/**
- * Total output tokens consumed in current period
- * @member {Number} tokens_out
- */
-UsageGet200Response.prototype['tokens_out'] = undefined;
-
-/**
- * Total number of errors in current period
- * @member {Number} errors
- */
-UsageGet200Response.prototype['errors'] = undefined;
+UsageGet200Response.prototype['endpoints'] = undefined;
 
 
 

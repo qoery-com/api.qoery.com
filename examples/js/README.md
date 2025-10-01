@@ -1,16 +1,20 @@
 # JavaScript Examples
 
-This directory contains minimal JavaScript examples for using the Qoery API.
+Minimal JavaScript examples for using the Qoery API with `fetch`.
 
 ## Examples
 
-- `nl_query_example.js` - Natural language query example
-- `scrape_example.js` - Web scraping example  
-- `usage_example.js` - Usage statistics example
-- `sql_query_example.js` - SQL query example
+- `nl_query_example.js` - Natural language query
+- `sql_query_example.js` - SQL query
+- `scrape_example.js` - Web scraping
+- `usage_example.js` - Usage statistics
 
 ## Usage
 
-1. Install the SDK: `npm install qoerys_api`
-2. Replace `'your-api-key'` with your actual API key
-3. Run the examples: `node example_name.js`
+1. Replace `your-api-key` with your actual API key
+2. Replace `your-user-id` with your user ID (for usage endpoint)
+3. Run: `node example_name.js`
+
+## Notes
+
+All examples use the production API endpoint `https://api.qoery.com/v0`

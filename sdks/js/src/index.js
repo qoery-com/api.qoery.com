@@ -13,27 +13,28 @@
 
 
 import ApiClient from './ApiClient';
-import DBSeries from './model/DBSeries';
 import ErrorResponse from './model/ErrorResponse';
 import NLQueryRequest from './model/NLQueryRequest';
-import Observation from './model/Observation';
+import NLQueryResponse from './model/NLQueryResponse';
+import ObservationData from './model/ObservationData';
 import QueryNlPost200Response from './model/QueryNlPost200Response';
-import QueryNlPost200ResponseAllOfSeriesInner from './model/QueryNlPost200ResponseAllOfSeriesInner';
-import QueryNlPost200ResponseAllOfSeriesInnerObservationsInner from './model/QueryNlPost200ResponseAllOfSeriesInnerObservationsInner';
+import QueryNlPost200ResponseSeriesInner from './model/QueryNlPost200ResponseSeriesInner';
 import QueryNlPost400Response from './model/QueryNlPost400Response';
 import QueryNlPostRequest from './model/QueryNlPostRequest';
 import QueryResponse from './model/QueryResponse';
 import QuerySqlPost200Response from './model/QuerySqlPost200Response';
+import QuerySqlPost200ResponseMetadata from './model/QuerySqlPost200ResponseMetadata';
 import QuerySqlPostRequest from './model/QuerySqlPostRequest';
 import SQLQueryRequest from './model/SQLQueryRequest';
 import ScrapePost200Response from './model/ScrapePost200Response';
 import ScrapePost200ResponseArtifacts from './model/ScrapePost200ResponseArtifacts';
-import ScrapePost200ResponseSeriesInner from './model/ScrapePost200ResponseSeriesInner';
-import ScrapePost200ResponseSeriesInnerOneOf from './model/ScrapePost200ResponseSeriesInnerOneOf';
+import ScrapePost200ResponseMetadata from './model/ScrapePost200ResponseMetadata';
 import ScrapePostRequest from './model/ScrapePostRequest';
-import Series from './model/Series';
+import ScrapeResponse from './model/ScrapeResponse';
 import URLRequest from './model/URLRequest';
 import UsageGet200Response from './model/UsageGet200Response';
+import UsageGet200ResponseEndpoints from './model/UsageGet200ResponseEndpoints';
+import UsageGet200ResponseEndpointsNl from './model/UsageGet200ResponseEndpointsNl';
 import UsageStats from './model/UsageStats';
 import QueriesApi from './api/QueriesApi';
 import UsageApi from './api/UsageApi';
@@ -79,12 +80,6 @@ export {
     ApiClient,
 
     /**
-     * The DBSeries model constructor.
-     * @property {module:model/DBSeries}
-     */
-    DBSeries,
-
-    /**
      * The ErrorResponse model constructor.
      * @property {module:model/ErrorResponse}
      */
@@ -97,10 +92,16 @@ export {
     NLQueryRequest,
 
     /**
-     * The Observation model constructor.
-     * @property {module:model/Observation}
+     * The NLQueryResponse model constructor.
+     * @property {module:model/NLQueryResponse}
      */
-    Observation,
+    NLQueryResponse,
+
+    /**
+     * The ObservationData model constructor.
+     * @property {module:model/ObservationData}
+     */
+    ObservationData,
 
     /**
      * The QueryNlPost200Response model constructor.
@@ -109,16 +110,10 @@ export {
     QueryNlPost200Response,
 
     /**
-     * The QueryNlPost200ResponseAllOfSeriesInner model constructor.
-     * @property {module:model/QueryNlPost200ResponseAllOfSeriesInner}
+     * The QueryNlPost200ResponseSeriesInner model constructor.
+     * @property {module:model/QueryNlPost200ResponseSeriesInner}
      */
-    QueryNlPost200ResponseAllOfSeriesInner,
-
-    /**
-     * The QueryNlPost200ResponseAllOfSeriesInnerObservationsInner model constructor.
-     * @property {module:model/QueryNlPost200ResponseAllOfSeriesInnerObservationsInner}
-     */
-    QueryNlPost200ResponseAllOfSeriesInnerObservationsInner,
+    QueryNlPost200ResponseSeriesInner,
 
     /**
      * The QueryNlPost400Response model constructor.
@@ -145,6 +140,12 @@ export {
     QuerySqlPost200Response,
 
     /**
+     * The QuerySqlPost200ResponseMetadata model constructor.
+     * @property {module:model/QuerySqlPost200ResponseMetadata}
+     */
+    QuerySqlPost200ResponseMetadata,
+
+    /**
      * The QuerySqlPostRequest model constructor.
      * @property {module:model/QuerySqlPostRequest}
      */
@@ -169,16 +170,10 @@ export {
     ScrapePost200ResponseArtifacts,
 
     /**
-     * The ScrapePost200ResponseSeriesInner model constructor.
-     * @property {module:model/ScrapePost200ResponseSeriesInner}
+     * The ScrapePost200ResponseMetadata model constructor.
+     * @property {module:model/ScrapePost200ResponseMetadata}
      */
-    ScrapePost200ResponseSeriesInner,
-
-    /**
-     * The ScrapePost200ResponseSeriesInnerOneOf model constructor.
-     * @property {module:model/ScrapePost200ResponseSeriesInnerOneOf}
-     */
-    ScrapePost200ResponseSeriesInnerOneOf,
+    ScrapePost200ResponseMetadata,
 
     /**
      * The ScrapePostRequest model constructor.
@@ -187,10 +182,10 @@ export {
     ScrapePostRequest,
 
     /**
-     * The Series model constructor.
-     * @property {module:model/Series}
+     * The ScrapeResponse model constructor.
+     * @property {module:model/ScrapeResponse}
      */
-    Series,
+    ScrapeResponse,
 
     /**
      * The URLRequest model constructor.
@@ -203,6 +198,18 @@ export {
      * @property {module:model/UsageGet200Response}
      */
     UsageGet200Response,
+
+    /**
+     * The UsageGet200ResponseEndpoints model constructor.
+     * @property {module:model/UsageGet200ResponseEndpoints}
+     */
+    UsageGet200ResponseEndpoints,
+
+    /**
+     * The UsageGet200ResponseEndpointsNl model constructor.
+     * @property {module:model/UsageGet200ResponseEndpointsNl}
+     */
+    UsageGet200ResponseEndpointsNl,
 
     /**
      * The UsageStats model constructor.

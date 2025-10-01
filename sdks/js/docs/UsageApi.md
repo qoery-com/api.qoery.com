@@ -10,11 +10,11 @@ Method | HTTP request | Description
 
 ## usageGet
 
-> UsageGet200Response usageGet()
+> UsageGet200Response usageGet(uid)
 
 Get usage statistics
 
-Get current usage and rate limit information
+Get current usage and rate limit information per endpoint
 
 ### Example
 
@@ -28,7 +28,8 @@ ApiKeyAuth.apiKey = 'YOUR API KEY';
 //ApiKeyAuth.apiKeyPrefix = 'Token';
 
 let apiInstance = new Qoery.UsageApi();
-apiInstance.usageGet((error, data, response) => {
+let uid = "uid_example"; // String | User ID (UUID)
+apiInstance.usageGet(uid, (error, data, response) => {
   if (error) {
     console.error(error);
   } else {
@@ -39,7 +40,10 @@ apiInstance.usageGet((error, data, response) => {
 
 ### Parameters
 
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **uid** | **String**| User ID (UUID) | 
 
 ### Return type
 

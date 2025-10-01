@@ -21,7 +21,7 @@ import ApiClient from '../ApiClient';
 class ScrapePost200ResponseArtifacts {
     /**
      * Constructs a new <code>ScrapePost200ResponseArtifacts</code>.
-     * URLs or file paths to stored artifacts
+     * URLs to stored artifacts
      * @alias module:model/ScrapePost200ResponseArtifacts
      */
     constructor() { 
@@ -89,16 +89,19 @@ class ScrapePost200ResponseArtifacts {
 
 
 /**
+ * URL to stored HTML
  * @member {String} html_url
  */
 ScrapePost200ResponseArtifacts.prototype['html_url'] = undefined;
 
 /**
+ * URL to stored markdown
  * @member {String} markdown_url
  */
 ScrapePost200ResponseArtifacts.prototype['markdown_url'] = undefined;
 
 /**
+ * Base URL for stored tables
  * @member {String} tables_base_url
  */
 ScrapePost200ResponseArtifacts.prototype['tables_base_url'] = undefined;

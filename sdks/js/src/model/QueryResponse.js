@@ -12,7 +12,8 @@
  */
 
 import ApiClient from '../ApiClient';
-import QueryNlPost200ResponseAllOfSeriesInner from './QueryNlPost200ResponseAllOfSeriesInner';
+import QueryNlPost200ResponseSeriesInner from './QueryNlPost200ResponseSeriesInner';
+import QuerySqlPost200ResponseMetadata from './QuerySqlPost200ResponseMetadata';
 
 /**
  * The QueryResponse model module.
@@ -22,8 +23,9 @@ import QueryNlPost200ResponseAllOfSeriesInner from './QueryNlPost200ResponseAllO
 class QueryResponse {
     /**
      * Constructs a new <code>QueryResponse</code>.
+     * Response from SQL query endpoint
      * @alias module:model/QueryResponse
-     * @param series {Array.<module:model/QueryNlPost200ResponseAllOfSeriesInner>} 
+     * @param series {Array.<module:model/QueryNlPost200ResponseSeriesInner>} Array of observations (flat structure, not nested)
      */
     constructor(series) { 
         
@@ -51,10 +53,13 @@ class QueryResponse {
             obj = obj || new QueryResponse();
 
             if (data.hasOwnProperty('series')) {
-                obj['series'] = ApiClient.convertToType(data['series'], [QueryNlPost200ResponseAllOfSeriesInner]);
+                obj['series'] = ApiClient.convertToType(data['series'], [QueryNlPost200ResponseSeriesInner]);
+            }
+            if (data.hasOwnProperty('sql_query')) {
+                obj['sql_query'] = ApiClient.convertToType(data['sql_query'], 'String');
             }
             if (data.hasOwnProperty('metadata')) {
-                obj['metadata'] = ApiClient.convertToType(data['metadata'], {'String': Object});
+                obj['metadata'] = QuerySqlPost200ResponseMetadata.constructFromObject(data['metadata']);
             }
         }
         return obj;
@@ -79,8 +84,12 @@ class QueryResponse {
             }
             // validate the optional field `series` (array)
             for (const item of data['series']) {
-                QueryNlPost200ResponseAllOfSeriesInner.validateJSON(item);
+                QueryNlPost200ResponseSeriesInner.validateJSON(item);
             };
+        }
+        // ensure the json data is a string
+        if (data['sql_query'] && !(typeof data['sql_query'] === 'string' || data['sql_query'] instanceof String)) {
+            throw new Error("Expected the field `sql_query` to be a primitive type in the JSON string but got " + data['sql_query']);
         }
 
         return true;
@@ -92,13 +101,19 @@ class QueryResponse {
 QueryResponse.RequiredProperties = ["series"];
 
 /**
- * @member {Array.<module:model/QueryNlPost200ResponseAllOfSeriesInner>} series
+ * Array of observations (flat structure, not nested)
+ * @member {Array.<module:model/QueryNlPost200ResponseSeriesInner>} series
  */
 QueryResponse.prototype['series'] = undefined;
 
 /**
- * Additional metadata about the query execution
- * @member {Object.<String, Object>} metadata
+ * The SQL query that was executed
+ * @member {String} sql_query
+ */
+QueryResponse.prototype['sql_query'] = undefined;
+
+/**
+ * @member {module:model/QuerySqlPost200ResponseMetadata} metadata
  */
 QueryResponse.prototype['metadata'] = undefined;
 

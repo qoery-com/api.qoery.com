@@ -12,8 +12,9 @@
  */
 
 import ApiClient from '../ApiClient';
+import QueryNlPost200ResponseSeriesInner from './QueryNlPost200ResponseSeriesInner';
 import ScrapePost200ResponseArtifacts from './ScrapePost200ResponseArtifacts';
-import ScrapePost200ResponseSeriesInner from './ScrapePost200ResponseSeriesInner';
+import ScrapePost200ResponseMetadata from './ScrapePost200ResponseMetadata';
 
 /**
  * The ScrapePost200Response model module.
@@ -23,8 +24,9 @@ import ScrapePost200ResponseSeriesInner from './ScrapePost200ResponseSeriesInner
 class ScrapePost200Response {
     /**
      * Constructs a new <code>ScrapePost200Response</code>.
+     * Response from web scraping endpoint
      * @alias module:model/ScrapePost200Response
-     * @param series {Array.<module:model/ScrapePost200ResponseSeriesInner>} Extracted time series from detected tables (fresh scrape) or structured DB series (cached)
+     * @param series {Array.<module:model/QueryNlPost200ResponseSeriesInner>} Array of observations extracted from the page (flat structure)
      */
     constructor(series) { 
         
@@ -51,14 +53,8 @@ class ScrapePost200Response {
         if (data) {
             obj = obj || new ScrapePost200Response();
 
-            if (data.hasOwnProperty('html')) {
-                obj['html'] = ApiClient.convertToType(data['html'], 'String');
-            }
-            if (data.hasOwnProperty('markdown')) {
-                obj['markdown'] = ApiClient.convertToType(data['markdown'], 'String');
-            }
             if (data.hasOwnProperty('series')) {
-                obj['series'] = ApiClient.convertToType(data['series'], [ScrapePost200ResponseSeriesInner]);
+                obj['series'] = ApiClient.convertToType(data['series'], [QueryNlPost200ResponseSeriesInner]);
             }
             if (data.hasOwnProperty('artifacts')) {
                 obj['artifacts'] = ScrapePost200ResponseArtifacts.constructFromObject(data['artifacts']);
@@ -67,7 +63,16 @@ class ScrapePost200Response {
                 obj['cached'] = ApiClient.convertToType(data['cached'], 'Boolean');
             }
             if (data.hasOwnProperty('source_id')) {
-                obj['source_id'] = ApiClient.convertToType(data['source_id'], 'Number');
+                obj['source_id'] = ApiClient.convertToType(data['source_id'], 'String');
+            }
+            if (data.hasOwnProperty('metadata')) {
+                obj['metadata'] = ScrapePost200ResponseMetadata.constructFromObject(data['metadata']);
+            }
+            if (data.hasOwnProperty('html')) {
+                obj['html'] = ApiClient.convertToType(data['html'], 'String');
+            }
+            if (data.hasOwnProperty('markdown')) {
+                obj['markdown'] = ApiClient.convertToType(data['markdown'], 'String');
             }
         }
         return obj;
@@ -85,14 +90,6 @@ class ScrapePost200Response {
                 throw new Error("The required field `" + property + "` is not found in the JSON data: " + JSON.stringify(data));
             }
         }
-        // ensure the json data is a string
-        if (data['html'] && !(typeof data['html'] === 'string' || data['html'] instanceof String)) {
-            throw new Error("Expected the field `html` to be a primitive type in the JSON string but got " + data['html']);
-        }
-        // ensure the json data is a string
-        if (data['markdown'] && !(typeof data['markdown'] === 'string' || data['markdown'] instanceof String)) {
-            throw new Error("Expected the field `markdown` to be a primitive type in the JSON string but got " + data['markdown']);
-        }
         if (data['series']) { // data not null
             // ensure the json data is an array
             if (!Array.isArray(data['series'])) {
@@ -100,12 +97,24 @@ class ScrapePost200Response {
             }
             // validate the optional field `series` (array)
             for (const item of data['series']) {
-                ScrapePost200ResponseSeriesInner.validateJSON(item);
+                QueryNlPost200ResponseSeriesInner.validateJSON(item);
             };
         }
         // validate the optional field `artifacts`
         if (data['artifacts']) { // data not null
           ScrapePost200ResponseArtifacts.validateJSON(data['artifacts']);
+        }
+        // ensure the json data is a string
+        if (data['source_id'] && !(typeof data['source_id'] === 'string' || data['source_id'] instanceof String)) {
+            throw new Error("Expected the field `source_id` to be a primitive type in the JSON string but got " + data['source_id']);
+        }
+        // ensure the json data is a string
+        if (data['html'] && !(typeof data['html'] === 'string' || data['html'] instanceof String)) {
+            throw new Error("Expected the field `html` to be a primitive type in the JSON string but got " + data['html']);
+        }
+        // ensure the json data is a string
+        if (data['markdown'] && !(typeof data['markdown'] === 'string' || data['markdown'] instanceof String)) {
+            throw new Error("Expected the field `markdown` to be a primitive type in the JSON string but got " + data['markdown']);
         }
 
         return true;
@@ -117,20 +126,8 @@ class ScrapePost200Response {
 ScrapePost200Response.RequiredProperties = ["series"];
 
 /**
- * Original HTML of the page (if requested)
- * @member {String} html
- */
-ScrapePost200Response.prototype['html'] = undefined;
-
-/**
- * Markdown representation of the page (if requested)
- * @member {String} markdown
- */
-ScrapePost200Response.prototype['markdown'] = undefined;
-
-/**
- * Extracted time series from detected tables (fresh scrape) or structured DB series (cached)
- * @member {Array.<module:model/ScrapePost200ResponseSeriesInner>} series
+ * Array of observations extracted from the page (flat structure)
+ * @member {Array.<module:model/QueryNlPost200ResponseSeriesInner>} series
  */
 ScrapePost200Response.prototype['series'] = undefined;
 
@@ -147,9 +144,26 @@ ScrapePost200Response.prototype['cached'] = undefined;
 
 /**
  * Database source ID (present when cached=true)
- * @member {Number} source_id
+ * @member {String} source_id
  */
 ScrapePost200Response.prototype['source_id'] = undefined;
+
+/**
+ * @member {module:model/ScrapePost200ResponseMetadata} metadata
+ */
+ScrapePost200Response.prototype['metadata'] = undefined;
+
+/**
+ * Original HTML of the page (only if html=true query param)
+ * @member {String} html
+ */
+ScrapePost200Response.prototype['html'] = undefined;
+
+/**
+ * Markdown representation of the page (only if markdown=true query param)
+ * @member {String} markdown
+ */
+ScrapePost200Response.prototype['markdown'] = undefined;
 
 
 
