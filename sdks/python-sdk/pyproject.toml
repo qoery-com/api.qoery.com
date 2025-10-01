@@ -1,9 +1,9 @@
 [project]
 name = "qoery"
-version = "1.0.0"
+version = "0.1.0"
 description = "qoery's API"
 authors = [
-  {name = "OpenAPI Generator Community",email = "team@openapitools.org"},
+  {name = "OpenAPI Generator Community",email = "samuel.tinnerholm@gmail.com"},
 ]
 license = "MIT"
 readme = "README.md"
@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/GIT_USER_ID/GIT_REPO_ID"
+Repository = "https://github.com/qoery-com/api.qoery.com"
 
 [tool.poetry]
 requires-poetry = ">=2.0"
