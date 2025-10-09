@@ -156,29 +156,66 @@ def create_temp_main_api_file(script_dir, temp_dir):
 
 
 def run_redocly_build(temp_api_file, output_file):
-    """Run Redocly to generate documentation."""
+    """Run Redocly to generate documentation.
+
+    Resolution order for the CLI:
+    1) REDOCLY_BIN env var if provided
+    2) Local ./node_modules/.bin/redocly
+    3) Global `redocly` on PATH
+    4) npx -y @redocly/cli build-docs ... (last resort)
+
+    A timeout is applied to avoid hanging builds.
+    """
     print(f"Running Redocly to generate {output_file}...")
-    
-    try:
-        # Run the Redocly command
-        cmd = [
-            'npx', '@redocly/cli', 'build-docs',
-            str(temp_api_file),
-            '--output', str(output_file)
-        ]
-        
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-        print(f"✓ Documentation generated successfully: {output_file}")
-        return True
-        
-    except subprocess.CalledProcessError as e:
-        print(f"Error running Redocly: {e}")
-        print(f"stdout: {e.stdout}")
-        print(f"stderr: {e.stderr}")
-        return False
-    except FileNotFoundError:
-        print("Error: Redocly not found. Please install it with: npm install -g @redocly/cli")
-        return False
+
+    script_dir = Path(__file__).parent
+    timeout_seconds = int(os.getenv('REDOCLY_TIMEOUT_SECONDS', '240'))
+
+    # 1) Explicit override
+    redocly_bin = os.getenv('REDOCLY_BIN')
+    if redocly_bin:
+        candidates = [[redocly_bin, 'build-docs']]
+    else:
+        # 2) Local bin
+        local_bin = script_dir / 'node_modules' / '.bin' / 'redocly'
+        candidates = []
+        if local_bin.exists():
+            candidates.append([str(local_bin), 'build-docs'])
+        # 3) Global on PATH
+        candidates.append(['redocly', 'build-docs'])
+        # 4) npx fallback
+        candidates.append(['npx', '-y', '@redocly/cli', 'build-docs'])
+
+    last_error = None
+    for base_cmd in candidates:
+        cmd = base_cmd + [str(temp_api_file), '--output', str(output_file)]
+        try:
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True,
+                timeout=timeout_seconds,
+            )
+            print(f"✓ Documentation generated successfully: {output_file}")
+            return True
+        except subprocess.TimeoutExpired:
+            print(f"Error: Redocly command timed out after {timeout_seconds}s: {' '.join(base_cmd)}")
+            last_error = 'timeout'
+        except FileNotFoundError:
+            # try next candidate
+            last_error = 'not found'
+        except subprocess.CalledProcessError as e:
+            print(f"Redocly failed with exit code {e.returncode} using: {' '.join(base_cmd)}")
+            if e.stdout:
+                print(f"stdout:\n{e.stdout}")
+            if e.stderr:
+                print(f"stderr:\n{e.stderr}")
+            last_error = 'failed'
+
+    if last_error == 'not found':
+        print("Error: Redocly not found. Try: npm i -g @redocly/cli or use npx -y @redocly/cli")
+    return False
 
 
 def main():

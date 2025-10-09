@@ -1,12 +1,12 @@
-const response = await fetch("https://api.qoery.com/v0/scrape", {
-  method: "POST",
-  headers: {
-    "X-API-Key": "your-api-key",
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ url: "https://example.com/statistics" })
-});
+var Qoery = require('qoery');
+var defaultClient = Qoery.ApiClient.instance;
+defaultClient.authentications['ApiKeyAuth'].apiKey = "your-api-key";
 
-const data = await response.json();
-console.log(`Cached: ${data.cached || false}`);
-console.log(`Results: ${data.series.length} observations`);
+var api = new Qoery.WebScrapingApi();
+var request = new Qoery.ScrapePostRequest();
+request.url = "https://example.com/statistics";
+
+api.scrapePost(request, function(err, data) {
+  if (err) { console.error(err); return; }
+  console.log(data.cached || false);
+});
