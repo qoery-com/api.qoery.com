@@ -4,9 +4,18 @@ Beautiful, interactive API documentation generated from OpenAPI 3.1 specificatio
 
 ## 🚀 Quick Start
 
-### Generate Beautiful Documentation
+### Build the docs (Redoc)
 
-**Redoc (Recommended - Beautiful & Clean)**
 ```bash
-npx @redocly/cli build-docs api.yaml --output docs.html
+python build_docs.py
 ```
+
+This injects examples into the OpenAPI, builds `index.html` with Redoc, and writes it to the repo root.
+
+### Generate SDKs
+
+```bash
+./generate-sdk.sh
+```
+
+Generates the JavaScript and Python SDKs from the current `api.yaml`.
