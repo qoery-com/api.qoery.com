@@ -56,7 +56,7 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-      description: API key for authentication. Can also be provided via query parameter 'api_key', 'X-API-Key', or 'x-api-key'
+      description: API key for authentication, provided via the 'X-API-Key' header.
 
   schemas:
     ErrorResponse:
@@ -67,8 +67,6 @@ components:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/ObservationData'
     QueryResponse:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/QueryResponse'
-    NLQueryResponse:
-      $ref: 'api/schemas/schemas.yaml#/components/schemas/NLQueryResponse'
     NLQueryRequest:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/NLQueryRequest'
     SQLQueryRequest:

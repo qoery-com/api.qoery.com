@@ -139,56 +139,30 @@ components:
         - ts
         - value
 
-    QueryMetadata:
-      type: object
-      description: Metadata about query execution
-      properties:
-        result_count:
-          type: integer
-          description: Number of results returned
-      additionalProperties: true
+    # Removed deprecated QueryMetadata in favor of QueryMeta
 
     QueryResponse:
       type: object
-      description: Response from SQL query endpoint
-      properties:
-        series:
-          type: array
-          description: Array of observations (flat structure, not nested)
-          items:
-            $ref: '#/components/schemas/ObservationData'
-        sql_query:
-          type: string
-          description: The SQL query that was executed
-          nullable: true
-        metadata:
-          $ref: '#/components/schemas/QueryMetadata'
-      required:
-        - series
-
-    NLQueryResponse:
-      type: object
-      description: Response from natural language query endpoint
+      description: Response from query endpoints (both natural language and SQL)
       properties:
         sql_query:
           type: string
-          description: The generated SQL query
+          description: The SQL query that was executed or generated
         series:
           type: array
-          description: Array of observations (flat structure, not nested)
+          description: Array of series, each with its observations
           items:
-            $ref: '#/components/schemas/ObservationData'
-        metadata:
-          type: object
-          description: Extended metadata including query resolution details
-          additionalProperties: true
+            $ref: '#/components/schemas/Series'
+        meta:
+          $ref: '#/components/schemas/QueryMeta'
         description:
           type: string
           description: Natural language description of the query result
+          nullable: true
       required:
         - sql_query
         - series
-        - description
+        - meta
 
     NLQueryRequest:
       type: object
@@ -204,13 +178,175 @@ components:
       properties:
         query:
           type: string
-          description: SQL query to execute (primary field name)
-        sql_query:
+          description: SQL query to execute
+      required:
+        - query
+
+    Observation:
+      type: object
+      description: A single observation with typed value and structured attributes
+      properties:
+        timestamp:
           type: string
-          description: SQL query to execute (alternative/legacy field name)
-      oneOf:
-        - required: [query]
-        - required: [sql_query]
+          format: date-time
+          description: Timestamp of the observation
+        value:
+          oneOf:
+            - type: number
+            - type: string
+            - type: boolean
+          description: Value of the observation
+        entity:
+          $ref: '#/components/schemas/Entity'
+        metric:
+          $ref: '#/components/schemas/Metric'
+        unit:
+          $ref: '#/components/schemas/Unit'
+        labels:
+          type: object
+          description: Additional labels and metadata
+          additionalProperties: true
+          nullable: true
+      required:
+        - timestamp
+        - value
+
+    Entity:
+      type: object
+      description: The entity that this observation refers to
+      properties:
+        id:
+          type: string
+          description: ID of the entity
+        name:
+          type: string
+          description: Human-readable name of the entity
+      required:
+        - name
+
+    Metric:
+      type: object
+      description: The metric that this observation measures
+      properties:
+        id:
+          type: string
+          description: ID of the metric
+        name:
+          type: string
+          description: Human-readable name of the metric
+      required:
+        - name
+
+    Unit:
+      type: object
+      description: The unit used for the observation value
+      properties:
+        id:
+          type: string
+          description: ID of the unit
+        name:
+          type: string
+          description: Human-readable name of the unit
+        symbol:
+          type: string
+          description: Symbol of the unit (e.g., $, %, kg)
+      required:
+        - name
+
+    ObservationPoint:
+      type: object
+      description: A single timestamped value within a specific series
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the observation
+        value:
+          oneOf:
+            - type: number
+            - type: string
+            - type: boolean
+          description: Value of the observation
+      required:
+        - timestamp
+        - value
+
+    Series:
+      type: object
+      description: A logical group of observations sharing the same entity/metric/unit
+      properties:
+        id:
+          type: string
+          description: ID of the series
+        name:
+          type: string
+          description: Human-readable name of the series
+        entity:
+          $ref: '#/components/schemas/Entity'
+        metric:
+          $ref: '#/components/schemas/Metric'
+        unit:
+          $ref: '#/components/schemas/Unit'
+        frequency:
+          type: string
+          description: Frequency of the time series (e.g., monthly, annual)
+          nullable: true
+        description:
+          type: string
+          description: Description of the series
+          nullable: true
+        labels:
+          type: object
+          description: Additional labels and metadata at the series level
+          additionalProperties: true
+          nullable: true
+        observations:
+          type: array
+          description: The ordered observations for this series
+          items:
+            $ref: '#/components/schemas/ObservationPoint'
+      required:
+        - entity
+        - metric
+        - observations
+
+    QueryMeta:
+      type: object
+      description: Metadata about query execution and pagination
+      properties:
+        result_count:
+          type: integer
+          description: Number of results returned in this response
+        page:
+          $ref: '#/components/schemas/PageInfo'
+        diagnostics:
+          type: object
+          description: Additional diagnostic information about the query execution
+          additionalProperties: true
+      required:
+        - result_count
+
+    PageInfo:
+      type: object
+      description: Pagination information for the response
+      properties:
+        limit:
+          type: integer
+          description: Number of items requested per page
+        offset:
+          type: integer
+          description: Offset index of the first item in this page
+        next_cursor:
+          type: string
+          description: Opaque token to fetch the next page
+          nullable: true
+        has_more:
+          type: boolean
+          description: Whether there are more items available beyond this page
+      required:
+        - limit
+        - offset
+        - has_more
 
     URLRequest:
       type: object

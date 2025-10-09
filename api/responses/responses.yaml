@@ -17,12 +17,27 @@ components:
         X-RateLimit-Limit:
           schema:
             type: integer
+          description: Maximum requests allowed per time window
         X-RateLimit-Remaining:
           schema:
             type: integer
+          description: Number of requests remaining in current window
         X-RateLimit-Reset:
           schema:
             type: integer
+          description: Unix timestamp when the rate limit resets
+        X-RateLimit-Window:
+          schema:
+            type: integer
+          description: Time window in seconds
+        X-Concurrent-Limit:
+          schema:
+            type: integer
+          description: Maximum concurrent requests allowed
+        X-Concurrent-Current:
+          schema:
+            type: integer
+          description: Current number of concurrent requests
 
     RateLimitHeaders:
       description: Rate limiting information
