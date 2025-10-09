@@ -1,19 +1,10 @@
-import requests
+import qoery
 
-response = requests.post(
-    "https://api.qoery.com/v0/query/sql",
-    headers={
-        "X-API-Key": "your-api-key",
-        "Content-Type": "application/json",
-    },
-    json={
-        "query": "SELECT * FROM series LIMIT 10"
-    }
-)
+configuration = qoery.Configuration()
+configuration.api_key['ApiKeyAuth'] = "your-api-key"
 
-response.raise_for_status()
-data = response.json()
-
-print(f"Executed SQL: {data['sql_query']}")
-print(f"Series returned: {len(data['series'])}")
-print(f"Total results (meta.result_count): {data['meta']['result_count']}")
+with qoery.ApiClient(configuration) as api_client:
+    api = qoery.QueriesApi(api_client)
+    request = qoery.QuerySqlPostRequest(query="SELECT * FROM series LIMIT 10")
+    response = api.query_sql_post(request)
+    

@@ -1,21 +1,10 @@
-import requests
+import qoery
 
-response = requests.post(
-    "https://api.qoery.com/v0/query/nl",
-    headers={
-        "X-API-Key": "your-api-key",
-        "Content-Type": "application/json",
-    },
-    json={
-        "query": "population of France"
-    }
-)
+configuration = qoery.Configuration()
+configuration.api_key['ApiKeyAuth'] = "your-api-key"
 
-response.raise_for_status()
-data = response.json()
-
-print(f"Generated SQL: {data['sql_query']}")
-print(f"Series returned: {len(data['series'])}")
-print(f"Total results (meta.result_count): {data['meta']['result_count']}")
-if data.get("description"):
-    print(f"Description: {data['description']}")
+with qoery.ApiClient(configuration) as api_client:
+    api = qoery.QueriesApi(api_client)
+    request = qoery.QueryNlPostRequest(query="population of France")
+    response = api.query_nl_post(request)
+    

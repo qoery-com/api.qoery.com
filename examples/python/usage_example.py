@@ -1,20 +1,8 @@
-import requests
+import qoery
 
-response = requests.get(
-    "https://api.qoery.com/v0/usage",
-    headers={
-        "X-API-Key": "your-api-key"
-    },
-    params={
-        "uid": "00000000-0000-0000-0000-000000000000"
-    }
-)
+configuration = qoery.Configuration()
+configuration.api_key['ApiKeyAuth'] = "your-api-key"
 
-response.raise_for_status()
-data = response.json()
-
-print(f"Plan: {data['plan']}")
-print(f"Period: {data['period_start']} -> {data['period_end']}")
-print(f"NL calls: {data['endpoints']['nl']['calls_used']}/{data['endpoints']['nl']['calls_limit']} (remaining: {data['endpoints']['nl']['remaining']})")
-print(f"SQL calls: {data['endpoints']['sql']['calls_used']}/{data['endpoints']['sql']['calls_limit']} (remaining: {data['endpoints']['sql']['remaining']})")
-print(f"Scrape calls: {data['endpoints']['scrape']['calls_used']}/{data['endpoints']['scrape']['calls_limit']} (remaining: {data['endpoints']['scrape']['remaining']})")
+with qoery.ApiClient(configuration) as api_client:
+    api = qoery.UsageApi(api_client)
+    response = api.usage_get(uid="00000000-0000-0000-0000-000000000000")

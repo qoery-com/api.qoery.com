@@ -1,11 +1,10 @@
-import requests
+import qoery
 
-response = requests.post(
-    "https://api.qoery.com/v0/scrape",
-    headers={"X-API-Key": "your-api-key"},
-    json={"url": "https://example.com/statistics"}
-)
+configuration = qoery.Configuration()
+configuration.api_key['ApiKeyAuth'] = "your-api-key"
 
-data = response.json()
-print(f"Cached: {data.get('cached', False)}")
-print(f"Results: {len(data['series'])} observations")
+with qoery.ApiClient(configuration) as api_client:
+    api = qoery.WebScrapingApi(api_client)
+    request = qoery.ScrapePostRequest(url="https://example.com/statistics")
+    response = api.scrape_post(request)
+
