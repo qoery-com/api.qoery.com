@@ -63,8 +63,6 @@ components:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/ErrorResponse'
     UsageStats:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/UsageStats'
-    ObservationData:
-      $ref: 'api/schemas/schemas.yaml#/components/schemas/ObservationData'
     QueryResponse:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/QueryResponse'
     NLQueryRequest:

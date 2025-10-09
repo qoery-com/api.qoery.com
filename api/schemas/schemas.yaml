@@ -82,62 +82,6 @@ components:
         - plan
         - endpoints
 
-    ObservationData:
-      type: object
-      description: A single observation with full metadata (flat structure)
-      properties:
-        ts:
-          type: string
-          format: date-time
-          description: Timestamp of the observation
-        value:
-          type: string
-          description: Value of the observation (returned as string)
-        entity_name:
-          type: string
-          description: Human-readable name of the entity
-        entity_id:
-          type: string
-          description: ID of the entity
-          nullable: true
-        metric_name:
-          type: string
-          description: Human-readable name of the metric
-        metric_id:
-          type: string
-          description: ID of the metric
-          nullable: true
-        unit_name:
-          type: string
-          description: Human-readable name of the unit
-        unit_id:
-          type: string
-          description: ID of the unit
-          nullable: true
-        frequency:
-          type: string
-          description: Frequency of the time series (e.g., monthly, annual)
-          nullable: true
-        series_description:
-          type: string
-          description: Description of the series
-          nullable: true
-        labels:
-          type: object
-          description: Additional labels and metadata
-          additionalProperties: true
-          nullable: true
-        source:
-          type: string
-          description: Source URL for the data
-          nullable: true
-        series_id:
-          type: string
-          description: ID of the series
-          nullable: true
-      required:
-        - ts
-        - value
 
     # Removed deprecated QueryMetadata in favor of QueryMeta
 
@@ -378,9 +322,9 @@ components:
       properties:
         series:
           type: array
-          description: Array of observations extracted from the page (flat structure)
+          description: Array of series with observations (same structure as query endpoints)
           items:
-            $ref: '#/components/schemas/ObservationData'
+            $ref: '#/components/schemas/Series'
         artifacts:
           $ref: '#/components/schemas/ScrapeArtifacts'
         cached:
