@@ -1,0 +1,17 @@
+{
+  "python": {
+    "natural": "import qoery\n\nconfiguration = qoery.Configuration()\nconfiguration.api_key['ApiKeyAuth'] = \"your-api-key\"\n\nwith qoery.ApiClient(configuration) as api_client:\n    api = qoery.QueriesApi(api_client)\n    request = qoery.QueryNlPostRequest(query=\"population of France\")\n    response = api.query_nl_post(request)",
+    "sql": "import qoery\n\nconfiguration = qoery.Configuration()\nconfiguration.api_key['ApiKeyAuth'] = \"your-api-key\"\n\nwith qoery.ApiClient(configuration) as api_client:\n    api = qoery.QueriesApi(api_client)\n    request = qoery.QuerySqlPostRequest(query=\"SELECT * FROM series LIMIT 10\")\n    response = api.query_sql_post(request)",
+    "scrape": "import qoery\n\nconfiguration = qoery.Configuration()\nconfiguration.api_key['ApiKeyAuth'] = \"your-api-key\"\n\nwith qoery.ApiClient(configuration) as api_client:\n    api = qoery.WebScrapingApi(api_client)\n    request = qoery.ScrapePostRequest(url=\"https://example.com/statistics\")\n    response = api.scrape_post(request)"
+  },
+  "javascript": {
+    "natural": "var Qoery = require('qoery');\n\nvar defaultClient = Qoery.ApiClient.instance;\ndefaultClient.authentications['ApiKeyAuth'].apiKey = \"your-api-key\";\n\nvar api = new Qoery.QueriesApi();\nvar req = new Qoery.QueryNlPostRequest();\nreq.query = \"population of France\";\n\napi.queryNlPost(req, function(err, data) {\n  if (err) { console.error(err); return; }\n  console.log(data.sql_query);\n});",
+    "sql": "var Qoery = require('qoery');\nvar defaultClient = Qoery.ApiClient.instance;\ndefaultClient.authentications['ApiKeyAuth'].apiKey = \"your-api-key\";\n\nvar api = new Qoery.QueriesApi();\nvar req = new Qoery.QuerySqlPostRequest();\nreq.query = \"SELECT * FROM series LIMIT 10\";\n\napi.querySqlPost(req, function(err, data) {\n  if (err) { console.error(err); return; }\n  console.log(data.sql_query);\n});",
+    "scrape": "var Qoery = require('qoery');\nvar defaultClient = Qoery.ApiClient.instance;\ndefaultClient.authentications['ApiKeyAuth'].apiKey = \"your-api-key\";\n\nvar api = new Qoery.WebScrapingApi();\nvar request = new Qoery.ScrapePostRequest();\nrequest.url = \"https://example.com/statistics\";\n\napi.scrapePost(request, function(err, data) {\n  if (err) { console.error(err); return; }\n  console.log(data.cached || false);\n});"
+  },
+  "curl": {
+    "natural": "curl -sS \"https://api.qoery.com/v0/query/nl\" \\\n  -H \"X-API-Key: your-api-key\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"query\": \"population of France\"}'",
+    "sql": "curl -sS \"https://api.qoery.com/v0/query/sql\" \\\n  -H \"X-API-Key: your-api-key\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"query\": \"SELECT * FROM series LIMIT 10\"}'",
+    "scrape": "curl \"https://api.qoery.com/v0/scrape\" \\\n  -H \"X-API-Key: your-api-key\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"url\": \"https://example.com/statistics\"}'"
+  }
+}
