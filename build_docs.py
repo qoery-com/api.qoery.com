@@ -464,9 +464,78 @@ def inject_copy_button_into_html(html_file, markdown_content):
     <script>
     function copyToClipboard() {{
         const markdownContent = {escaped_markdown};
-        navigator.clipboard.writeText(markdownContent).then(function() {{
-            alert('Copied to clipboard!');
-        }});
+        
+        // Try modern clipboard API first
+        if (navigator.clipboard && window.isSecureContext) {{
+            navigator.clipboard.writeText(markdownContent).then(function() {{
+                showCopySuccess();
+            }}).catch(function() {{
+                fallbackCopy(markdownContent);
+            }});
+        }} else {{
+            fallbackCopy(markdownContent);
+        }}
+    }}
+    
+    function fallbackCopy(text) {{
+        // Create a temporary textarea element
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {{
+            const successful = document.execCommand('copy');
+            if (successful) {{
+                showCopySuccess();
+            }} else {{
+                showCopyError();
+            }}
+        }} catch (err) {{
+            showCopyError();
+        }}
+        
+        document.body.removeChild(textArea);
+    }}
+    
+    function showCopySuccess() {{
+        const button = document.getElementById('copy-for-llm-btn');
+        if (button) {{
+            const originalText = button.innerHTML;
+            button.innerHTML = '✅ Copied!';
+            button.style.backgroundColor = '#28a745';
+            button.style.borderColor = '#28a745';
+            button.style.color = 'white';
+            
+            setTimeout(function() {{
+                button.innerHTML = originalText;
+                button.style.backgroundColor = 'white';
+                button.style.borderColor = '#007bff';
+                button.style.color = '#007bff';
+            }}, 2000);
+        }}
+    }}
+    
+    function showCopyError() {{
+        const button = document.getElementById('copy-for-llm-btn');
+        if (button) {{
+            const originalText = button.innerHTML;
+            button.innerHTML = '❌ Failed';
+            button.style.backgroundColor = '#dc3545';
+            button.style.borderColor = '#dc3545';
+            button.style.color = 'white';
+            
+            setTimeout(function() {{
+                button.innerHTML = originalText;
+                button.style.backgroundColor = 'white';
+                button.style.borderColor = '#007bff';
+                button.style.color = '#007bff';
+            }}, 2000);
+        }}
     }}
     
     // Wait for Redocly to finish rendering, then add the button
