@@ -12,6 +12,8 @@ import re
 import shutil
 import subprocess
 import tempfile
+import yaml
+import json
 from pathlib import Path
 
 
@@ -23,6 +25,217 @@ def read_example_file(file_path):
     except FileNotFoundError:
         print(f"Warning: Example file not found: {file_path}")
         return None
+
+
+def resolve_refs_in_spec(spec, base_path):
+    """Resolve $ref references in the OpenAPI spec."""
+    import yaml
+    
+    def resolve_ref(obj, base_path):
+        if isinstance(obj, dict):
+            if '$ref' in obj:
+                ref_path = obj['$ref']
+                if ref_path.startswith('api/'):
+                    # Load the referenced file
+                    ref_file = base_path.parent / ref_path
+                    if ref_file.exists():
+                        try:
+                            with open(ref_file, 'r', encoding='utf-8') as f:
+                                ref_content = yaml.safe_load(f)
+                            
+                            # Navigate to the referenced part
+                            parts = ref_path.split('#/')
+                            if len(parts) > 1:
+                                path_parts = parts[1].split('/')
+                                for part in path_parts:
+                                    if part and ref_content and part in ref_content:
+                                        ref_content = ref_content[part]
+                                    else:
+                                        print(f"Warning: Could not resolve path {part} in {ref_path}")
+                                        return obj  # Return original if path not found
+                            
+                            return ref_content
+                        except Exception as e:
+                            print(f"Warning: Error loading {ref_file}: {e}")
+                            return obj
+                else:
+                    return obj  # Return original if not a local ref
+            else:
+                return {k: resolve_ref(v, base_path) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [resolve_ref(item, base_path) for item in obj]
+        else:
+            return obj
+    
+    return resolve_ref(spec, base_path)
+
+
+def generate_markdown_docs(api_spec_path, examples_dir):
+    """Generate markdown documentation from OpenAPI spec."""
+    print("Generating markdown documentation...")
+    
+    # Load the OpenAPI spec
+    with open(api_spec_path, 'r', encoding='utf-8') as f:
+        spec = yaml.safe_load(f)
+    
+    # Instead of resolving refs, load the individual path files directly
+    # since we're working with temporary files that already have examples injected
+    temp_api_dir = api_spec_path.parent / 'api'
+    
+    # Load all path files
+    paths = {}
+    if temp_api_dir.exists():
+        for path_file in temp_api_dir.glob('**/*.yaml'):
+            if path_file.name in ['queries.yaml', 'web-scraping.yaml', 'usage.yaml']:
+                with open(path_file, 'r', encoding='utf-8') as f:
+                    path_spec = yaml.safe_load(f)
+                    if 'paths' in path_spec:
+                        paths.update(path_spec['paths'])
+    
+    # Replace the paths in the main spec
+    if paths:
+        spec['paths'] = paths
+    
+    markdown_parts = []
+    
+    # API Info
+    info = spec.get('info', {})
+    markdown_parts.append(f"# {info.get('title', 'API Documentation')}")
+    markdown_parts.append(f"**Version:** {info.get('version', 'N/A')}")
+    markdown_parts.append("")
+    
+    # Description
+    if 'description' in info:
+        markdown_parts.append(info['description'])
+        markdown_parts.append("")
+    
+    # Contact info
+    if 'contact' in info:
+        contact = info['contact']
+        markdown_parts.append("## Contact")
+        if 'name' in contact:
+            markdown_parts.append(f"**Name:** {contact['name']}")
+        if 'email' in contact:
+            markdown_parts.append(f"**Email:** {contact['email']}")
+        if 'url' in contact:
+            markdown_parts.append(f"**URL:** {contact['url']}")
+        markdown_parts.append("")
+    
+    # Base URL
+    if 'servers' in spec and spec['servers']:
+        markdown_parts.append("## Base URL")
+        markdown_parts.append(f"`{spec['servers'][0]['url']}`")
+        markdown_parts.append("")
+    
+    # Authentication
+    if 'security' in spec:
+        markdown_parts.append("## Authentication")
+        markdown_parts.append("All endpoints require API key authentication via the `X-API-Key` header.")
+        markdown_parts.append("")
+    
+    # Tags/Endpoints
+    if 'paths' in spec:
+        markdown_parts.append("## Endpoints")
+        markdown_parts.append("")
+        
+        # Group by tags
+        endpoints_by_tag = {}
+        for path, methods in spec['paths'].items():
+            if isinstance(methods, dict):
+                for method, details in methods.items():
+                    if method.upper() in ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']:
+                        if isinstance(details, dict):
+                            tags = details.get('tags', ['General'])
+                            for tag in tags:
+                                if tag not in endpoints_by_tag:
+                                    endpoints_by_tag[tag] = []
+                                endpoints_by_tag[tag].append((path, method.upper(), details))
+                        else:
+                            print(f"Warning: Details for {method} {path} is not a dict: {type(details)}")
+            else:
+                print(f"Warning: Methods for {path} is not a dict: {type(methods)}")
+        
+        # Process each tag
+        for tag, endpoints in endpoints_by_tag.items():
+            markdown_parts.append(f"### {tag}")
+            markdown_parts.append("")
+            
+            for path, method, details in endpoints:
+                # Endpoint header
+                markdown_parts.append(f"#### {method} {path}")
+                markdown_parts.append("")
+                
+                # Description
+                if 'description' in details:
+                    markdown_parts.append(details['description'])
+                    markdown_parts.append("")
+                
+                # Request body
+                if 'requestBody' in details:
+                    markdown_parts.append("**Request Body:**")
+                    markdown_parts.append("")
+                    req_body = details['requestBody']
+                    if 'description' in req_body:
+                        markdown_parts.append(req_body['description'])
+                        markdown_parts.append("")
+                    
+                    # Schema info
+                    if 'content' in req_body and 'application/json' in req_body['content']:
+                        schema = req_body['content']['application/json'].get('schema', {})
+                        if '$ref' in schema:
+                            ref_name = schema['$ref'].split('/')[-1]
+                            markdown_parts.append(f"Schema: `{ref_name}`")
+                        markdown_parts.append("")
+                
+                # Parameters
+                if 'parameters' in details:
+                    markdown_parts.append("**Parameters:**")
+                    markdown_parts.append("")
+                    for param in details['parameters']:
+                        param_name = param.get('name', '')
+                        param_type = param.get('schema', {}).get('type', 'string')
+                        param_desc = param.get('description', '')
+                        required = param.get('required', False)
+                        req_text = " (required)" if required else ""
+                        markdown_parts.append(f"- `{param_name}` ({param_type}){req_text}: {param_desc}")
+                    markdown_parts.append("")
+                
+                # Code examples
+                if 'x-codeSamples' in details:
+                    markdown_parts.append("**Examples:**")
+                    markdown_parts.append("")
+                    
+                    for example in details['x-codeSamples']:
+                        lang = example.get('lang', '')
+                        source = example.get('source', '')
+                        
+                        # Try to read from example files if source contains INJECT
+                        if '# INJECT:' in source:
+                            example_file = source.split('# INJECT:')[1].strip()
+                            example_path = examples_dir / example_file
+                            if example_path.exists():
+                                with open(example_path, 'r', encoding='utf-8') as f:
+                                    source = f.read()
+                        
+                        markdown_parts.append(f"**{lang}:**")
+                        markdown_parts.append("```" + lang.lower())
+                        markdown_parts.append(source)
+                        markdown_parts.append("```")
+                        markdown_parts.append("")
+                
+                # Responses
+                if 'responses' in details:
+                    markdown_parts.append("**Responses:**")
+                    markdown_parts.append("")
+                    for status_code, response in details['responses'].items():
+                        desc = response.get('description', '')
+                        markdown_parts.append(f"- `{status_code}`: {desc}")
+                    markdown_parts.append("")
+                
+                markdown_parts.append("---")
+                markdown_parts.append("")
+    
+    return '\n'.join(markdown_parts)
 
 
 def inject_examples_into_yaml(yaml_content, examples_dir):
@@ -218,6 +431,113 @@ def run_redocly_build(temp_api_file, output_file):
     return False
 
 
+def inject_copy_button_into_html(html_file, markdown_content):
+    """Inject the copy button and markdown content into the generated HTML."""
+    print("Injecting copy button into HTML...")
+    
+    # Read the HTML file
+    with open(html_file, 'r', encoding='utf-8') as f:
+        html_content = f.read()
+    
+    # Escape the markdown content for JavaScript
+    # Use json.dumps to properly escape the content
+    escaped_markdown = json.dumps(markdown_content)
+    
+    # Create a simple copy button HTML
+    copy_button_html = '''
+    <button id="copy-for-llm-btn" style="
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        margin-left: 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    " onclick="copyToClipboard()">
+        📋 Copy for LLMs
+    </button>
+    '''
+    
+    # JavaScript that waits for Redocly to finish rendering
+    copy_script = f'''
+    <script>
+    function copyToClipboard() {{
+        const markdownContent = {escaped_markdown};
+        navigator.clipboard.writeText(markdownContent).then(function() {{
+            alert('Copied to clipboard!');
+        }});
+    }}
+    
+    // Wait for Redocly to finish rendering, then add the button
+    function addCopyButton() {{
+        const title = document.querySelector('h1');
+        if (title && !document.getElementById('copy-for-llm-btn')) {{
+            const button = document.createElement('button');
+            button.id = 'copy-for-llm-btn';
+            button.innerHTML = '📋 Copy for LLMs';
+            button.style.cssText = `
+                background: white;
+                color: #007bff;
+                border: 1px solid #007bff;
+                padding: 6px 12px;
+                margin-left: 15px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 13px;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                display: inline-block;
+                vertical-align: middle;
+            `;
+            button.onclick = copyToClipboard;
+            
+            // Add hover effect
+            button.onmouseover = function() {{
+                this.style.backgroundColor = '#007bff';
+                this.style.color = 'white';
+            }};
+            button.onmouseout = function() {{
+                this.style.backgroundColor = 'white';
+                this.style.color = '#007bff';
+            }};
+            
+            // Make the title container display inline so the button appears on the same line
+            title.style.display = 'inline-block';
+            title.style.marginRight = '15px';
+            
+            // Insert right after the title, on the same line
+            title.parentNode.insertBefore(button, title.nextSibling);
+        }}
+    }}
+    
+    // Try to add the button after Redocly loads
+    document.addEventListener('DOMContentLoaded', function() {{
+        setTimeout(addCopyButton, 1000);
+    }});
+    
+    // Also try when the page is fully loaded
+    window.addEventListener('load', function() {{
+        setTimeout(addCopyButton, 500);
+    }});
+    </script>
+    '''
+    
+    # No need to inject static button - we'll add it dynamically with JavaScript
+    
+    # Add the JavaScript at the end
+    if '</body>' in html_content:
+        html_content = html_content.replace('</body>', copy_script + '</body>')
+    else:
+        html_content += copy_script
+    
+    # Write the modified HTML back to the file
+    with open(html_file, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    
+    print("✓ Copy button injected successfully")
+
+
 def main():
     """Main build function."""
     script_dir = Path(__file__).parent
@@ -247,11 +567,17 @@ def main():
             # Create temporary main API file
             temp_api_file = create_temp_main_api_file(script_dir, temp_dir)
             
+            # Generate markdown documentation
+            markdown_content = generate_markdown_docs(temp_api_file, examples_dir)
+            
             # Run Redocly to generate documentation
             success = run_redocly_build(temp_api_file, output_file)
             
             if success:
+                # Inject the copy button into the generated HTML
+                inject_copy_button_into_html(output_file, markdown_content)
                 print(f"\n✓ Build complete! Documentation generated: {output_file}")
+                print("✓ Copy for LLMs button added to documentation")
             else:
                 print("\n✗ Build failed!")
                 return 1

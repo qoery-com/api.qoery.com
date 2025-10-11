@@ -197,6 +197,25 @@ components:
       required:
         - name
 
+    Source:
+      type: object
+      description: Provenance record for a dataset or observation source
+      properties:
+        id:
+          type: integer
+          description: Numeric ID of the source in the database
+        url:
+          type: string
+          format: uri
+          description: Canonical URL of the data source
+        description:
+          type: string
+          description: Human-readable description of the source
+          nullable: true
+      required:
+        - id
+        - url
+
     ObservationPoint:
       type: object
       description: A single timestamped value within a specific series
@@ -231,6 +250,8 @@ components:
           $ref: '#/components/schemas/Metric'
         unit:
           $ref: '#/components/schemas/Unit'
+        source:
+          $ref: '#/components/schemas/Source'
         frequency:
           type: string
           description: Frequency of the time series (e.g., monthly, annual)
@@ -252,6 +273,7 @@ components:
       required:
         - entity
         - metric
+        - source
         - observations
 
     QueryMeta:
