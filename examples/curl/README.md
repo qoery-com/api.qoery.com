@@ -5,7 +5,6 @@ Minimal cURL examples for using the Qoery API.
 ## Examples
 
 - `nl_query_example.sh` - Natural language query
-- `sql_query_example.sh` - SQL query
 - `scrape_example.sh` - Web scraping
 - `usage_example.sh` - Usage statistics
 

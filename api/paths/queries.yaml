@@ -2,7 +2,7 @@ paths:
   /query/nl:
     post:
       summary: Natural Language Query
-      description: Submit a natural-language request and get back a curated time series response. The response also includes the generated SQL so you can switch to the SQL endpoint for faster/cheaper repeated queries.
+      description: Submit a natural-language request and get back a curated time series response.
       tags:
         - Queries
       security:
@@ -64,68 +64,4 @@ paths:
         '429':
           $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
 
-  /query/sql:
-    post:
-      summary: SQL Query
-      description: Execute a read-only SELECT query and receive the results as curated time series. The response includes the executed SQL query and optional metadata.
-      tags:
-        - Queries
-      security:
-        - ApiKeyAuth: []
-      requestBody:
-        required: true
-        description: Provide JSON body with 'query' field.
-        content:
-          application/json:
-            schema:
-              $ref: '../schemas/schemas.yaml#/components/schemas/SQLQueryRequest'
-      x-codeSamples:
-        - lang: cURL
-          source: # INJECT: curl/sql_query_example.sh
-        - lang: Python
-          source: # INJECT: python/sql_query_example.py
-        - lang: JavaScript
-          source: # INJECT: js/sql_query_example.js
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas/schemas.yaml#/components/schemas/QueryResponse'
-          headers:
-            X-RateLimit-Limit:
-              schema:
-                type: integer
-              description: Maximum requests allowed per time window
-            X-RateLimit-Remaining:
-              schema:
-                type: integer
-              description: Number of requests remaining in current window
-            X-RateLimit-Reset:
-              schema:
-                type: integer
-              description: Unix timestamp when the rate limit resets
-            X-RateLimit-Window:
-              schema:
-                type: integer
-              description: Time window in seconds
-            X-Concurrent-Limit:
-              schema:
-                type: integer
-              description: Maximum concurrent requests allowed
-            X-Concurrent-Current:
-              schema:
-                type: integer
-              description: Current number of concurrent requests
-        '400':
-          description: Invalid SQL or mapping failure
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
-        '401':
-          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
-        '429':
-          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
 

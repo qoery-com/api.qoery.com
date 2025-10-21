@@ -44,7 +44,7 @@ security:
 
 tags:
   - name: Queries
-    description: Natural language and SQL query execution
+    description: Natural language query execution
   - name: Web Scraping
     description: Web scraping and data extraction
   - name: Usage
@@ -67,8 +67,6 @@ components:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/QueryResponse'
     NLQueryRequest:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/NLQueryRequest'
-    SQLQueryRequest:
-      $ref: 'api/schemas/schemas.yaml#/components/schemas/SQLQueryRequest'
     URLRequest:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/URLRequest'
     ScrapeResponse:
@@ -85,8 +83,6 @@ components:
 paths:
   /query/nl:
     $ref: 'api/paths/queries.yaml#/paths/~1query~1nl'
-  /query/sql:
-    $ref: 'api/paths/queries.yaml#/paths/~1query~1sql'
   /scrape:
     $ref: 'api/paths/web-scraping.yaml#/paths/~1scrape'
   /usage:

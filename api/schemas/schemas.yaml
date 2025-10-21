@@ -68,13 +68,10 @@ components:
           properties:
             nl:
               $ref: '#/components/schemas/EndpointUsageStats'
-            sql:
-              $ref: '#/components/schemas/EndpointUsageStats'
             scrape:
               $ref: '#/components/schemas/EndpointUsageStats'
           required:
             - nl
-            - sql
             - scrape
       required:
         - period_start
@@ -87,11 +84,8 @@ components:
 
     QueryResponse:
       type: object
-      description: Response from query endpoints (both natural language and SQL)
+      description: Response from natural language query endpoint
       properties:
-        sql_query:
-          type: string
-          description: The SQL query that was executed or generated
         series:
           type: array
           description: Array of series, each with its observations
@@ -104,7 +98,6 @@ components:
           description: Natural language description of the query result
           nullable: true
       required:
-        - sql_query
         - series
         - meta
 
@@ -117,14 +110,6 @@ components:
       required:
         - query
 
-    SQLQueryRequest:
-      type: object
-      properties:
-        query:
-          type: string
-          description: SQL query to execute
-      required:
-        - query
 
     Observation:
       type: object

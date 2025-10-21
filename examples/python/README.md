@@ -11,7 +11,6 @@ pip install requests
 ## Examples
 
 - `nl_query_example.py` - Natural language query
-- `sql_query_example.py` - SQL query
 - `scrape_example.py` - Web scraping
 - `usage_example.py` - Usage statistics
 

@@ -5,7 +5,6 @@ Minimal JavaScript examples for using the Qoery API with `fetch`.
 ## Examples
 
 - `nl_query_example.js` - Natural language query
-- `sql_query_example.js` - SQL query
 - `scrape_example.js` - Web scraping
 - `usage_example.js` - Usage statistics
 
