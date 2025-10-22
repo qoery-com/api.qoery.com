@@ -111,95 +111,7 @@ components:
         - query
 
 
-    Observation:
-      type: object
-      description: A single observation with typed value and structured attributes
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          description: Timestamp of the observation
-        value:
-          oneOf:
-            - type: number
-            - type: string
-            - type: boolean
-          description: Value of the observation
-        entity:
-          $ref: '#/components/schemas/Entity'
-        metric:
-          $ref: '#/components/schemas/Metric'
-        unit:
-          $ref: '#/components/schemas/Unit'
-        labels:
-          type: object
-          description: Additional labels and metadata
-          additionalProperties: true
-          nullable: true
-      required:
-        - timestamp
-        - value
 
-    Entity:
-      type: object
-      description: The entity that this observation refers to
-      properties:
-        id:
-          type: string
-          description: ID of the entity
-        name:
-          type: string
-          description: Human-readable name of the entity
-      required:
-        - name
-
-    Metric:
-      type: object
-      description: The metric that this observation measures
-      properties:
-        id:
-          type: string
-          description: ID of the metric
-        name:
-          type: string
-          description: Human-readable name of the metric
-      required:
-        - name
-
-    Unit:
-      type: object
-      description: The unit used for the observation value
-      properties:
-        id:
-          type: string
-          description: ID of the unit
-        name:
-          type: string
-          description: Human-readable name of the unit
-        symbol:
-          type: string
-          description: Symbol of the unit (e.g., $, %, kg)
-      required:
-        - name
-
-    Source:
-      type: object
-      description: Provenance record for a dataset or observation source
-      properties:
-        id:
-          type: integer
-          description: Numeric ID of the source in the database
-        url:
-          type: string
-          format: uri
-          description: Canonical URL of the data source
-        description:
-          type: string
-          description: Human-readable description of the source
-          nullable: true
-      required:
-        - id
-        - url
 
     ObservationPoint:
       type: object
@@ -221,45 +133,32 @@ components:
 
     Series:
       type: object
-      description: A logical group of observations sharing the same entity/metric/unit
+      description: A time series with observations from a specific source
       properties:
-        id:
+        url:
           type: string
-          description: ID of the series
-        name:
+          format: uri
+          description: URL of the source page
+        title:
           type: string
-          description: Human-readable name of the series
-        entity:
-          $ref: '#/components/schemas/Entity'
-        metric:
-          $ref: '#/components/schemas/Metric'
-        unit:
-          $ref: '#/components/schemas/Unit'
-        source:
-          $ref: '#/components/schemas/Source'
-        frequency:
+          description: Title of the series
+        url_title:
           type: string
-          description: Frequency of the time series (e.g., monthly, annual)
-          nullable: true
-        description:
-          type: string
-          description: Description of the series
-          nullable: true
-        labels:
-          type: object
-          description: Additional labels and metadata at the series level
-          additionalProperties: true
-          nullable: true
+          description: Title from the URL/source
         observations:
           type: array
           description: The ordered observations for this series
           items:
             $ref: '#/components/schemas/ObservationPoint'
+        relevance_score:
+          type: number
+          description: Relevance score for this series (0-1)
       required:
-        - entity
-        - metric
-        - source
+        - url
+        - title
+        - url_title
         - observations
+        - relevance_score
 
     QueryMeta:
       type: object
@@ -306,6 +205,14 @@ components:
           type: string
           format: uri
           description: URL to scrape
+        query:
+          type: string
+          description: Optional user query to guide extraction
+          nullable: true
+        enable_screenshots:
+          type: boolean
+          description: Enable screenshot capture during scraping
+          default: false
       required:
         - url
 

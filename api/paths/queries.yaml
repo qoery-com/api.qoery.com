@@ -1,19 +1,19 @@
 paths:
   /query/nl:
-    post:
+    get:
       summary: Natural Language Query
-      description: Submit a natural-language request and get back a curated time series response.
+      description: Submit a natural-language request via query parameter and get back a curated time series response.
       tags:
         - Queries
       security:
         - ApiKeyAuth: []
-      requestBody:
-        required: true
-        description: Provide JSON body.
-        content:
-          application/json:
-            schema:
-              $ref: '../schemas/schemas.yaml#/components/schemas/NLQueryRequest'
+      parameters:
+        - in: query
+          name: query
+          required: true
+          description: Natural language query
+          schema:
+            type: string
       x-codeSamples:
         - lang: cURL
           source: # INJECT: curl/nl_query_example.sh

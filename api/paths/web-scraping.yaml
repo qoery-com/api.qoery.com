@@ -1,20 +1,31 @@
 paths:
   /scrape:
-    post:
+    get:
       summary: Structured Web Scrape
-      description: Download a web page, and structured data as time series. Use query params `html=true` and/or `markdown=true` to include raw artifacts inline; otherwise artifact URLs are provided in `artifacts`.
+      description: Download a web page, and structured data as time series. Use query parameters to specify options.
       tags:
         - Web Scraping
       security:
         - ApiKeyAuth: []
-      requestBody:
-        required: false
-        description: Provide JSON body or use query parameter 'url'. Body takes precedence.
-        content:
-          application/json:
-            schema:
-              $ref: '../schemas/schemas.yaml#/components/schemas/URLRequest'
       parameters:
+        - in: query
+          name: url
+          required: true
+          description: URL to scrape
+          schema:
+            type: string
+            format: uri
+        - in: query
+          name: query
+          description: Optional user query to guide extraction
+          schema:
+            type: string
+        - in: query
+          name: enable_screenshots
+          description: Enable screenshot capture during scraping
+          schema:
+            type: boolean
+            default: false
         - in: query
           name: html
           description: Include page HTML inline in response
