@@ -1,0 +1,47 @@
+paths:
+  /plot2table:
+    get:
+      summary: Convert Charts to Data Tables
+      description: Convert charts, graphs, and other visual data representations into structured data tables using AI.
+      tags:
+        - Web Scraping
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: image_url
+          required: true
+          description: URL of the image containing charts or graphs to convert to data table
+          schema:
+            type: string
+            format: uri
+      x-codeSamples:
+        - lang: cURL
+          source: # INJECT: curl/plot2table_example.sh
+        - lang: Python
+          source: # INJECT: python/plot2table_example.py
+        - lang: JavaScript
+          source: # INJECT: js/plot2table_example.js
+      responses:
+        '200':
+          description: Successfully converted chart to data table
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/QueryResponse'
+        '400':
+          description: Bad request - missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'

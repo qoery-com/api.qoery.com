@@ -86,7 +86,7 @@ def generate_markdown_docs(api_spec_path, examples_dir):
     paths = {}
     if temp_api_dir.exists():
         for path_file in temp_api_dir.glob('**/*.yaml'):
-            if path_file.name in ['queries.yaml', 'web-scraping.yaml', 'usage.yaml']:
+            if path_file.name in ['queries.yaml', 'web-scraping.yaml', 'usage.yaml', 'plot2table.yaml']:
                 with open(path_file, 'r', encoding='utf-8') as f:
                     path_spec = yaml.safe_load(f)
                     if 'paths' in path_spec:

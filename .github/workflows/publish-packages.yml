@@ -1,0 +1,129 @@
+name: Publish Packages
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers on version tags like v0.2.4, v1.0.0, etc.
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Install dependencies
+        run: |
+          cd sdks/js
+          npm ci
+      
+      - name: Build package
+        run: |
+          cd sdks/js
+          npm run build || echo "No build script found, skipping build"
+      
+      - name: Publish to NPM
+        run: |
+          cd sdks/js
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      - name: Notify success
+        run: echo "✅ NPM package published successfully!"
+
+  publish-pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+      
+      - name: Build Python package
+        run: |
+          cd sdks/python-sdk
+          python -m build
+      
+      - name: Publish to PyPI
+        run: |
+          cd sdks/python-sdk
+          twine upload dist/*
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+      
+      - name: Notify success
+        run: echo "✅ PyPI package published successfully!"
+
+  create-github-release:
+    runs-on: ubuntu-latest
+    needs: [publish-npm, publish-pypi]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Extract version from tag
+        id: get_version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$GITHUB_REF" >> $GITHUB_OUTPUT
+      
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.tag }}
+          release_name: Release ${{ steps.get_version.outputs.version }}
+          body: |
+            ## 🚀 Release ${{ steps.get_version.outputs.version }}
+            
+            ### 📦 Packages Published
+            - **NPM**: `qoery@${{ steps.get_version.outputs.version }}`
+            - **PyPI**: `qoery==${{ steps.get_version.outputs.version }}`
+            
+            ### 🆕 What's New
+            - Added plot2table endpoint for chart-to-data conversion
+            - Updated API documentation and examples
+            - Improved SDK consistency across all endpoints
+            
+            ### 📚 Installation
+            
+            **NPM:**
+            ```bash
+            npm install qoery@${{ steps.get_version.outputs.version }}
+            ```
+            
+            **PyPI:**
+            ```bash
+            pip install qoery==${{ steps.get_version.outputs.version }}
+            ```
+            
+            ### 🔗 Documentation
+            - [API Documentation](https://api.qoery.com)
+            - [NPM Package](https://www.npmjs.com/package/qoery)
+            - [PyPI Package](https://pypi.org/project/qoery/)
+          draft: false
+          prerelease: false

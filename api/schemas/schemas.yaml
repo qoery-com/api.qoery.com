@@ -70,9 +70,12 @@ components:
               $ref: '#/components/schemas/EndpointUsageStats'
             scrape:
               $ref: '#/components/schemas/EndpointUsageStats'
+            plot2table:
+              $ref: '#/components/schemas/EndpointUsageStats'
           required:
             - nl
             - scrape
+            - plot2table
       required:
         - period_start
         - period_end

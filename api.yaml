@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: qoery's API
-  version: 0.2.3
+  version: 0.2.4
   description: |
     Every number on the internet, queryable. Instant access to millions of trusted
     statistics through a single natural language query or API call.
@@ -46,7 +46,7 @@ tags:
   - name: Queries
     description: Natural language query execution
   - name: Web Scraping
-    description: Web scraping and data extraction
+    description: Web scraping and data extraction from URLs
   - name: System
     description: System health and status endpoints
 
@@ -109,3 +109,5 @@ paths:
     $ref: 'api/paths/queries.yaml#/paths/~1query~1nl'
   /scrape:
     $ref: 'api/paths/web-scraping.yaml#/paths/~1scrape'
+  /plot2table:
+    $ref: 'api/paths/plot2table.yaml#/paths/~1plot2table'
