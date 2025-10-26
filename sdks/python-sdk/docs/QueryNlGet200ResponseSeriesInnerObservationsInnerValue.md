@@ -1,6 +1,6 @@
 # QueryNlGet200ResponseSeriesInnerObservationsInnerValue
 
-Value of the observation
+Value of the observation at this dimension point
 
 ## Properties
 

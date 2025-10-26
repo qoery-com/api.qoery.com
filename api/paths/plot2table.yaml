@@ -2,7 +2,7 @@ paths:
   /plot2table:
     get:
       summary: Convert Charts to Data Tables
-      description: Convert charts, graphs, and other visual data representations into structured data tables using AI.
+      description: Convert charts, graphs, and other visual data representations into structured data points using AI. Supports time series, categorical, scatter plots, and other chart types.
       tags:
         - Web Scraping
       security:
@@ -24,7 +24,7 @@ paths:
           source: # INJECT: js/plot2table_example.js
       responses:
         '200':
-          description: Successfully converted chart to data table
+          description: Successfully converted chart to structured data points
           content:
             application/json:
               schema:

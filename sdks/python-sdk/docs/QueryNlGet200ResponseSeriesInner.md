@@ -1,6 +1,6 @@
 # QueryNlGet200ResponseSeriesInner
 
-A time series with observations from a specific source
+A data series with observations from a specific source
 
 ## Properties
 

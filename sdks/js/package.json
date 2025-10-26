@@ -1,6 +1,6 @@
 {
   "name": "qoery",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Every_number_on_the_internet",
   "license": "MIT",
   "main": "dist/index.js",

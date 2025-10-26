@@ -118,25 +118,24 @@ components:
 
     ObservationPoint:
       type: object
-      description: A single timestamped value within a specific series
+      description: A single data point within a specific series
       properties:
-        timestamp:
+        dimension:
           type: string
-          format: date-time
-          description: Timestamp of the observation
+          description: The dimension/axis value (timestamp for time series, category for categorical data, x-value for scatter plots, etc.)
         value:
           oneOf:
             - type: number
             - type: string
             - type: boolean
-          description: Value of the observation
+          description: Value of the observation at this dimension point
       required:
-        - timestamp
+        - dimension
         - value
 
     Series:
       type: object
-      description: A time series with observations from a specific source
+      description: A data series with observations from a specific source
       properties:
         url:
           type: string

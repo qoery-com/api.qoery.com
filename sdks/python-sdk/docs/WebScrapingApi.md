@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 Convert Charts to Data Tables
 
-Convert charts, graphs, and other visual data representations into structured data tables using AI.
+Convert charts, graphs, and other visual data representations into structured data points using AI. Supports time series, categorical, scatter plots, and other chart types.
 
 ### Example
 
@@ -83,7 +83,7 @@ Name | Type | Description  | Notes
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | Successfully converted chart to data table |  -  |
+**200** | Successfully converted chart to structured data points |  -  |
 **400** | Bad request - missing or invalid parameters |  -  |
 **401** | Unauthorized |  -  |
 **429** | Rate limit exceeded |  * X-RateLimit-Limit - Maximum requests allowed per time window <br>  * X-RateLimit-Remaining - Number of requests remaining in current window <br>  * X-RateLimit-Reset - Unix timestamp when the rate limit resets <br>  * X-RateLimit-Window - Time window in seconds <br>  * X-Concurrent-Limit - Maximum concurrent requests allowed <br>  * X-Concurrent-Current - Current number of concurrent requests <br>  |

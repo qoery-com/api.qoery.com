@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 Convert Charts to Data Tables
 
-Convert charts, graphs, and other visual data representations into structured data tables using AI.
+Convert charts, graphs, and other visual data representations into structured data points using AI. Supports time series, categorical, scatter plots, and other chart types.
 
 ### Example
 
