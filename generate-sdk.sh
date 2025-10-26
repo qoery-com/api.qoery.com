@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Configurable settings (override via env vars when invoking the script)
-VERSION=${VERSION:-0.3.2}
+VERSION=${VERSION:-0.3.3}
 PY_PKG_NAME=${PY_PKG_NAME:-qoery}
 PY_PROJECT_NAME=${PY_PROJECT_NAME:-qoery}
 DESC_TXT=${DESC_TXT:-Every number on the internet, queryable.}
