@@ -6,6 +6,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **query** | **str** | Natural language query | 
+**num_results** | **int** | Number of search results to process | [optional] [default to 10]
+**paragraph_extraction** | **bool** | Enable paragraph-based time-series extraction | [optional] [default to False]
+**plot2table** | **int** | Number of charts/images to process with plot2table | [optional] [default to 0]
 
 ## Example
 

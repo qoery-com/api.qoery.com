@@ -2,19 +2,18 @@ paths:
   /usage:
     get:
       summary: Get usage statistics
-      description: Get current usage and rate limit information per endpoint
+      description: Get current usage and rate limit information per endpoint for the provided API key
       tags:
         - Usage
       security:
-        - ApiKeyAuth: []
+        - {}
       parameters:
         - in: query
-          name: uid
+          name: api_key
           required: true
-          description: User ID (UUID)
+          description: API key to look up usage for
           schema:
             type: string
-            format: uuid
       x-codeSamples:
         - lang: cURL
           source: # INJECT: curl/usage_example.sh

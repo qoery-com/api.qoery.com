@@ -6,5 +6,6 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **nl** | [**UsageGet200ResponseEndpointsNl**](UsageGet200ResponseEndpointsNl.md) |  | 
 **scrape** | [**UsageGet200ResponseEndpointsNl**](UsageGet200ResponseEndpointsNl.md) |  | 
+**plot2table** | [**UsageGet200ResponseEndpointsNl**](UsageGet200ResponseEndpointsNl.md) |  | 
 
 

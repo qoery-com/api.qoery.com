@@ -6,6 +6,10 @@ README.md
 docs/ErrorResponse.md
 docs/HealthGet200Response.md
 docs/NLQueryRequest.md
+docs/PlansGet200Response.md
+docs/PlansGet200ResponsePlansValue.md
+docs/PlansGet200ResponsePlansValueApiKeys.md
+docs/PlansGet200ResponsePlansValueMonthlyPrice.md
 docs/QueriesApi.md
 docs/QueryNlGet200Response.md
 docs/QueryNlGet200ResponseMeta.md
@@ -21,9 +25,11 @@ docs/ScrapeGet200ResponseMetadata.md
 docs/ScrapeResponse.md
 docs/SystemApi.md
 docs/URLRequest.md
+docs/UsageApi.md
+docs/UsageGet200Response.md
+docs/UsageGet200ResponseEndpoints.md
+docs/UsageGet200ResponseEndpointsNl.md
 docs/UsageStats.md
-docs/UsageStatsEndpoints.md
-docs/UsageStatsEndpointsNl.md
 docs/WebScrapingApi.md
 git_push.sh
 pyproject.toml
@@ -31,6 +37,7 @@ qoery/__init__.py
 qoery/api/__init__.py
 qoery/api/queries_api.py
 qoery/api/system_api.py
+qoery/api/usage_api.py
 qoery/api/web_scraping_api.py
 qoery/api_client.py
 qoery/api_response.py
@@ -40,6 +47,10 @@ qoery/models/__init__.py
 qoery/models/error_response.py
 qoery/models/health_get200_response.py
 qoery/models/nl_query_request.py
+qoery/models/plans_get200_response.py
+qoery/models/plans_get200_response_plans_value.py
+qoery/models/plans_get200_response_plans_value_api_keys.py
+qoery/models/plans_get200_response_plans_value_monthly_price.py
 qoery/models/query_nl_get200_response.py
 qoery/models/query_nl_get200_response_meta.py
 qoery/models/query_nl_get200_response_meta_page.py
@@ -53,9 +64,10 @@ qoery/models/scrape_get200_response_artifacts.py
 qoery/models/scrape_get200_response_metadata.py
 qoery/models/scrape_response.py
 qoery/models/url_request.py
+qoery/models/usage_get200_response.py
+qoery/models/usage_get200_response_endpoints.py
+qoery/models/usage_get200_response_endpoints_nl.py
 qoery/models/usage_stats.py
-qoery/models/usage_stats_endpoints.py
-qoery/models/usage_stats_endpoints_nl.py
 qoery/py.typed
 qoery/rest.py
 requirements.txt

@@ -11,8 +11,6 @@ Name | Type | Description | Notes
 **cached** | **bool** | Whether this result was retrieved from cache | [optional] 
 **source_id** | **str** | Database source ID (present when cached&#x3D;true) | [optional] 
 **metadata** | [**ScrapeGet200ResponseMetadata**](ScrapeGet200ResponseMetadata.md) |  | [optional] 
-**html** | **str** | Original HTML of the page (only if html&#x3D;true query param) | [optional] 
-**markdown** | **str** | Markdown representation of the page (only if markdown&#x3D;true query param) | [optional] 
 
 ## Example
 

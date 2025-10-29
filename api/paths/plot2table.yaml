@@ -2,7 +2,11 @@ paths:
   /plot2table:
     get:
       summary: Convert Charts to Data Tables
-      description: Convert charts, graphs, and other visual data representations into structured data points using AI. Supports time series, categorical, scatter plots, and other chart types.
+      description: |
+        Provide an image URL of a plot or chart and receive the underlying datapoints as structured series.
+        Supports time series, categorical, and scatter charts.
+
+        Credits: 1 Plot2Table credit per image processed.
       tags:
         - Web Scraping
       security:
@@ -45,3 +49,5 @@ paths:
             application/json:
               schema:
                 $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+
+    

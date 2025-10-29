@@ -1,0 +1,21 @@
+paths:
+  /plans:
+    get:
+      summary: List subscription plans and endpoint limits
+      description: Returns available plans with pricing metadata and monthly limits per endpoint.
+      tags:
+        - Usage
+      responses:
+        '200':
+          description: Plans and limits
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/PlansResponse'
+        '500':
+          description: Failed to load plans
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+

@@ -9,7 +9,5 @@ Name | Type | Description | Notes
 **cached** | **Boolean** | Whether this result was retrieved from cache | [optional] 
 **sourceId** | **String** | Database source ID (present when cached&#x3D;true) | [optional] 
 **metadata** | [**ScrapeGet200ResponseMetadata**](ScrapeGet200ResponseMetadata.md) |  | [optional] 
-**html** | **String** | Original HTML of the page (only if html&#x3D;true query param) | [optional] 
-**markdown** | **String** | Markdown representation of the page (only if markdown&#x3D;true query param) | [optional] 
 
 

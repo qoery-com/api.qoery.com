@@ -1,12 +1,16 @@
-var Qoery = require('qoery');
-var defaultClient = Qoery.ApiClient.instance;
-defaultClient.authentications['ApiKeyAuth'].apiKey = "your-api-key";
+// Structured Web Scrape (GET)
+async function run() {
+  const url = new URL('https://api.qoery.com/v0/scrape');
+  url.searchParams.set('url', 'https://example.com/statistics');
+  url.searchParams.set('paragraph_extraction', 'false');
+  url.searchParams.set('plot2table', '0');
 
-var api = new Qoery.WebScrapingApi();
-var request = new Qoery.ScrapePostRequest();
-request.url = "https://example.com/statistics";
+  const res = await fetch(url.toString(), {
+    method: 'GET',
+    headers: { 'X-API-Key': 'YOUR_API_KEY' }
+  });
+  const data = await res.json();
+  console.log(data);
+}
 
-api.scrapePost(request, function(err, data) {
-  if (err) { console.error(err); return; }
-  console.log(data.cached || false);
-});
+run().catch(console.error);

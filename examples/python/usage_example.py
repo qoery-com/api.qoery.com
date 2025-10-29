@@ -1,8 +1,8 @@
-import qoery
+import requests
 
-configuration = qoery.Configuration()
-configuration.api_key['ApiKeyAuth'] = "your-api-key"
+url = "https://api.qoery.com/v0/usage"
+params = {"api_key": "YOUR_API_KEY"}
+headers = {"X-API-Key": "YOUR_API_KEY"}
 
-with qoery.ApiClient(configuration) as api_client:
-    api = qoery.UsageApi(api_client)
-    response = api.usage_get(uid="00000000-0000-0000-0000-000000000000").to_dict()
+resp = requests.get(url, params=params, headers=headers)
+print(resp.json())

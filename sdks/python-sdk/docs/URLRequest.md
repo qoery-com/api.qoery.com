@@ -7,7 +7,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **url** | **str** | URL to scrape | 
 **query** | **str** | Optional user query to guide extraction | [optional] 
-**enable_screenshots** | **bool** | Enable screenshot capture during scraping | [optional] [default to False]
+**paragraph_extraction** | **bool** | Enable paragraph-based time-series extraction | [optional] [default to False]
+**plot2table** | **int** | Number of charts/images to process with plot2table | [optional] [default to 0]
 
 ## Example
 

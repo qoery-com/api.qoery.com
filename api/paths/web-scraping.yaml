@@ -2,7 +2,18 @@ paths:
   /scrape:
     get:
       summary: Structured Web Scrape
-      description: Download a web page, and structured data as time series. Use query parameters to specify options.
+      description: |
+        We search the public web for the most relevant sources to your query, extract structured data, and return curated series.
+
+        How it works:
+        - We always extract tabular/JSON-like data when available.
+        - If `paragraph_extraction` is true, we scan prose paragraphs to identify statistics and convert them into series (e.g., "In 2000, there were 5,000 Swedes in Norway; in 2020, 50,000" → year/value pairs).
+        - If `plot2table` > 0, we analyze images of plots and extract their underlying datapoints.
+
+        Credits:
+        - 1 Scrape credit per request.
+        - Paragraph extraction surcharge = +1 credit when `paragraph_extraction` is true.
+        - Plot2Table credits = 1 per chart processed when `plot2table` > 0.
       tags:
         - Web Scraping
       security:
@@ -17,27 +28,22 @@ paths:
             format: uri
         - in: query
           name: query
-          description: Optional user query to guide extraction
+          description: Optional hint to guide extraction focus for this URL
           schema:
             type: string
         - in: query
-          name: enable_screenshots
-          description: Enable screenshot capture during scraping
+          name: paragraph_extraction
+          description: Extract statistics from paragraphs and convert to structured series
           schema:
             type: boolean
             default: false
         - in: query
-          name: html
-          description: Include page HTML inline in response
+          name: plot2table
+          description: Number of plot images to analyze and convert into raw datapoints
           schema:
-            type: boolean
-            default: false
-        - in: query
-          name: markdown
-          description: Include page markdown inline in response
-          schema:
-            type: boolean
-            default: false
+            type: integer
+            minimum: 0
+            default: 0
       x-codeSamples:
         - lang: cURL
           source: # INJECT: curl/scrape_example.sh
@@ -87,3 +93,4 @@ paths:
           $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
         '429':
           $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
+

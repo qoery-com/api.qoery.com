@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 Convert Charts to Data Tables
 
-Convert charts, graphs, and other visual data representations into structured data points using AI. Supports time series, categorical, scatter plots, and other chart types.
+Provide an image URL of a plot or chart and receive the underlying datapoints as structured series. Supports time series, categorical, and scatter charts.  Credits: 1 Plot2Table credit per image processed. 
 
 ### Example
 
@@ -66,7 +66,7 @@ Name | Type | Description  | Notes
 
 Structured Web Scrape
 
-Download a web page, and structured data as time series. Use query parameters to specify options.
+We search the public web for the most relevant sources to your query, extract structured data, and return curated series.  How it works: - We always extract tabular/JSON-like data when available. - If &#x60;paragraph_extraction&#x60; is true, we scan prose paragraphs to identify statistics and convert them into series (e.g., \&quot;In 2000, there were 5,000 Swedes in Norway; in 2020, 50,000\&quot; → year/value pairs). - If &#x60;plot2table&#x60; &gt; 0, we analyze images of plots and extract their underlying datapoints.  Credits: - 1 Scrape credit per request. - Paragraph extraction surcharge &#x3D; +1 credit when &#x60;paragraph_extraction&#x60; is true. - Plot2Table credits &#x3D; 1 per chart processed when &#x60;plot2table&#x60; &gt; 0. 
 
 ### Example
 
@@ -82,10 +82,9 @@ ApiKeyAuth.apiKey = 'YOUR API KEY';
 let apiInstance = new Qoery.WebScrapingApi();
 let url = "url_example"; // String | URL to scrape
 let opts = {
-  'query': "query_example", // String | Optional user query to guide extraction
-  'enableScreenshots': false, // Boolean | Enable screenshot capture during scraping
-  'html': false, // Boolean | Include page HTML inline in response
-  'markdown': false // Boolean | Include page markdown inline in response
+  'query': "query_example", // String | Optional hint to guide extraction focus for this URL
+  'paragraphExtraction': false, // Boolean | Extract statistics from paragraphs and convert to structured series
+  'plot2table': 0 // Number | Number of plot images to analyze and convert into raw datapoints
 };
 apiInstance.scrapeGet(url, opts, (error, data, response) => {
   if (error) {
@@ -102,10 +101,9 @@ apiInstance.scrapeGet(url, opts, (error, data, response) => {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **url** | **String**| URL to scrape | 
- **query** | **String**| Optional user query to guide extraction | [optional] 
- **enableScreenshots** | **Boolean**| Enable screenshot capture during scraping | [optional] [default to false]
- **html** | **Boolean**| Include page HTML inline in response | [optional] [default to false]
- **markdown** | **Boolean**| Include page markdown inline in response | [optional] [default to false]
+ **query** | **String**| Optional hint to guide extraction focus for this URL | [optional] 
+ **paragraphExtraction** | **Boolean**| Extract statistics from paragraphs and convert to structured series | [optional] [default to false]
+ **plot2table** | **Number**| Number of plot images to analyze and convert into raw datapoints | [optional] [default to 0]
 
 ### Return type
 

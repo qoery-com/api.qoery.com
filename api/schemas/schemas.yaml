@@ -110,6 +110,21 @@ components:
         query:
           type: string
           description: Natural language query
+        num_results:
+          type: integer
+          description: Number of search results to process
+          minimum: 1
+          maximum: 100
+          default: 10
+        paragraph_extraction:
+          type: boolean
+          description: Enable paragraph-based time-series extraction
+          default: false
+        plot2table:
+          type: integer
+          description: Number of charts/images to process with plot2table
+          minimum: 0
+          default: 0
       required:
         - query
 
@@ -211,12 +226,87 @@ components:
           type: string
           description: Optional user query to guide extraction
           nullable: true
-        enable_screenshots:
+        paragraph_extraction:
           type: boolean
-          description: Enable screenshot capture during scraping
+          description: Enable paragraph-based time-series extraction
           default: false
+        plot2table:
+          type: integer
+          description: Number of charts/images to process with plot2table
+          minimum: 0
+          default: 0
       required:
         - url
+
+    ImageURLRequest:
+      type: object
+      properties:
+        image_url:
+          type: string
+          format: uri
+          description: URL of the image containing charts or graphs to convert to data table
+      required:
+        - image_url
+
+    PlanPrice:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        priceId:
+          type: string
+
+    Plan:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: string
+          description: Human-friendly display price
+        billing:
+          type: string
+          description: Billing cadence for display (e.g., monthly, annual, one-time)
+        limits:
+          type: object
+          additionalProperties:
+            type: integer
+          description: Monthly limits keyed by endpoint (e.g., 'query/nl', 'scrape', 'plot2table')
+        api_keys:
+          oneOf:
+            - type: integer
+            - type: string
+          description: Number of API keys included (or 'unlimited')
+        support:
+          type: string
+        monthlyPrice:
+          allOf:
+            - $ref: '#/components/schemas/PlanPrice'
+          nullable: true
+        annualPrice:
+          allOf:
+            - $ref: '#/components/schemas/PlanPrice'
+          nullable: true
+        discountPercentage:
+          type: number
+          nullable: true
+
+    PlansResponse:
+      type: object
+      properties:
+        plans:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Plan'
+        default_plan:
+          type: string
+      required:
+        - plans
+        - default_plan
 
     ScrapeArtifacts:
       type: object
@@ -258,13 +348,5 @@ components:
               type: integer
               description: Number of observations extracted
           additionalProperties: true
-        html:
-          type: string
-          description: Original HTML of the page (only if html=true query param)
-          nullable: true
-        markdown:
-          type: string
-          description: Markdown representation of the page (only if markdown=true query param)
-          nullable: true
       required:
         - series

@@ -1,10 +1,14 @@
-var Qoery = require('qoery');
-var defaultClient = Qoery.ApiClient.instance;
-defaultClient.authentications['ApiKeyAuth'].apiKey = "your-api-key";
+// Usage for API key (GET)
+async function run() {
+  const url = new URL('https://api.qoery.com/v0/usage');
+  url.searchParams.set('api_key', 'YOUR_API_KEY');
 
-var api = new Qoery.UsageApi();
+  const res = await fetch(url.toString(), {
+    method: 'GET',
+    headers: { 'X-API-Key': 'YOUR_API_KEY' }
+  });
+  const data = await res.json();
+  console.log(data);
+}
 
-api.usageGet({ uid: "00000000-0000-0000-0000-000000000000" }, function(err, data) {
-  if (err) { console.error(err); return; }
-  console.log(data.plan);
-});
+run().catch(console.error);

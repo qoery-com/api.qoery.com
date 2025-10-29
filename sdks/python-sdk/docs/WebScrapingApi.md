@@ -13,7 +13,11 @@ Method | HTTP request | Description
 
 Convert Charts to Data Tables
 
-Convert charts, graphs, and other visual data representations into structured data points using AI. Supports time series, categorical, scatter plots, and other chart types.
+Provide an image URL of a plot or chart and receive the underlying datapoints as structured series.
+Supports time series, categorical, and scatter charts.
+
+Credits: 1 Plot2Table credit per image processed.
+
 
 ### Example
 
@@ -92,11 +96,22 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **scrape_get**
-> ScrapeGet200Response scrape_get(url, query=query, enable_screenshots=enable_screenshots, html=html, markdown=markdown)
+> ScrapeGet200Response scrape_get(url, query=query, paragraph_extraction=paragraph_extraction, plot2table=plot2table)
 
 Structured Web Scrape
 
-Download a web page, and structured data as time series. Use query parameters to specify options.
+We search the public web for the most relevant sources to your query, extract structured data, and return curated series.
+
+How it works:
+- We always extract tabular/JSON-like data when available.
+- If `paragraph_extraction` is true, we scan prose paragraphs to identify statistics and convert them into series (e.g., "In 2000, there were 5,000 Swedes in Norway; in 2020, 50,000" → year/value pairs).
+- If `plot2table` > 0, we analyze images of plots and extract their underlying datapoints.
+
+Credits:
+- 1 Scrape credit per request.
+- Paragraph extraction surcharge = +1 credit when `paragraph_extraction` is true.
+- Plot2Table credits = 1 per chart processed when `plot2table` > 0.
+
 
 ### Example
 
@@ -130,14 +145,13 @@ with qoery.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = qoery.WebScrapingApi(api_client)
     url = 'url_example' # str | URL to scrape
-    query = 'query_example' # str | Optional user query to guide extraction (optional)
-    enable_screenshots = False # bool | Enable screenshot capture during scraping (optional) (default to False)
-    html = False # bool | Include page HTML inline in response (optional) (default to False)
-    markdown = False # bool | Include page markdown inline in response (optional) (default to False)
+    query = 'query_example' # str | Optional hint to guide extraction focus for this URL (optional)
+    paragraph_extraction = False # bool | Extract statistics from paragraphs and convert to structured series (optional) (default to False)
+    plot2table = 0 # int | Number of plot images to analyze and convert into raw datapoints (optional) (default to 0)
 
     try:
         # Structured Web Scrape
-        api_response = api_instance.scrape_get(url, query=query, enable_screenshots=enable_screenshots, html=html, markdown=markdown)
+        api_response = api_instance.scrape_get(url, query=query, paragraph_extraction=paragraph_extraction, plot2table=plot2table)
         print("The response of WebScrapingApi->scrape_get:\n")
         pprint(api_response)
     except Exception as e:
@@ -152,10 +166,9 @@ with qoery.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **url** | **str**| URL to scrape | 
- **query** | **str**| Optional user query to guide extraction | [optional] 
- **enable_screenshots** | **bool**| Enable screenshot capture during scraping | [optional] [default to False]
- **html** | **bool**| Include page HTML inline in response | [optional] [default to False]
- **markdown** | **bool**| Include page markdown inline in response | [optional] [default to False]
+ **query** | **str**| Optional hint to guide extraction focus for this URL | [optional] 
+ **paragraph_extraction** | **bool**| Extract statistics from paragraphs and convert to structured series | [optional] [default to False]
+ **plot2table** | **int**| Number of plot images to analyze and convert into raw datapoints | [optional] [default to 0]
 
 ### Return type
 

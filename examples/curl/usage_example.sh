@@ -1,2 +1,5 @@
-curl -sS "https://api.qoery.com/v0/usage?uid=00000000-0000-0000-0000-000000000000" \
-  -H "X-API-Key: your-api-key"
+#!/bin/bash
+
+# Usage for API key (GET)
+curl -sS "https://api.qoery.com/v0/usage?api_key=YOUR_API_KEY" \
+  -H "X-API-Key: YOUR_API_KEY"

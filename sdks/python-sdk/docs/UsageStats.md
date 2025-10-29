@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **period_start** | **datetime** | Start of the current usage period | 
 **period_end** | **datetime** | End of the current usage period | 
 **plan** | **str** | Current subscription plan | 
-**endpoints** | [**UsageStatsEndpoints**](UsageStatsEndpoints.md) |  | 
+**endpoints** | [**UsageGet200ResponseEndpoints**](UsageGet200ResponseEndpoints.md) |  | 
 
 ## Example
 

@@ -1,13 +1,17 @@
-var Qoery = require('qoery');
+// Natural Language Query (GET)
+async function run() {
+  const url = new URL('https://api.qoery.com/v0/query/nl');
+  url.searchParams.set('query', 'population of France');
+  url.searchParams.set('num_results', '10');
+  url.searchParams.set('paragraph_extraction', 'false');
+  url.searchParams.set('plot2table', '0');
 
-var defaultClient = Qoery.ApiClient.instance;
-defaultClient.authentications['ApiKeyAuth'].apiKey = "your-api-key";
+  const res = await fetch(url.toString(), {
+    method: 'GET',
+    headers: { 'X-API-Key': 'YOUR_API_KEY' }
+  });
+  const data = await res.json();
+  console.log(data);
+}
 
-var api = new Qoery.QueriesApi();
-var req = new Qoery.QueryNlPostRequest();
-req.query = "population of France";
-
-api.queryNlPost(req, function(err, data) {
-  if (err) { console.error(err); return; }
-  console.log(data.sql_query);
-});
+run().catch(console.error);

@@ -1,10 +1,14 @@
-import qoery
+import requests
 
-configuration = qoery.Configuration()
-configuration.api_key['ApiKeyAuth'] = "your-api-key"
+url = "https://api.qoery.com/v0/query/nl"
+params = {
+    "query": "population of France",
+    "num_results": 10,
+    "paragraph_extraction": False,
+    "plot2table": 0,
+}
+headers = {"X-API-Key": "YOUR_API_KEY"}
 
-with qoery.ApiClient(configuration) as api_client:
-    api = qoery.QueriesApi(api_client)
-    request = qoery.QueryNlPostRequest(query="population of France")
-    response = api.query_nl_post(request).to_dict()
+resp = requests.get(url, params=params, headers=headers)
+print(resp.json())
     
