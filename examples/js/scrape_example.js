@@ -1,16 +1,21 @@
-// Structured Web Scrape (GET)
-async function run() {
-  const url = new URL('https://api.qoery.com/v0/scrape');
-  url.searchParams.set('url', 'https://example.com/statistics');
-  url.searchParams.set('paragraph_extraction', 'false');
-  url.searchParams.set('plot2table', '0');
+// Structured Web Scrape via SDK (GET)
+const Qoery = require('qoery');
 
-  const res = await fetch(url.toString(), {
-    method: 'GET',
-    headers: { 'X-API-Key': 'YOUR_API_KEY' }
-  });
-  const data = await res.json();
+const client = Qoery.ApiClient.instance;
+const apiKeyAuth = client.authentications['ApiKeyAuth'];
+apiKeyAuth.apiKey = 'YOUR_API_KEY';
+
+const scrapingApi = new Qoery.WebScrapingApi();
+
+const opts = {
+  url: 'https://example.com/statistics',
+  paragraphExtraction: false,
+  plot2table: 0
+};
+
+scrapingApi.scrapeGet(opts, (error, data) => {
+  if (error) {
+    throw error;
+  }
   console.log(data);
-}
-
-run().catch(console.error);
+});

@@ -1,17 +1,22 @@
-// Natural Language Query (GET)
-async function run() {
-  const url = new URL('https://api.qoery.com/v0/query/nl');
-  url.searchParams.set('query', 'population of France');
-  url.searchParams.set('num_results', '10');
-  url.searchParams.set('paragraph_extraction', 'false');
-  url.searchParams.set('plot2table', '0');
+// Natural Language Query via SDK (GET)
+const Qoery = require('qoery');
 
-  const res = await fetch(url.toString(), {
-    method: 'GET',
-    headers: { 'X-API-Key': 'YOUR_API_KEY' }
-  });
-  const data = await res.json();
+const client = Qoery.ApiClient.instance;
+const apiKeyAuth = client.authentications['ApiKeyAuth'];
+apiKeyAuth.apiKey = 'YOUR_API_KEY';
+
+const queriesApi = new Qoery.QueriesApi();
+
+const query = 'population of France';
+const opts = {
+  numResults: 10,
+  paragraphExtraction: false,
+  plot2table: 0
+};
+
+queriesApi.queryNlGet(query, opts, (error, data) => {
+  if (error) {
+    throw error;
+  }
   console.log(data);
-}
-
-run().catch(console.error);
+});

@@ -1,13 +1,14 @@
-import requests
+import qoery
 
-url = "https://api.qoery.com/v0/scrape"
-params = {
-    "url": "https://example.com/statistics",
-    "paragraph_extraction": False,
-    "plot2table": 0,
-}
-headers = {"X-API-Key": "YOUR_API_KEY"}
+configuration = qoery.Configuration()
+configuration.api_key['ApiKeyAuth'] = 'YOUR_API_KEY'
 
-resp = requests.get(url, params=params, headers=headers)
-print(resp.json())
+with qoery.ApiClient(configuration) as api_client:
+    api = qoery.WebScrapingApi(api_client)
+    data = api.scrape_get(
+        url="https://example.com/statistics",
+        paragraph_extraction=False,
+        plot2table=0,
+    )
+    print(data)
 

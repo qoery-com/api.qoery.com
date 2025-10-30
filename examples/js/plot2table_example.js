@@ -1,10 +1,17 @@
-// Example: Convert chart image to data table
-const response = await fetch('https://api.qoery.com/v0/plot2table?image_url=https://example.com/chart.png', {
-  method: 'GET',
-  headers: {
-    'X-API-Key': 'YOUR_API_KEY'
-  }
-});
+// Example: Convert chart image to data table via SDK (GET)
+const Qoery = require('qoery');
 
-const data = await response.json();
-console.log(data);
+const client = Qoery.ApiClient.instance;
+const apiKeyAuth = client.authentications['ApiKeyAuth'];
+apiKeyAuth.apiKey = 'YOUR_API_KEY';
+
+const scrapingApi = new Qoery.WebScrapingApi();
+
+const opts = { imageUrl: 'https://example.com/chart.png' };
+
+scrapingApi.plot2tableGet(opts, (error, data) => {
+  if (error) {
+    throw error;
+  }
+  console.log(data);
+});
