@@ -4,8 +4,7 @@ Minimal cURL examples for using the Qoery API.
 
 ## Examples
 
-- `nl_query_example.sh` - Natural language query
-- `scrape_example.sh` - Web scraping
+- `datasets_example.sh` - Dataset collection jobs (start, poll, download CSV)
 - `usage_example.sh` - Usage statistics
 
 ## Usage

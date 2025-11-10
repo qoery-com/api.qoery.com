@@ -1,14 +1,14 @@
 # ErrorResponse
 
+Standard error response
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**error** | **str** |  | 
-**code** | **int** |  | 
-**message** | **str** | Additional error message | [optional] 
-**details** | **str** |  | [optional] 
+**error** | **str** | Error message | 
+**status** | **int** | HTTP status code (may be omitted in some error responses) | [optional] 
+**details** | **str** | Additional error details (optional) | [optional] 
 
 ## Example
 

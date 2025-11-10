@@ -1,68 +1,77 @@
 components:
   responses:
     UnauthorizedError:
-      description: Unauthorized
+      description: Unauthorized - Invalid or missing API key
       content:
         application/json:
           schema:
             $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
-
+          examples:
+            missingKey:
+              summary: Missing API key
+              value:
+                error: "API key required. Provide via ?api_key=... or Authorization: Bearer ... header"
+                status: 401
+            invalidKey:
+              summary: Invalid API key
+              value:
+                error: "Invalid API key"
+                status: 401
+                details: "The provided API key does not exist or has been revoked"
+    
     RateLimitError:
-      description: Rate limit exceeded
+      description: Rate limit exceeded - Monthly quota exceeded
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+              - type: object
+                properties:
+                  reset_date:
+                    type: string
+                    format: date-time
+                    description: Date when the quota resets
+          example:
+            error: "Monthly quota exceeded"
+            status: 429
+            reset_date: "2025-12-01T00:00:00Z"
+    
+    NotFoundError:
+      description: Resource not found
       content:
         application/json:
           schema:
             $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
-      headers:
-        X-RateLimit-Limit:
+          examples:
+            jobNotFound:
+              summary: Job not found
+              value:
+                error: "Job not found"
+                status: 404
+                details: "No job found with ID: 20251110_151628"
+            csvNotReady:
+              summary: CSV not ready
+              value:
+                error: "CSV not ready yet"
+                status: 404
+                details: "The job is still processing. Please wait and try again."
+    
+    BadRequestError:
+      description: Bad request - Invalid input parameters
+      content:
+        application/json:
           schema:
-            type: integer
-          description: Maximum requests allowed per time window
-        X-RateLimit-Remaining:
-          schema:
-            type: integer
-          description: Number of requests remaining in current window
-        X-RateLimit-Reset:
-          schema:
-            type: integer
-          description: Unix timestamp when the rate limit resets
-        X-RateLimit-Window:
-          schema:
-            type: integer
-          description: Time window in seconds
-        X-Concurrent-Limit:
-          schema:
-            type: integer
-          description: Maximum concurrent requests allowed
-        X-Concurrent-Current:
-          schema:
-            type: integer
-          description: Current number of concurrent requests
-
-    RateLimitHeaders:
-      description: Rate limiting information
-      headers:
-        X-RateLimit-Limit:
-          schema:
-            type: integer
-          description: Maximum requests allowed per time window
-        X-RateLimit-Remaining:
-          schema:
-            type: integer
-          description: Number of requests remaining in current window
-        X-RateLimit-Reset:
-          schema:
-            type: integer
-          description: Unix timestamp when the rate limit resets
-        X-RateLimit-Window:
-          schema:
-            type: integer
-          description: Time window in seconds
-        X-Concurrent-Limit:
-          schema:
-            type: integer
-          description: Maximum concurrent requests allowed
-        X-Concurrent-Current:
-          schema:
-            type: integer
-          description: Current number of concurrent requests
+            $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+          examples:
+            missingSearch:
+              summary: Missing search parameter
+              value:
+                error: "Search parameter is required"
+                status: 400
+            invalidSearch:
+              summary: Invalid search parameter
+              value:
+                error: "Search parameter must be a non-empty string"
+                status: 400
+                details: "The search query must contain at least 1 character"

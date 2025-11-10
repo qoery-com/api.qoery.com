@@ -1,26 +1,52 @@
 paths:
-  /usage:
+  /v0/usage:
     get:
+      operationId: getUsageStats
       summary: Get usage statistics
-      description: Get current usage and rate limit information per endpoint for the provided API key
+      description: |
+        Returns current usage statistics and quota information for the user.
+        Can be identified by either `api_key` or `uid` parameter.
+        
+        **Usage Period:**
+        - Usage is tracked monthly, resetting on the 1st of each month
+        - Counts include all API calls, including errors
+        - Errors are tracked separately in the `errors` field
       tags:
         - Usage
-      security:
-        - {}
-      parameters:
-        - in: query
-          name: api_key
-          required: true
-          description: API key to look up usage for
-          schema:
-            type: string
+      security: []
       x-codeSamples:
-        - lang: cURL
-          source: # INJECT: curl/usage_example.sh
         - lang: Python
           source: # INJECT: python/usage_example.py
         - lang: JavaScript
           source: # INJECT: js/usage_example.js
+        - lang: cURL
+          source: # INJECT: curl/usage_example.sh
+      parameters:
+        - in: query
+          name: api_key
+          required: false
+          description: API key to look up usage for (alternative to uid)
+          schema:
+            type: string
+        - in: query
+          name: uid
+          required: false
+          description: User ID to look up usage for (alternative to api_key)
+          schema:
+            type: string
+        - in: header
+          name: x-api-key
+          required: false
+          description: API key provided via header
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          required: false
+          description: API key provided as Bearer token
+          schema:
+            type: string
+            pattern: '^Bearer .+$'
       responses:
         '200':
           description: Usage statistics
@@ -28,30 +54,53 @@ paths:
             application/json:
               schema:
                 $ref: '../schemas/schemas.yaml#/components/schemas/UsageStats'
+              example:
+                user_id: "user_123"
+                plan: "free"
+                totalUsage: 150
+                totalErrors: 2
+                endpointBreakdown:
+                  - endpoint: "/v0/datasets"
+                    calls: 42
+                    errors: 0
+                    limit: 100
+                  - endpoint: "/v0/usage"
+                    calls: 108
+                    errors: 2
+                    limit: 1000
           headers:
             X-RateLimit-Limit:
               schema:
                 type: integer
-              description: Maximum requests allowed per time window
+              description: Monthly quota limit for this endpoint
             X-RateLimit-Remaining:
               schema:
                 type: integer
-              description: Number of requests remaining in current window
+              description: Remaining calls in current monthly period
             X-RateLimit-Reset:
               schema:
-                type: integer
-              description: Unix timestamp when the rate limit resets
-            X-RateLimit-Window:
+                type: string
+                format: date-time
+              description: Timestamp when the monthly quota resets
+        '400':
+          description: Either uid or api_key is required
+          content:
+            application/json:
               schema:
-                type: integer
-              description: Time window in seconds
-            X-Concurrent-Limit:
-              schema:
-                type: integer
-              description: Maximum concurrent requests allowed
-            X-Concurrent-Current:
-              schema:
-                type: integer
-              description: Current number of concurrent requests
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
         '401':
-          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+          description: Invalid API key
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+        '500':
+          description: Failed to fetch usage data
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+              example:
+                error: "Failed to fetch usage data"
+                status: 500
+                details: "Database connection error"

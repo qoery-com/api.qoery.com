@@ -1,13 +1,13 @@
 [project]
 name = "qoery"
 version = "0.4.0"
-description = "qoery's API"
+description = "Qoetry API"
 authors = [
-  {name = "qoery Support",email = "samuel.tinnerholm@gmail.com"},
+  {name = "Qoetry Support",email = "samuel.tinnerholm@gmail.com"},
 ]
 license = "MIT"
 readme = "README.md"
-keywords = ["OpenAPI", "OpenAPI-Generator", "qoery's API"]
+keywords = ["OpenAPI", "OpenAPI-Generator", "Qoetry API"]
 requires-python = ">=3.9"
 
 dependencies = [

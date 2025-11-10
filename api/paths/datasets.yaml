@@ -1,0 +1,337 @@
+paths:
+  /v0/datasets:
+    get:
+      operationId: listDatasetsOrStartJob
+      summary: List API endpoints or start a dataset collection job
+      description: |
+        If no `search` query parameter is provided, returns API information.
+        If `search` parameter is provided, starts a new dataset collection job.
+        
+        **Job Lifecycle:**
+        - Jobs start in `processing` status
+        - Poll the job status endpoint to check progress
+        - Jobs transition to `completed` when finished or `error` if they fail
+        - Typical job duration: 1-5 minutes depending on query complexity
+        - CSV files are available for download even while processing (partial data)
+      tags:
+        - Datasets
+      security:
+        - ApiKeyAuth: []
+        - ApiKeyHeader: []
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: search
+          required: false
+          description: Search query to start a dataset collection job
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        '200':
+          description: API information or job started
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '../schemas/schemas.yaml#/components/schemas/ApiInfo'
+                  - $ref: '../schemas/schemas.yaml#/components/schemas/JobStartResponse'
+              examples:
+                apiInfo:
+                  summary: API information response
+                  value:
+                    message: "Datasets API"
+                    endpoints:
+                      "POST /v0/datasets": "Start a new dataset collection job (body: {\"search\": \"...\"})"
+                      "GET /v0/datasets?search=...": "Start a new dataset collection job (query param)"
+                      "GET /v0/datasets/:job_id": "Get job status and progress"
+                      "GET /v0/datasets/:job_id/csv": "Download the CSV file"
+                jobStarted:
+                  summary: Job started response
+                  value:
+                    job_id: "20251110_151628"
+                    status: "processing"
+                    polling_interval_ms: 1500
+        '400':
+          $ref: '../responses/responses.yaml#/components/responses/BadRequestError'
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+              example:
+                error: "Error starting job"
+    
+    post:
+      operationId: startDatasetJob
+      summary: Start a new dataset collection job
+      description: |
+        Starts a new dataset collection job with the provided search query.
+        The job runs asynchronously in the background.
+        
+        **Job Lifecycle:**
+        - Jobs start in `processing` status
+        - Poll the job status endpoint to check progress
+        - Jobs transition to `completed` when finished or `error` if they fail
+        - Typical job duration: 1-5 minutes depending on query complexity
+        - CSV files are available for download even while processing (partial data)
+      tags:
+        - Datasets
+      security:
+        - ApiKeyAuth: []
+        - ApiKeyHeader: []
+        - BearerAuth: []
+      requestBody:
+        required: false
+        description: |
+          Request body with search query. Alternatively, you can provide `search` as a query parameter.
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/schemas.yaml#/components/schemas/JobStartRequest'
+            examples:
+              basic:
+                summary: Basic job request
+                value:
+                  search: "climate change statistics"
+              specific:
+                summary: Specific topic query
+                value:
+                  search: "US unemployment rate 2020-2024"
+      parameters:
+        - in: query
+          name: search
+          required: false
+          description: Search query (alternative to request body)
+          schema:
+            type: string
+            minLength: 1
+      x-codeSamples:
+        - lang: Python
+          source: # INJECT: python/datasets_example.py
+        - lang: JavaScript
+          source: # INJECT: js/datasets_example.js
+        - lang: cURL
+          source: # INJECT: curl/datasets_example.sh
+      responses:
+        '200':
+          description: Job started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/JobStartResponse'
+              example:
+                job_id: "20251110_151628"
+                status: "processing"
+                polling_interval_ms: 1500
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Monthly quota limit for this endpoint
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: Remaining calls in current monthly period
+            X-RateLimit-Reset:
+              schema:
+                type: string
+                format: date-time
+              description: Timestamp when the monthly quota resets
+        '400':
+          $ref: '../responses/responses.yaml#/components/responses/BadRequestError'
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+              example:
+                error: "Failed to start Python process"
+  
+  /v0/datasets/{job_id}:
+    get:
+      operationId: getDatasetJobStatus
+      summary: Get job status and progress
+      description: |
+        Returns the current status and progress of a dataset collection job.
+        Poll this endpoint to check when the job completes.
+        
+        **Status Values:**
+        - `processing`: Job is actively collecting data
+        - `completed`: Job finished successfully, CSV is ready
+        - `error`: Job failed, check the `error` field for details
+        
+        **Progress Steps:**
+        - `initializing`: Setting up the job
+        - `searching`: Finding relevant URLs
+        - `scraping`: Extracting data from URLs
+        - `processing`: Analyzing and structuring data
+        - `finalizing`: Preparing the CSV output
+      tags:
+        - Datasets
+      security:
+        - ApiKeyAuth: []
+        - ApiKeyHeader: []
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: job_id
+          required: true
+          description: Unique identifier for the job
+          schema:
+            type: string
+            pattern: '^[0-9]{8}_[0-9]{6}$'
+            example: "20251110_151628"
+      responses:
+        '200':
+          description: Job status and progress
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/JobStatus'
+              examples:
+                processing:
+                  summary: Job in progress
+                  value:
+                    job_id: "20251110_151628"
+                    status: "processing"
+                    query: "climate change statistics"
+                    progress:
+                      current_step: "scraping"
+                      rows_collected: 1250
+                      urls_processed: 8
+                      urls_total: 15
+                      last_updated: "2025-11-10T15:16:45Z"
+                    urls: ["https://example.com/data1", "https://example.com/data2"]
+                    csv_url: "/v0/datasets/20251110_151628/csv"
+                    error: null
+                    started_at: "2025-11-10T15:16:28Z"
+                    completed_at: null
+                completed:
+                  summary: Job completed successfully
+                  value:
+                    job_id: "20251110_151628"
+                    status: "completed"
+                    query: "climate change statistics"
+                    progress:
+                      current_step: "finalizing"
+                      rows_collected: 3420
+                      urls_processed: 15
+                      urls_total: 15
+                      last_updated: "2025-11-10T15:18:12Z"
+                    urls: ["https://example.com/data1", "https://example.com/data2", "https://example.com/data3"]
+                    csv_url: "/v0/datasets/20251110_151628/csv"
+                    error: null
+                    started_at: "2025-11-10T15:16:28Z"
+                    completed_at: "2025-11-10T15:18:12Z"
+                error:
+                  summary: Job failed
+                  value:
+                    job_id: "20251110_151628"
+                    status: "error"
+                    query: "climate change statistics"
+                    progress:
+                      current_step: "scraping"
+                      rows_collected: 450
+                      urls_processed: 3
+                      urls_total: 15
+                      last_updated: "2025-11-10T15:17:05Z"
+                    urls: ["https://example.com/data1"]
+                    csv_url: "/v0/datasets/20251110_151628/csv"
+                    error: "Failed to scrape URL: Connection timeout"
+                    started_at: "2025-11-10T15:16:28Z"
+                    completed_at: "2025-11-10T15:17:05Z"
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '../responses/responses.yaml#/components/responses/NotFoundError'
+        '429':
+          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+              example:
+                error: "Error getting job status"
+  
+  /v0/datasets/{job_id}/csv:
+    get:
+      operationId: downloadDatasetCsv
+      summary: Download the CSV file
+      description: |
+        Downloads the CSV file containing the collected dataset.
+        The file may be partial if the job is still processing.
+        
+        **CSV Format:**
+        - First row contains column headers
+        - Each subsequent row represents a data point
+        - Columns include: `url`, `title`, `value`, `dimension`, `timestamp` (if applicable)
+        - Data is sorted by relevance score (most relevant first)
+        - Partial CSVs are available while jobs are processing
+      tags:
+        - Datasets
+      security:
+        - ApiKeyAuth: []
+        - ApiKeyHeader: []
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: job_id
+          required: true
+          description: Unique identifier for the job
+          schema:
+            type: string
+            pattern: '^[0-9]{8}_[0-9]{6}$'
+            example: "20251110_151628"
+      responses:
+        '200':
+          description: CSV file download
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+              example: |
+                url,title,value,dimension,timestamp
+                https://example.com/data1,Climate Change Stats,42.5,2020,2020-01-01T00:00:00Z
+                https://example.com/data1,Climate Change Stats,43.2,2021,2021-01-01T00:00:00Z
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+                example: 'attachment; filename="data.csv"'
+            Content-Type:
+              schema:
+                type: string
+                example: 'text/csv'
+        '401':
+          $ref: '../responses/responses.yaml#/components/responses/UnauthorizedError'
+        '404':
+          description: CSV not ready yet
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+        '429':
+          $ref: '../responses/responses.yaml#/components/responses/RateLimitError'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
+              example:
+                error: "Error getting CSV"
+

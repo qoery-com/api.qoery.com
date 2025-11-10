@@ -2,351 +2,381 @@ components:
   schemas:
     ErrorResponse:
       type: object
+      description: Standard error response
       properties:
         error:
           type: string
-        code:
+          description: Error message
+        status:
           type: integer
-        message:
-          type: string
-          description: Additional error message
+          description: HTTP status code (may be omitted in some error responses)
+          example: 400
         details:
           type: string
+          description: Additional error details (optional)
           nullable: true
       required:
         - error
-        - code
-
-    EndpointUsageStats:
+    
+    HealthResponse:
+      type: object
+      description: Health check response
+      properties:
+        status:
+          type: string
+          example: "ok"
+        timestamp:
+          type: string
+          format: date-time
+          description: Current server timestamp
+      required:
+        - status
+        - timestamp
+    
+    ApiInfo:
+      type: object
+      description: API information and available endpoints
+      properties:
+        message:
+          type: string
+          example: "Datasets API"
+        endpoints:
+          type: object
+          description: Available endpoint descriptions
+          additionalProperties:
+            type: string
+          example:
+            "POST /v0/datasets": "Start a new dataset collection job (body: {\"search\": \"...\"})"
+            "GET /v0/datasets?search=...": "Start a new dataset collection job (query param)"
+            "GET /v0/datasets/:job_id": "Get job status and progress"
+            "GET /v0/datasets/:job_id/csv": "Download the CSV file"
+      required:
+        - message
+        - endpoints
+    
+    JobStartRequest:
+      type: object
+      description: Request to start a new dataset collection job
+      properties:
+        search:
+          type: string
+          description: Search query for dataset collection
+          minLength: 1
+      required:
+        - search
+    
+    JobStartResponse:
+      type: object
+      description: Response when a job is started
+      properties:
+        job_id:
+          type: string
+          description: Unique identifier for the job
+          pattern: '^[0-9]{8}_[0-9]{6}$'
+          example: "20251110_151628"
+        status:
+          type: string
+          description: Initial job status
+          enum: [processing]
+          example: "processing"
+        polling_interval_ms:
+          type: integer
+          description: Recommended polling interval in milliseconds
+          example: 1500
+      required:
+        - job_id
+        - status
+        - polling_interval_ms
+    
+    JobProgress:
+      type: object
+      description: Progress information for a dataset collection job
+      properties:
+        current_step:
+          type: string
+          description: |
+            Current step in the processing pipeline. Possible values:
+            - `initializing`: Setting up the job and preparing resources
+            - `searching`: Finding relevant URLs based on the search query
+            - `scraping`: Extracting data from discovered URLs
+            - `processing`: Analyzing and structuring extracted data
+            - `finalizing`: Preparing the final CSV output
+          example: "scraping"
+        rows_collected:
+          type: integer
+          description: Number of data rows collected so far
+          minimum: 0
+          example: 0
+        urls_processed:
+          type: integer
+          description: Number of URLs processed so far
+          minimum: 0
+          example: 0
+        urls_total:
+          type: integer
+          description: Total number of URLs to process
+          minimum: 0
+          example: 0
+        last_updated:
+          type: string
+          format: date-time
+          description: Timestamp of last progress update
+      required:
+        - current_step
+        - rows_collected
+        - urls_processed
+        - urls_total
+        - last_updated
+    
+    JobStatus:
+      type: object
+      description: Complete status information for a dataset collection job
+      properties:
+        job_id:
+          type: string
+          description: Unique identifier for the job
+          pattern: '^[0-9]{8}_[0-9]{6}$'
+          example: "20251110_151628"
+        status:
+          type: string
+          description: |
+            Current job status. Possible values:
+            - `processing`: Job is actively collecting and processing data
+            - `completed`: Job finished successfully, CSV is ready for download
+            - `error`: Job failed, check the `error` field for details
+          enum: [processing, completed, error]
+          example: "processing"
+        query:
+          type: string
+          description: Original search query
+          example: "climate change statistics"
+        progress:
+          $ref: '#/components/schemas/JobProgress'
+        urls:
+          type: array
+          description: List of URLs being processed
+          items:
+            type: string
+            format: uri
+          example: []
+        csv_url:
+          type: string
+          description: URL to download the CSV file
+          example: "/v0/datasets/20251110_151628/csv"
+        error:
+          type: string
+          description: Error message if status is 'error'
+          nullable: true
+          example: null
+        started_at:
+          type: string
+          format: date-time
+          description: Timestamp when the job started
+        completed_at:
+          type: string
+          format: date-time
+          description: Timestamp when the job completed (null if still processing)
+          nullable: true
+          example: null
+      required:
+        - job_id
+        - status
+        - query
+        - progress
+        - urls
+        - csv_url
+        - error
+        - started_at
+        - completed_at
+    
+    EndpointUsage:
       type: object
       description: Usage statistics for a specific endpoint
       properties:
-        calls_used:
-          type: integer
-          description: Number of calls used in current period
-        calls_limit:
+        endpoint:
           type: string
-          description: Maximum calls allowed in current period (returned as string)
-        tokens_in:
+          description: Endpoint path
+          example: "/v0/datasets"
+        calls:
           type: integer
-          description: Total input tokens consumed in current period
-        tokens_out:
-          type: integer
-          description: Total output tokens consumed in current period
+          description: Number of calls made in the current period
+          minimum: 0
+          example: 42
         errors:
           type: integer
-          description: Total number of errors in current period
-        remaining:
-          type: integer
-          description: Number of calls remaining in current period
-      required:
-        - calls_used
-        - calls_limit
-        - tokens_in
-        - tokens_out
-        - errors
-        - remaining
-
-    UsageStats:
-      type: object
-      description: Usage statistics per endpoint
-      properties:
-        period_start:
-          type: string
-          format: date-time
-          description: Start of the current usage period
-        period_end:
-          type: string
-          format: date-time
-          description: End of the current usage period
-        plan:
-          type: string
-          description: Current subscription plan
-        endpoints:
-          type: object
-          description: Usage statistics broken down by endpoint
-          properties:
-            nl:
-              $ref: '#/components/schemas/EndpointUsageStats'
-            scrape:
-              $ref: '#/components/schemas/EndpointUsageStats'
-            plot2table:
-              $ref: '#/components/schemas/EndpointUsageStats'
-          required:
-            - nl
-            - scrape
-            - plot2table
-      required:
-        - period_start
-        - period_end
-        - plan
-        - endpoints
-
-
-    # Removed deprecated QueryMetadata in favor of QueryMeta
-
-    QueryResponse:
-      type: object
-      description: Response from natural language query endpoint
-      properties:
-        series:
-          type: array
-          description: Array of series, each with its observations
-          items:
-            $ref: '#/components/schemas/Series'
-        meta:
-          $ref: '#/components/schemas/QueryMeta'
-        description:
-          type: string
-          description: Natural language description of the query result
-          nullable: true
-      required:
-        - series
-        - meta
-
-    NLQueryRequest:
-      type: object
-      properties:
-        query:
-          type: string
-          description: Natural language query
-        num_results:
-          type: integer
-          description: Number of search results to process
-          minimum: 1
-          maximum: 100
-          default: 10
-        paragraph_extraction:
-          type: boolean
-          description: Enable paragraph-based time-series extraction
-          default: false
-        plot2table:
-          type: integer
-          description: Number of charts/images to process with plot2table
+          description: Number of errors encountered
           minimum: 0
-          default: 0
-      required:
-        - query
-
-
-
-
-    ObservationPoint:
-      type: object
-      description: A single data point within a specific series
-      properties:
-        dimension:
-          type: string
-          description: The dimension/axis value (timestamp for time series, category for categorical data, x-value for scatter plots, etc.)
-        value:
-          oneOf:
-            - type: number
-            - type: string
-            - type: boolean
-          description: Value of the observation at this dimension point
-      required:
-        - dimension
-        - value
-
-    Series:
-      type: object
-      description: A data series with observations from a specific source
-      properties:
-        url:
-          type: string
-          format: uri
-          description: URL of the source page
-        title:
-          type: string
-          description: Title of the series
-        url_title:
-          type: string
-          description: Title from the URL/source
-        observations:
-          type: array
-          description: The ordered observations for this series
-          items:
-            $ref: '#/components/schemas/ObservationPoint'
-        relevance_score:
-          type: number
-          description: Relevance score for this series (0-1)
-      required:
-        - url
-        - title
-        - url_title
-        - observations
-        - relevance_score
-
-    QueryMeta:
-      type: object
-      description: Metadata about query execution and pagination
-      properties:
-        result_count:
-          type: integer
-          description: Number of results returned in this response
-        page:
-          $ref: '#/components/schemas/PageInfo'
-        diagnostics:
-          type: object
-          description: Additional diagnostic information about the query execution
-          additionalProperties: true
-      required:
-        - result_count
-
-    PageInfo:
-      type: object
-      description: Pagination information for the response
-      properties:
+          example: 0
         limit:
           type: integer
-          description: Number of items requested per page
-        offset:
-          type: integer
-          description: Offset index of the first item in this page
-        next_cursor:
-          type: string
-          description: Opaque token to fetch the next page
-          nullable: true
-        has_more:
-          type: boolean
-          description: Whether there are more items available beyond this page
-      required:
-        - limit
-        - offset
-        - has_more
-
-    URLRequest:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          description: URL to scrape
-        query:
-          type: string
-          description: Optional user query to guide extraction
-          nullable: true
-        paragraph_extraction:
-          type: boolean
-          description: Enable paragraph-based time-series extraction
-          default: false
-        plot2table:
-          type: integer
-          description: Number of charts/images to process with plot2table
+          description: Monthly limit for this endpoint
           minimum: 0
-          default: 0
+          example: 1000
       required:
-        - url
-
-    ImageURLRequest:
+        - endpoint
+        - calls
+        - errors
+        - limit
+    
+    UsageStats:
       type: object
+      description: Complete usage statistics for a user
       properties:
-        image_url:
+        user_id:
           type: string
-          format: uri
-          description: URL of the image containing charts or graphs to convert to data table
+          description: User identifier
+          example: "user_123"
+        plan:
+          type: string
+          description: |
+            Current subscription plan. Possible values:
+            - `free`: Free tier with basic limits
+            - `starter`: Starter plan for small projects
+            - `pro`: Professional plan for production use
+            - `growth`: Growth plan for large-scale operations
+          enum: [free, starter, pro, growth]
+          example: "free"
+        totalUsage:
+          type: integer
+          description: Total number of API calls across all endpoints
+          minimum: 0
+          example: 150
+        totalErrors:
+          type: integer
+          description: Total number of errors across all endpoints
+          minimum: 0
+          example: 2
+        endpointBreakdown:
+          type: array
+          description: Usage breakdown by endpoint
+          items:
+            $ref: '#/components/schemas/EndpointUsage'
+          example:
+            - endpoint: "/v0/datasets"
+              calls: 42
+              errors: 0
+              limit: 1000
       required:
-        - image_url
-
+        - user_id
+        - plan
+        - totalUsage
+        - totalErrors
+        - endpointBreakdown
+    
     PlanPrice:
       type: object
+      description: Pricing information for a plan
       properties:
         amount:
           type: number
+          description: Price amount
+          example: 29.99
         currency:
           type: string
+          description: Currency code
+          example: "USD"
         priceId:
           type: string
-
+          description: Stripe price ID
+          example: "price_1234567890"
+      required:
+        - amount
+        - currency
+        - priceId
+    
     Plan:
       type: object
+      description: Subscription plan details
       properties:
         name:
           type: string
+          description: Plan display name
+          example: "Free"
         description:
           type: string
+          description: Plan description
+          example: "Ideal for experimentation and testing"
         price:
           type: string
           description: Human-friendly display price
+          example: "$0"
         billing:
           type: string
-          description: Billing cadence for display (e.g., monthly, annual, one-time)
+          description: Billing cadence description
+          example: "one-time"
         limits:
           type: object
+          description: Monthly limits per endpoint
           additionalProperties:
             type: integer
-          description: Monthly limits keyed by endpoint (e.g., 'query/nl', 'scrape', 'plot2table')
+          example:
+            "datasets": 100
+            "query/nl": 50
         api_keys:
           oneOf:
             - type: integer
             - type: string
-          description: Number of API keys included (or 'unlimited')
+          description: |
+            Number of API keys included with this plan.
+            Can be an integer (e.g., 1, 2, 10) or the string "unlimited" for plans with no API key limit.
+          example: 1
         support:
           type: string
+          description: |
+            Support level provided with this plan. Possible values:
+            - `Community`: Community support via forums and documentation
+            - `Standard`: Standard email support with 48-hour response time
+            - `Priority`: Priority support with 24-hour response time
+          example: "Community"
         monthlyPrice:
           allOf:
             - $ref: '#/components/schemas/PlanPrice'
           nullable: true
+          description: Monthly pricing option
         annualPrice:
           allOf:
             - $ref: '#/components/schemas/PlanPrice'
           nullable: true
+          description: Annual pricing option
         discountPercentage:
           type: number
           nullable: true
-
+          description: Discount percentage for annual billing
+          minimum: 0
+          maximum: 1
+          example: 0.15
+      required:
+        - name
+        - description
+        - price
+        - billing
+        - limits
+        - api_keys
+        - support
+    
     PlansResponse:
       type: object
+      description: Response containing all available plans
       properties:
         plans:
           type: object
+          description: Plans keyed by plan name
           additionalProperties:
             $ref: '#/components/schemas/Plan'
+          example:
+            free:
+              name: "Free"
+              description: "Ideal for experimentation and testing"
+              price: "$0"
+              billing: "one-time"
+              limits:
+                datasets: 100
+              api_keys: 1
+              support: "Community"
         default_plan:
           type: string
+          description: Default plan name
+          example: "free"
       required:
         - plans
         - default_plan
-
-    ScrapeArtifacts:
-      type: object
-      description: URLs to stored artifacts
-      properties:
-        html_url:
-          type: string
-          description: URL to stored HTML
-        markdown_url:
-          type: string
-          description: URL to stored markdown
-        tables_base_url:
-          type: string
-          description: Base URL for stored tables
-
-    ScrapeResponse:
-      type: object
-      description: Response from web scraping endpoint
-      properties:
-        series:
-          type: array
-          description: Array of series with observations (same structure as query endpoints)
-          items:
-            $ref: '#/components/schemas/Series'
-        artifacts:
-          $ref: '#/components/schemas/ScrapeArtifacts'
-        cached:
-          type: boolean
-          description: Whether this result was retrieved from cache
-        source_id:
-          type: string
-          description: Database source ID (present when cached=true)
-          nullable: true
-        metadata:
-          type: object
-          description: Additional metadata about the scrape
-          properties:
-            result_count:
-              type: integer
-              description: Number of observations extracted
-          additionalProperties: true
-      required:
-        - series

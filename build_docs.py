@@ -78,23 +78,66 @@ def generate_markdown_docs(api_spec_path, examples_dir):
     with open(api_spec_path, 'r', encoding='utf-8') as f:
         spec = yaml.safe_load(f)
     
-    # Instead of resolving refs, load the individual path files directly
-    # since we're working with temporary files that already have examples injected
+    # Resolve all $ref references to get complete path definitions
+    # Load all path files from the temporary API directory
     temp_api_dir = api_spec_path.parent / 'api'
     
     # Load all path files
-    paths = {}
+    all_paths = {}
     if temp_api_dir.exists():
-        for path_file in temp_api_dir.glob('**/*.yaml'):
-            if path_file.name in ['queries.yaml', 'web-scraping.yaml', 'usage.yaml', 'plot2table.yaml']:
-                with open(path_file, 'r', encoding='utf-8') as f:
-                    path_spec = yaml.safe_load(f)
-                    if 'paths' in path_spec:
-                        paths.update(path_spec['paths'])
+        for path_file in temp_api_dir.glob('paths/*.yaml'):
+            with open(path_file, 'r', encoding='utf-8') as f:
+                path_spec = yaml.safe_load(f)
+                if 'paths' in path_spec:
+                    all_paths.update(path_spec['paths'])
     
-    # Replace the paths in the main spec
-    if paths:
-        spec['paths'] = paths
+    # Resolve $ref references from main spec
+    resolved_paths = {}
+    if 'paths' in spec:
+        for path_key, path_value in spec['paths'].items():
+            if isinstance(path_value, dict) and '$ref' not in path_value:
+                # This is an inline path definition (like /v0/datasets/{job_id})
+                resolved_paths[path_key] = path_value
+            elif isinstance(path_value, dict) and '$ref' in path_value:
+                # Try to resolve the reference
+                ref_path = path_value['$ref']
+                if ref_path.startswith('api/paths/'):
+                    # Extract the file and path
+                    parts = ref_path.split('#/')
+                    if len(parts) > 1:
+                        file_part = parts[0]
+                        path_part = parts[1]
+                        file_path = api_spec_path.parent / file_part
+                        if file_path.exists():
+                            with open(file_path, 'r', encoding='utf-8') as f:
+                                ref_content = yaml.safe_load(f)
+                                # Navigate to the referenced path
+                                # path_part format: paths/~1v0~1datasets
+                                path_parts = path_part.replace('~1', '/').split('/')
+                                current = ref_content
+                                for part in path_parts:
+                                    if part and isinstance(current, dict) and part in current:
+                                        current = current[part]
+                                    else:
+                                        current = None
+                                        break
+                                if current:
+                                    resolved_paths[path_key] = current
+                # Also check if it's already in all_paths
+                if path_key not in resolved_paths and path_key in all_paths:
+                    resolved_paths[path_key] = all_paths[path_key]
+            else:
+                # Direct path value
+                resolved_paths[path_key] = path_value
+    
+    # Merge with paths from files
+    for path_key, path_value in all_paths.items():
+        if path_key not in resolved_paths:
+            resolved_paths[path_key] = path_value
+    
+    # Replace the paths in the main spec with resolved paths
+    if resolved_paths:
+        spec['paths'] = resolved_paths
     
     markdown_parts = []
     
@@ -217,9 +260,18 @@ def generate_markdown_docs(api_spec_path, examples_dir):
                                 with open(example_path, 'r', encoding='utf-8') as f:
                                     source = f.read()
                         
+                        # Determine code block language
+                        code_lang = lang.lower()
+                        if code_lang == 'curl':
+                            code_lang = 'bash'
+                        elif code_lang == 'javascript':
+                            code_lang = 'javascript'
+                        elif code_lang == 'python':
+                            code_lang = 'python'
+                        
                         markdown_parts.append(f"**{lang}:**")
-                        markdown_parts.append("```" + lang.lower())
-                        markdown_parts.append(source)
+                        markdown_parts.append(f"```{code_lang}")
+                        markdown_parts.append(source.strip())
                         markdown_parts.append("```")
                         markdown_parts.append("")
                 

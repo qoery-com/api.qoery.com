@@ -1,35 +1,26 @@
 openapi: 3.1.0
 info:
-  title: qoery's API
-  version: 0.4.0
+  title: Qoetry API
+  version: 0.5.0
   description: |
-    Every number on the internet, queryable. Instant access to millions of trusted
-    statistics through a single natural language query or API call.
-
-    # Installation
-
-    ### Python SDK
-
-    Install from PyPI:
-
-    ```bash
-    pip install qoery
-    ```
-
-    PyPI: [qoery](https://pypi.org/project/qoery/)
-
-    ### JavaScript SDK
-
-    Install from npm:
-
-    ```bash
-    npm install qoery
-    ```
-
-    npm: [qoery](https://www.npmjs.com/package/qoery)
-
+    Qoetry API for dataset collection and management. Start dataset collection jobs,
+    monitor their progress, and download results as CSV files.
+    
+    ## Authentication
+    
+    **All endpoints require API key authentication** (except `/health` and `/`).
+    
+    You can provide your API key via:
+    - Query parameter: `?api_key=your_api_key`
+    - Header: `x-api-key: your_api_key`
+    - Header: `Authorization: Bearer your_api_key`
+    
+    ## Rate Limits
+    
+    API calls are subject to monthly quotas based on your subscription plan.
+    Quota information is available via the `/v0/usage` endpoint.
   contact:
-    name: qoery Support
+    name: Qoetry Support
     url: https://qoery.com
     email: samuel.tinnerholm@gmail.com
   license:
@@ -37,61 +28,111 @@ info:
     url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: https://api.qoery.com/v0
+  - url: https://api.qoery.com
+    description: Production server
+  - url: http://localhost:3000
+    description: Local development server
 
 security:
   - ApiKeyAuth: []
+  - ApiKeyHeader: []
+  - BearerAuth: []
 
 tags:
-  - name: Queries
-    description: Natural language query execution
-  - name: Web Scraping
-    description: Web scraping and data extraction from URLs
+  - name: Health
+    description: Health check and status endpoints
+  - name: Datasets
+    description: Dataset collection job management
   - name: Usage
-    description: Usage statistics and rate limit information
-  - name: System
-    description: System health and status endpoints
+    description: Usage statistics and quota information
+  - name: Plans
+    description: Subscription plans and pricing
 
 components:
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
+      name: api_key
+      in: query
+      description: API key for authentication (can also be provided via x-api-key header or Authorization Bearer token)
+    ApiKeyHeader:
+      type: apiKey
+      name: x-api-key
       in: header
-      name: X-API-Key
-      description: API key for authentication, provided via the 'X-API-Key' header.
+      description: API key provided via header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: API_KEY
+      description: API key provided as Bearer token
 
   schemas:
     ErrorResponse:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/ErrorResponse'
+    JobStatus:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/JobStatus'
+    JobProgress:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/JobProgress'
+    JobStartRequest:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/JobStartRequest'
+    JobStartResponse:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/JobStartResponse'
     UsageStats:
       $ref: 'api/schemas/schemas.yaml#/components/schemas/UsageStats'
-    QueryResponse:
-      $ref: 'api/schemas/schemas.yaml#/components/schemas/QueryResponse'
-    NLQueryRequest:
-      $ref: 'api/schemas/schemas.yaml#/components/schemas/NLQueryRequest'
-    URLRequest:
-      $ref: 'api/schemas/schemas.yaml#/components/schemas/URLRequest'
-    ScrapeResponse:
-      $ref: 'api/schemas/schemas.yaml#/components/schemas/ScrapeResponse'
+    EndpointUsage:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/EndpointUsage'
+    PlansResponse:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/PlansResponse'
+    Plan:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/Plan'
+    PlanPrice:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/PlanPrice'
+    HealthResponse:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/HealthResponse'
+    ApiInfo:
+      $ref: 'api/schemas/schemas.yaml#/components/schemas/ApiInfo'
 
   responses:
     UnauthorizedError:
       $ref: 'api/responses/responses.yaml#/components/responses/UnauthorizedError'
     RateLimitError:
       $ref: 'api/responses/responses.yaml#/components/responses/RateLimitError'
-    RateLimitHeaders:
-      $ref: 'api/responses/responses.yaml#/components/responses/RateLimitHeaders'
+    NotFoundError:
+      $ref: 'api/responses/responses.yaml#/components/responses/NotFoundError'
+    BadRequestError:
+      $ref: 'api/responses/responses.yaml#/components/responses/BadRequestError'
 
 paths:
   /health:
     get:
+      operationId: healthCheck
       summary: Health Check
       description: Check the health status of the API
       tags:
-        - System
+        - Health
+      security: []
       responses:
         '200':
           description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: "ok"
+                timestamp: "2025-11-10T15:16:28Z"
+  
+  /:
+    get:
+      operationId: rootStatus
+      summary: Root Status
+      description: Root endpoint for health checks
+      tags:
+        - Health
+      security: []
+      responses:
+        '200':
+          description: Service is running
           content:
             application/json:
               schema:
@@ -100,20 +141,170 @@ paths:
                   status:
                     type: string
                     example: "ok"
-                  timestamp:
-                    type: string
-                    format: date-time
-                    description: Current timestamp
-                required:
-                  - status
-                  - timestamp
-  /query/nl:
-    $ref: 'api/paths/queries.yaml#/paths/~1query~1nl'
-  /scrape:
-    $ref: 'api/paths/web-scraping.yaml#/paths/~1scrape'
-  /plot2table:
-    $ref: 'api/paths/plot2table.yaml#/paths/~1plot2table'
-  /usage:
-    $ref: 'api/paths/usage.yaml#/paths/~1usage'
-  /plans:
-    $ref: 'api/paths/plans.yaml#/paths/~1plans'
+              example:
+                status: "ok"
+  
+  /v0/datasets:
+    $ref: 'api/paths/datasets.yaml#/paths/~1v0~1datasets'
+  
+  /v0/datasets/{job_id}:
+    get:
+      operationId: getDatasetJobStatus
+      summary: Get job status and progress
+      description: |
+        Returns the current status and progress of a dataset collection job.
+        Poll this endpoint to check when the job completes.
+        
+        **Status Values:**
+        - `processing`: Job is actively collecting data
+        - `completed`: Job finished successfully, CSV is ready
+        - `error`: Job failed, check the `error` field for details
+        
+        **Progress Steps:**
+        - `initializing`: Setting up the job
+        - `searching`: Finding relevant URLs
+        - `scraping`: Extracting data from URLs
+        - `processing`: Analyzing and structuring data
+        - `finalizing`: Preparing the CSV output
+      tags:
+        - Datasets
+      security:
+        - ApiKeyAuth: []
+        - ApiKeyHeader: []
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: job_id
+          required: true
+          description: Unique identifier for the job
+          schema:
+            type: string
+            pattern: '^[0-9]{8}_[0-9]{6}$'
+            example: "20251110_151628"
+      responses:
+        '200':
+          description: Job status and progress
+          content:
+            application/json:
+              schema:
+                $ref: 'api/schemas/schemas.yaml#/components/schemas/JobStatus'
+              examples:
+                processing:
+                  summary: Job in progress
+                  value:
+                    job_id: "20251110_151628"
+                    status: "processing"
+                    query: "climate change statistics"
+                    progress:
+                      current_step: "scraping"
+                      rows_collected: 1250
+                      urls_processed: 8
+                      urls_total: 15
+                      last_updated: "2025-11-10T15:16:45Z"
+                    urls: ["https://example.com/data1", "https://example.com/data2"]
+                    csv_url: "/v0/datasets/20251110_151628/csv"
+                    error: null
+                    started_at: "2025-11-10T15:16:28Z"
+                    completed_at: null
+                completed:
+                  summary: Job completed successfully
+                  value:
+                    job_id: "20251110_151628"
+                    status: "completed"
+                    query: "climate change statistics"
+                    progress:
+                      current_step: "finalizing"
+                      rows_collected: 3420
+                      urls_processed: 15
+                      urls_total: 15
+                      last_updated: "2025-11-10T15:18:12Z"
+                    urls: ["https://example.com/data1", "https://example.com/data2", "https://example.com/data3"]
+                    csv_url: "/v0/datasets/20251110_151628/csv"
+                    error: null
+                    started_at: "2025-11-10T15:16:28Z"
+                    completed_at: "2025-11-10T15:18:12Z"
+        '401':
+          $ref: 'api/responses/responses.yaml#/components/responses/UnauthorizedError'
+        '404':
+          $ref: 'api/responses/responses.yaml#/components/responses/NotFoundError'
+        '429':
+          $ref: 'api/responses/responses.yaml#/components/responses/RateLimitError'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: 'api/schemas/schemas.yaml#/components/schemas/ErrorResponse'
+  
+  /v0/datasets/{job_id}/csv:
+    get:
+      operationId: downloadDatasetCsv
+      summary: Download the CSV file
+      description: |
+        Downloads the CSV file containing the collected dataset.
+        The file may be partial if the job is still processing.
+        
+        **CSV Format:**
+        - First row contains column headers
+        - Each subsequent row represents a data point
+        - Columns include: `url`, `title`, `value`, `dimension`, `timestamp` (if applicable)
+        - Data is sorted by relevance score (most relevant first)
+        - Partial CSVs are available while jobs are processing
+      tags:
+        - Datasets
+      security:
+        - ApiKeyAuth: []
+        - ApiKeyHeader: []
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: job_id
+          required: true
+          description: Unique identifier for the job
+          schema:
+            type: string
+            pattern: '^[0-9]{8}_[0-9]{6}$'
+            example: "20251110_151628"
+      responses:
+        '200':
+          description: CSV file download
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+              example: |
+                url,title,value,dimension,timestamp
+                https://example.com/data1,Climate Change Stats,42.5,2020,2020-01-01T00:00:00Z
+                https://example.com/data1,Climate Change Stats,43.2,2021,2021-01-01T00:00:00Z
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+                example: 'attachment; filename="data.csv"'
+            Content-Type:
+              schema:
+                type: string
+                example: 'text/csv'
+        '401':
+          $ref: 'api/responses/responses.yaml#/components/responses/UnauthorizedError'
+        '404':
+          description: CSV not ready yet
+          content:
+            application/json:
+              schema:
+                $ref: 'api/schemas/schemas.yaml#/components/schemas/ErrorResponse'
+        '429':
+          $ref: 'api/responses/responses.yaml#/components/responses/RateLimitError'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: 'api/schemas/schemas.yaml#/components/schemas/ErrorResponse'
+  
+  /v0/usage:
+    $ref: 'api/paths/usage.yaml#/paths/~1v0~1usage'
+  
+  /v0/plans:
+    $ref: 'api/paths/plans.yaml#/paths/~1v0~1plans'

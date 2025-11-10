@@ -1,10 +1,27 @@
 paths:
-  /plans:
+  /v0/plans:
     get:
+      operationId: listPlans
       summary: List subscription plans and endpoint limits
-      description: Returns available plans with pricing metadata and monthly limits per endpoint.
+      description: |
+        Returns all available subscription plans with pricing metadata,
+        monthly limits per endpoint, and other plan features.
+        
+        **Plan Features:**
+        - Each plan includes different monthly quotas per endpoint
+        - Limits reset on the 1st of each month
+        - Plans can be upgraded/downgraded at any time
+        - Annual billing offers discounts compared to monthly billing
       tags:
-        - Usage
+        - Plans
+      security: []
+      x-codeSamples:
+        - lang: Python
+          source: # INJECT: python/plans_example.py
+        - lang: JavaScript
+          source: # INJECT: js/plans_example.js
+        - lang: cURL
+          source: # INJECT: curl/plans_example.sh
       responses:
         '200':
           description: Plans and limits
@@ -12,10 +29,46 @@ paths:
             application/json:
               schema:
                 $ref: '../schemas/schemas.yaml#/components/schemas/PlansResponse'
+              example:
+                plans:
+                  free:
+                    name: "Free"
+                    description: "Ideal for experimentation and testing"
+                    price: "$0"
+                    billing: "one-time"
+                    limits:
+                      datasets: 100
+                    api_keys: 1
+                    support: "Community"
+                    monthlyPrice: null
+                    annualPrice: null
+                    discountPercentage: null
+                  starter:
+                    name: "Starter"
+                    description: "Built for researchers and small projects"
+                    price: "$29"
+                    billing: "/mo billed monthly"
+                    limits:
+                      datasets: 1000
+                      "query/nl": 500
+                    api_keys: 2
+                    support: "Standard"
+                    monthlyPrice:
+                      amount: 29
+                      currency: "USD"
+                      priceId: "price_starter_monthly"
+                    annualPrice:
+                      amount: 290
+                      currency: "USD"
+                      priceId: "price_starter_annual"
+                    discountPercentage: 0.17
+                default_plan: "free"
         '500':
-          description: Failed to load plans
+          description: Failed to load plans from database
           content:
             application/json:
               schema:
                 $ref: '../schemas/schemas.yaml#/components/schemas/ErrorResponse'
-
+              example:
+                error: "Failed to load plans from database"
+                status: 500

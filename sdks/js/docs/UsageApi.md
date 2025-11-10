@@ -1,83 +1,34 @@
 # Qoery.UsageApi
 
-All URIs are relative to *https://api.qoery.com/v0*
+All URIs are relative to *https://api.qoery.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**plansGet**](UsageApi.md#plansGet) | **GET** /plans | List subscription plans and endpoint limits
-[**usageGet**](UsageApi.md#usageGet) | **GET** /usage | Get usage statistics
+[**getUsageStats**](UsageApi.md#getUsageStats) | **GET** /v0/usage | Get usage statistics
 
 
 
-## plansGet
+## getUsageStats
 
-> PlansGet200Response plansGet()
-
-List subscription plans and endpoint limits
-
-Returns available plans with pricing metadata and monthly limits per endpoint.
-
-### Example
-
-```javascript
-import Qoery from 'qoery';
-let defaultClient = Qoery.ApiClient.instance;
-// Configure API key authorization: ApiKeyAuth
-let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
-ApiKeyAuth.apiKey = 'YOUR API KEY';
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//ApiKeyAuth.apiKeyPrefix = 'Token';
-
-let apiInstance = new Qoery.UsageApi();
-apiInstance.plansGet((error, data, response) => {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-});
-```
-
-### Parameters
-
-This endpoint does not need any parameter.
-
-### Return type
-
-[**PlansGet200Response**](PlansGet200Response.md)
-
-### Authorization
-
-[ApiKeyAuth](../README.md#ApiKeyAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-
-## usageGet
-
-> UsageGet200Response usageGet(apiKey)
+> GetUsageStats200Response getUsageStats(opts)
 
 Get usage statistics
 
-Get current usage and rate limit information per endpoint for the provided API key
+Returns current usage statistics and quota information for the user. Can be identified by either &#x60;api_key&#x60; or &#x60;uid&#x60; parameter.  **Usage Period:** - Usage is tracked monthly, resetting on the 1st of each month - Counts include all API calls, including errors - Errors are tracked separately in the &#x60;errors&#x60; field 
 
 ### Example
 
 ```javascript
 import Qoery from 'qoery';
-let defaultClient = Qoery.ApiClient.instance;
-// Configure API key authorization: ApiKeyAuth
-let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
-ApiKeyAuth.apiKey = 'YOUR API KEY';
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//ApiKeyAuth.apiKeyPrefix = 'Token';
 
 let apiInstance = new Qoery.UsageApi();
-let apiKey = "apiKey_example"; // String | API key to look up usage for
-apiInstance.usageGet(apiKey, (error, data, response) => {
+let opts = {
+  'apiKey': "apiKey_example", // String | API key to look up usage for (alternative to uid)
+  'uid': "uid_example", // String | User ID to look up usage for (alternative to api_key)
+  'xApiKey': "xApiKey_example", // String | API key provided via header
+  'authorization': "authorization_example" // String | API key provided as Bearer token
+};
+apiInstance.getUsageStats(opts, (error, data, response) => {
   if (error) {
     console.error(error);
   } else {
@@ -91,15 +42,18 @@ apiInstance.usageGet(apiKey, (error, data, response) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **apiKey** | **String**| API key to look up usage for | 
+ **apiKey** | **String**| API key to look up usage for (alternative to uid) | [optional] 
+ **uid** | **String**| User ID to look up usage for (alternative to api_key) | [optional] 
+ **xApiKey** | **String**| API key provided via header | [optional] 
+ **authorization** | **String**| API key provided as Bearer token | [optional] 
 
 ### Return type
 
-[**UsageGet200Response**](UsageGet200Response.md)
+[**GetUsageStats200Response**](GetUsageStats200Response.md)
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#ApiKeyAuth)
+No authorization required
 
 ### HTTP request headers
 

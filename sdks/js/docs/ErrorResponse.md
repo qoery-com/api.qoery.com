@@ -4,9 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**error** | **String** |  | 
-**code** | **Number** |  | 
-**message** | **String** | Additional error message | [optional] 
-**details** | **String** |  | [optional] 
+**error** | **String** | Error message | 
+**status** | **Number** | HTTP status code (may be omitted in some error responses) | [optional] 
+**details** | **String** | Additional error details (optional) | [optional] 
 
 
