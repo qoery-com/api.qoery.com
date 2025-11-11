@@ -10,9 +10,9 @@ Name | Type | Description | Notes
 **progress** | [**GetDatasetJobStatus200ResponseProgress**](GetDatasetJobStatus200ResponseProgress.md) |  | 
 **urls** | **[String]** | List of URLs being processed | 
 **csvUrl** | **String** | URL to download the CSV file | 
-**error** | **String** | Error message if status is &#39;error&#39; | 
+**error** | **String** | Error message if status is &#39;error&#39; (only present when status is &#39;error&#39;) | [optional] 
 **startedAt** | **Date** | Timestamp when the job started | 
-**completedAt** | **Date** | Timestamp when the job completed (null if still processing) | 
+**completedAt** | **Date** | Timestamp when the job completed (only present when status is &#39;completed&#39;) | [optional] 
 
 
 

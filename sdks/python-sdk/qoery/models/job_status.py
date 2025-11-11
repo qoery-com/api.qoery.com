@@ -20,7 +20,7 @@ import json
 
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from qoery.models.get_dataset_job_status200_response_progress import GetDatasetJobStatus200ResponseProgress
 from typing import Optional, Set
@@ -36,9 +36,9 @@ class JobStatus(BaseModel):
     progress: GetDatasetJobStatus200ResponseProgress
     urls: List[StrictStr] = Field(description="List of URLs being processed")
     csv_url: StrictStr = Field(description="URL to download the CSV file")
-    error: StrictStr = Field(description="Error message if status is 'error'")
+    error: Optional[StrictStr] = Field(default=None, description="Error message if status is 'error' (only present when status is 'error')")
     started_at: datetime = Field(description="Timestamp when the job started")
-    completed_at: datetime = Field(description="Timestamp when the job completed (null if still processing)")
+    completed_at: Optional[datetime] = Field(default=None, description="Timestamp when the job completed (only present when status is 'completed')")
     __properties: ClassVar[List[str]] = ["job_id", "status", "query", "progress", "urls", "csv_url", "error", "started_at", "completed_at"]
 
     @field_validator('job_id')

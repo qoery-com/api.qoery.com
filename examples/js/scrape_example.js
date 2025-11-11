@@ -7,13 +7,13 @@ apiKeyAuth.apiKey = 'YOUR_API_KEY';
 
 const scrapingApi = new Qoery.WebScrapingApi();
 
+const url = 'https://example.com/statistics';
 const opts = {
-  url: 'https://example.com/statistics',
   paragraphExtraction: false,
   plot2table: 0
 };
 
-scrapingApi.scrapeGet(opts, (error, data) => {
+scrapingApi.scrapeGet(url, opts, (error, data) => {
   if (error) {
     throw error;
   }

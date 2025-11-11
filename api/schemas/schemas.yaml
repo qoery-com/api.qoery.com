@@ -165,9 +165,7 @@ components:
           example: "/v0/datasets/20251110_151628/csv"
         error:
           type: string
-          description: Error message if status is 'error'
-          nullable: true
-          example: null
+          description: Error message if status is 'error' (only present when status is 'error')
         started_at:
           type: string
           format: date-time
@@ -175,9 +173,7 @@ components:
         completed_at:
           type: string
           format: date-time
-          description: Timestamp when the job completed (null if still processing)
-          nullable: true
-          example: null
+          description: Timestamp when the job completed (only present when status is 'completed')
       required:
         - job_id
         - status
@@ -185,9 +181,7 @@ components:
         - progress
         - urls
         - csv_url
-        - error
         - started_at
-        - completed_at
     
     EndpointUsage:
       type: object

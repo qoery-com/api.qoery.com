@@ -7,9 +7,9 @@ apiKeyAuth.apiKey = 'YOUR_API_KEY';
 
 const scrapingApi = new Qoery.WebScrapingApi();
 
-const opts = { imageUrl: 'https://example.com/chart.png' };
+const imageUrl = 'https://example.com/chart.png';
 
-scrapingApi.plot2tableGet(opts, (error, data) => {
+scrapingApi.plot2tableGet(imageUrl, (error, data) => {
   if (error) {
     throw error;
   }

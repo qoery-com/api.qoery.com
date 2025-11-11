@@ -5,7 +5,7 @@ client.authentications['ApiKeyAuth'].apiKey = 'YOUR_API_KEY';
 
 const api = new Qoery.UsageApi();
 
-api.v0UsageGet((error, usage) => {
+api.getUsageStats({}, (error, usage) => {
   if (error) throw error;
   console.log(`Plan: ${usage.plan}, Usage: ${usage.total_usage}`);
 });

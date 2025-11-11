@@ -12,9 +12,9 @@ Name | Type | Description | Notes
 **progress** | [**GetDatasetJobStatus200ResponseProgress**](GetDatasetJobStatus200ResponseProgress.md) |  | 
 **urls** | **List[str]** | List of URLs being processed | 
 **csv_url** | **str** | URL to download the CSV file | 
-**error** | **str** | Error message if status is &#39;error&#39; | 
+**error** | **str** | Error message if status is &#39;error&#39; (only present when status is &#39;error&#39;) | [optional] 
 **started_at** | **datetime** | Timestamp when the job started | 
-**completed_at** | **datetime** | Timestamp when the job completed (null if still processing) | 
+**completed_at** | **datetime** | Timestamp when the job completed (only present when status is &#39;completed&#39;) | [optional] 
 
 ## Example
 

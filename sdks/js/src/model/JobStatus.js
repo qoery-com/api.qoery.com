@@ -30,13 +30,11 @@ class JobStatus {
      * @param progress {module:model/GetDatasetJobStatus200ResponseProgress} 
      * @param urls {Array.<String>} List of URLs being processed
      * @param csvUrl {String} URL to download the CSV file
-     * @param error {String} Error message if status is 'error'
      * @param startedAt {Date} Timestamp when the job started
-     * @param completedAt {Date} Timestamp when the job completed (null if still processing)
      */
-    constructor(jobId, status, query, progress, urls, csvUrl, error, startedAt, completedAt) { 
+    constructor(jobId, status, query, progress, urls, csvUrl, startedAt) { 
         
-        JobStatus.initialize(this, jobId, status, query, progress, urls, csvUrl, error, startedAt, completedAt);
+        JobStatus.initialize(this, jobId, status, query, progress, urls, csvUrl, startedAt);
     }
 
     /**
@@ -44,16 +42,14 @@ class JobStatus {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj, jobId, status, query, progress, urls, csvUrl, error, startedAt, completedAt) { 
+    static initialize(obj, jobId, status, query, progress, urls, csvUrl, startedAt) { 
         obj['job_id'] = jobId;
         obj['status'] = status;
         obj['query'] = query;
         obj['progress'] = progress;
         obj['urls'] = urls;
         obj['csv_url'] = csvUrl;
-        obj['error'] = error;
         obj['started_at'] = startedAt;
-        obj['completed_at'] = completedAt;
     }
 
     /**
@@ -145,7 +141,7 @@ class JobStatus {
 
 }
 
-JobStatus.RequiredProperties = ["job_id", "status", "query", "progress", "urls", "csv_url", "error", "started_at", "completed_at"];
+JobStatus.RequiredProperties = ["job_id", "status", "query", "progress", "urls", "csv_url", "started_at"];
 
 /**
  * Unique identifier for the job
@@ -183,7 +179,7 @@ JobStatus.prototype['urls'] = undefined;
 JobStatus.prototype['csv_url'] = undefined;
 
 /**
- * Error message if status is 'error'
+ * Error message if status is 'error' (only present when status is 'error')
  * @member {String} error
  */
 JobStatus.prototype['error'] = undefined;
@@ -195,7 +191,7 @@ JobStatus.prototype['error'] = undefined;
 JobStatus.prototype['started_at'] = undefined;
 
 /**
- * Timestamp when the job completed (null if still processing)
+ * Timestamp when the job completed (only present when status is 'completed')
  * @member {Date} completed_at
  */
 JobStatus.prototype['completed_at'] = undefined;

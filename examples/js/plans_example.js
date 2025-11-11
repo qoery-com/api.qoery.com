@@ -5,7 +5,7 @@ client.authentications['ApiKeyAuth'].apiKey = 'YOUR_API_KEY';
 
 const api = new Qoery.PlansApi();
 
-api.v0PlansGet((error, plans) => {
+api.listPlans((error, plans) => {
   if (error) throw error;
   console.log(`Plans: ${Object.keys(plans.plans).join(', ')}`);
 });
